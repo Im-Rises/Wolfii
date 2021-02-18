@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">cours1</string>
+    <string name="valider">Send</string>
+    <string name="edit_message">edit message</string>
 </resources>
