@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">revision_cours1_2</string>
+    <string name="editText_str">text</string>
+    <string name="bouton_str">envoyer</string>
+    <string name="test_str">truc</string>
+    <string name="nouveau_marqueur_str">nouveau marqueur</string>
+</resources>
