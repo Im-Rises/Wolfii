@@ -2,7 +2,12 @@ package com.example.lecteurmusique;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.annotation.SuppressLint;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         //Gestion du déplacement de la maj auto du seekbar et des textView
         runnableTemps = new Runnable() {
             @Override
@@ -64,13 +70,39 @@ public class MainActivity extends AppCompatActivity {
                 if (musiquePlayer != null) {
                     seekBarMusique.setProgress(musiquePlayer.getCurrentPosition());
                     txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));
-                    //Remet dans la pile un appel du handler qui appel le Runnable (this)
+                    //Remet dans la pile du handler un appel pour le Runnable (this)
                     handlerTemps.postDelayed(this,400);
                 }
             }
         };
+
     }
 
+
+
+
+
+    //Code de test de notification pour la gestion de la musique en dehors de l'application
+    public void test(View view) {
+
+        //Déclaration Intent de retour à la page de lecture musique
+        Intent musiquePlayerIntent = new Intent(this,MainActivity.class);
+        PendingIntent musiquePlayerPenInt = PendingIntent.getActivity(this, 0, musiquePlayerIntent, 0);
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "MyNotiftest");
+        builder.setSmallIcon(R.drawable.image_notif_musique);
+        builder.setContentTitle("My notification");
+        builder.setContentText("Much longer text that cannot fit one line...");
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setOngoing(true);//Empêche l'utilisateur de supprimer la notification
+
+        builder.setContentIntent(musiquePlayerPenInt);//Ajoute l'intent à l'appui sur la notification
+        builder.setAutoCancel(true);//Supprime la notification si on appuit dessus
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);//Création d'une gestion de notification
+        managerCompat.notify(1, builder.build());//Appel la notification builder
+    }
 
 
     public void musiqueDemaPause(View view) {
@@ -105,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("DefaultLocale")
     private String millisecondesEnMinutesSeconde(int tmpsMillisecondes)
     {
         return String.format("%02d:%02d",
