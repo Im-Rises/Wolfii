@@ -7,7 +7,10 @@ import androidx.core.app.NotificationManagerCompat;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioFocusRequest;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -20,13 +23,15 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SeekBar seekBarMusique;
-    private TextView txtViewMusiqueTemps,txtViewMusiqueDuree;
+    private SeekBar seekBarMusique;                             //SeekBar de lecture de la msuqiue
+    private TextView txtViewMusiqueTemps,txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
 
-    private MediaPlayer musiquePlayer;
-    private Handler handlerTemps = new Handler();
-    private Runnable runnableTemps;
+    private MediaPlayer musiquePlayer;                          //Lecture musique
+    private Handler handlerTemps = new Handler();               //Handler pour appeler toutes les secondes le runnable
+    private Runnable runnableTemps;                             //Runnable pour mettre à jour toutes les secondes le seekbar et les temps relatifs à la musique
 
+    private AudioManager musiqueManager;                        //AudioManager pour appeler la gestion de l'interruption musique via musiqueFocusmanager
+    //private AudioFocusRequest musiqueFocusRequest;              //AudioFocusRequest pour gérer les interruptions par d'autres applications de la musique
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +76,34 @@ public class MainActivity extends AppCompatActivity {
                     seekBarMusique.setProgress(musiquePlayer.getCurrentPosition());
                     txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));
                     //Remet dans la pile du handler un appel pour le Runnable (this)
-                    handlerTemps.postDelayed(this,400);
+                    handlerTemps.postDelayed(this, 400);
                 }
             }
         };
 
+        //Fonction pour focus la musique !!! Fonctionnne !!!!!!
+/*
+        musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));//initialise l'AudioManager
+
+        AudioManager.OnAudioFocusChangeListener musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener() {
+            @Override
+            public void onAudioFocusChange(int focusChange) {
+                if (focusChange==AudioManager.AUDIOFOCUS_LOSS)
+                    musiquePlayer.pause();
+            }
+        };
+
+        int result = musiqueManager.requestAudioFocus(musiqueFocusChange,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
+        {
+            musiquePlayer = MediaPlayer.create(this, R.raw.musiquetest);
+            musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+            seekBarMusique.setMax(musiquePlayer.getDuration());
+            musiquePlayer.seekTo(seekBarMusique.getProgress());
+            handlerTemps.postDelayed(runnableTemps, 400);
+            musiquePlayer.start();
+        }*/
     }
-
-
 
 
 
@@ -106,12 +131,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void musiqueDemaPause(View view) {
+
         if (musiquePlayer == null) {
             musiquePlayer = MediaPlayer.create(this, R.raw.musiquetest);
             musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
             seekBarMusique.setMax(musiquePlayer.getDuration());
             musiquePlayer.seekTo(seekBarMusique.getProgress());
-            handlerTemps.postDelayed(runnableTemps,400);
+            handlerTemps.postDelayed(runnableTemps, 400);
             musiquePlayer.start();
         }
         else if (!musiquePlayer.isPlaying()) {
