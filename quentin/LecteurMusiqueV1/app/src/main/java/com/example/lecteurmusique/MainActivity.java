@@ -6,11 +6,14 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        //Fonction pour focus la musique !!! Fonctionnne !!!!!!
+        //FONCTION FOCUS MUSIQUE (FONTIONNE) !!!
 /*
         musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));//initialise l'AudioManager
 
@@ -110,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
     //Code de test de notification pour la gestion de la musique en dehors de l'application
     public void test(View view) {
 
-        //Déclaration Intent de retour à la page de lecture musique
+        //REFAIRE GESTION DE LA NOTIFICATION CORRECTEMENT AVEC une gestion des ID correcte et l'AJOUT DU TRAIEMENT ANDROID 8.0
+        /*//Déclaration Intent de retour à la page de lecture musique
         Intent musiquePlayerIntent = new Intent(this,MainActivity.class);
         PendingIntent musiquePlayerPenInt = PendingIntent.getActivity(this, 0, musiquePlayerIntent, 0);
 
@@ -121,12 +125,25 @@ public class MainActivity extends AppCompatActivity {
         builder.setContentText("Much longer text that cannot fit one line...");
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
         builder.setOngoing(true);//Empêche l'utilisateur de supprimer la notification
-
-        builder.setContentIntent(musiquePlayerPenInt);//Ajoute l'intent à l'appui sur la notification
+        builder.setNotificationSilent();//Désactive le son de la notification
+        builder.setContentIntent(musiquePlayerPenInt);//Ajoute l'intent à l'appui sur la notification (retour application)
         builder.setAutoCancel(true);//Supprime la notification si on appuit dessus
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);//Création d'une gestion de notification
-        managerCompat.notify(1, builder.build());//Appel la notification builder
+
+        //Gestion si en téléphone en Android 8.0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+*//*            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;*//*
+            NotificationChannel channel = new NotificationChannel("MyNotiftest", "test", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("description");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        managerCompat.notify(1, builder.build());//Appel la notification builder*/
     }
 
 
