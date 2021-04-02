@@ -61,14 +61,16 @@ public class MainActivity extends AppCompatActivity {
         getMusic();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
         listView.setAdapter(adapter);
-        /*
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, int l) {
-                //lire la musique ici
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.i("debug_click", "click reussi !");
+
 
             }
-        });*/
+        });
 
     }
 
@@ -80,11 +82,12 @@ public class MainActivity extends AppCompatActivity {
         if(songCursor != null && songCursor.moveToFirst()) {
             int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-
+            int songLocation = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
             do {
                 String currentTitle = songCursor.getString(songTitle);
                 String currentArtist = songCursor.getString(songArtist);
-                arrayList.add(currentTitle + "\n" + currentArtist);
+                String currentLocation = songCursor.getString(songLocation);
+                arrayList.add("titre : " + currentTitle + "\nartiste : " + currentArtist + "\nlocation : " + currentLocation);
                 Log.d("debug_music", arrayList.get(0));
             } while(songCursor.moveToNext());
         }
