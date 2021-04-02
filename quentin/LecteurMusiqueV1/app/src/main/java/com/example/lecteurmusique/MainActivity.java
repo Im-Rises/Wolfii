@@ -34,8 +34,14 @@ public class MainActivity extends AppCompatActivity {
     private Runnable runnableTemps;                             //Runnable pour mettre à jour toutes les secondes le seekbar et les temps relatifs à la musique
 
     private AudioManager musiqueManager;                        //AudioManager pour appeler la gestion de l'interruption musique via musiqueFocusmanager
-    //private AudioFocusRequest musiqueFocusRequest;              //AudioFocusRequest pour gérer les interruptions par d'autres applications de la musique
+    private AudioManager.OnAudioFocusChangeListener musiqueFocusChange;//OnAudioFocusChange pour gérer les interruptions par d'autres applications de la musique
 
+    private static final String CHANNEL_ID = "NotifControlMusique";             //ID notification de control musique
+    private static final String NOTIFICATION_CHANNEL_NAME = "NotifChannelName"; //CHANNEL name notification de control musique
+    private static final int NOTIFICATION_ID = 1;                               //Notification numéro
+
+
+    //Fonction d'apppel lors de la création de la page
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,11 +90,12 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        //FONCTION FOCUS MUSIQUE (FONTIONNE) !!!
-/*
-        musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));//initialise l'AudioManager
 
-        AudioManager.OnAudioFocusChangeListener musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener() {
+        //Gestion du focus de la musique
+        musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));      //initialise l'AudioManager
+
+        //Gestion de l'interruption de la musique par une autre application
+        musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener() {
             @Override
             public void onAudioFocusChange(int focusChange) {
                 if (focusChange==AudioManager.AUDIOFOCUS_LOSS)
@@ -96,70 +103,72 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        int result = musiqueManager.requestAudioFocus(musiqueFocusChange,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
-        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
-        {
-            musiquePlayer = MediaPlayer.create(this, R.raw.musiquetest);
-            musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-            seekBarMusique.setMax(musiquePlayer.getDuration());
-            musiquePlayer.seekTo(seekBarMusique.getProgress());
-            handlerTemps.postDelayed(runnableTemps, 400);
-            musiquePlayer.start();
-        }*/
+
+        //Inititalisation de la notification
+        notificationInit();
     }
 
 
 
-    //Code de test de notification pour la gestion de la musique en dehors de l'application
-    public void test(View view) {
+    public void notificationInit()
+    {
+        Intent musiquePlayerIntent = new Intent(this,MainActivity.class);           //Déclaration Intent pour retourner sur la page de la musique
+        PendingIntent musiquePlayerPenInt = PendingIntent.getActivity(this, 0, musiquePlayerIntent, 0); //Déclaration d'un pendingIntent pour utiliser l'intent précédent dans une notification
 
-        //REFAIRE GESTION DE LA NOTIFICATION CORRECTEMENT AVEC une gestion des ID correcte et l'AJOUT DU TRAIEMENT ANDROID 8.0
-        /*//Déclaration Intent de retour à la page de lecture musique
-        Intent musiquePlayerIntent = new Intent(this,MainActivity.class);
-        PendingIntent musiquePlayerPenInt = PendingIntent.getActivity(this, 0, musiquePlayerIntent, 0);
-
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "MyNotiftest");
-        builder.setSmallIcon(R.drawable.image_notif_musique);
-        builder.setContentTitle("My notification");
-        builder.setContentText("Much longer text that cannot fit one line...");
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        builder.setOngoing(true);//Empêche l'utilisateur de supprimer la notification
-        builder.setNotificationSilent();//Désactive le son de la notification
-        builder.setContentIntent(musiquePlayerPenInt);//Ajoute l'intent à l'appui sur la notification (retour application)
-        builder.setAutoCancel(true);//Supprime la notification si on appuit dessus
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, CHANNEL_ID);//Inititalisation notification
+        builder.setSmallIcon(R.drawable.image_notif_musique);                   //Image de la notification
+        builder.setContentTitle("My notification");                             //Titre de la notification
+        builder.setContentText("Much longer text that cannot fit one line..."); //Text de la notification
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);               //Défini la priorité de la notification
+        builder.setOngoing(true);                                               //Empêche l'utilisateur de supprimer la notification
+        builder.setNotificationSilent();                                        //Désactive le son de la notification
+        builder.setContentIntent(musiquePlayerPenInt);                          //Ajoute l'intent à l'appui sur la notification (retour application)
+        //builder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);//Création d'une gestion de notification
 
-        //Gestion si en téléphone en Android 8.0
+        //Gestion si l'utilisateur utilise Android 8.0 ou supérieur
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-*//*            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;*//*
-            NotificationChannel channel = new NotificationChannel("MyNotiftest", "test", NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription("description");
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
 
-        managerCompat.notify(1, builder.build());//Appel la notification builder*/
+        managerCompat.notify(NOTIFICATION_ID, builder.build());//Appel la notification builder
     }
 
+
+
+    public void musiqueDemaEtFocus()
+    {
+        /*
+        Fonction de demande d'utilisation unique des sorties audio du téléphone
+        et démarrage de la musique.
+         */
+        int result = musiqueManager.requestAudioFocus(musiqueFocusChange,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
+        {
+            musiquePlayer.start();
+        }
+    }
 
     public void musiqueDemaPause(View view) {
 
         if (musiquePlayer == null) {
             musiquePlayer = MediaPlayer.create(this, R.raw.musiquetest);
+            txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(musiquePlayer.getDuration()));
             musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
             seekBarMusique.setMax(musiquePlayer.getDuration());
             musiquePlayer.seekTo(seekBarMusique.getProgress());
             handlerTemps.postDelayed(runnableTemps, 400);
-            musiquePlayer.start();
+            //musiquePlayer.start();
+            musiqueDemaEtFocus();
         }
         else if (!musiquePlayer.isPlaying()) {
             handlerTemps.postDelayed(runnableTemps,400);
-            musiquePlayer.start();
+            //musiquePlayer.start();
+            musiqueDemaEtFocus();
         }
         else
         {
@@ -176,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             musiquePlayer=null;
             seekBarMusique.setProgress(0);
             txtViewMusiqueTemps.setText("00:00");
+            txtViewMusiqueDuree.setText("00:00");
         }
     }
 
@@ -191,5 +201,4 @@ public class MainActivity extends AppCompatActivity {
         //return Integer.toString((tmpsMillisecondes/1000)/60).substring(0,2)+":"+Integer.toString(tmpsMillisecondes%60).substring(0,2);
         //txtViewMusiqueTemps.setText("99:99");
     }
-
 }
