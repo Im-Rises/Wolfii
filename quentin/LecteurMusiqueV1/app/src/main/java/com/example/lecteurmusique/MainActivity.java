@@ -4,14 +4,12 @@ package com.example.lecteurmusique;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +20,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,16 +28,21 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la msuqiue
     private TextView txtViewMusiqueTemps,txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
 
+
     private MediaPlayer musiquePlayer;                          //Lecture musique
     private Handler handlerTemps = new Handler();               //Handler pour appeler toutes les secondes le runnable
     private Runnable runnableTemps;                             //Runnable pour mettre à jour toutes les secondes le seekbar et les temps relatifs à la musique
 
+
     private AudioManager musiqueManager;                        //AudioManager pour appeler la gestion de l'interruption musique via musiqueFocusmanager
     private AudioManager.OnAudioFocusChangeListener musiqueFocusChange;//OnAudioFocusChange pour gérer les interruptions par d'autres applications de la musique
+
 
     private static final String CHANNEL_ID = "NotifControlMusique";             //ID notification de control musique
     private static final String NOTIFICATION_CHANNEL_NAME = "NotifChannelName"; //CHANNEL name notification de control musique
     private static final int NOTIFICATION_ID = 1;                               //Notification numéro
+    private NotificationCompat.Builder notifBuilder;                     //Inititalisation notification
+    private NotificationManagerCompat notifManagerCompat;                //Création d'une gestion de notification decompatibilité
 
 
     //Fonction d'apppel lors de la création de la page
@@ -110,32 +114,56 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void notificationInit()
-    {
-        Intent musiquePlayerIntent = new Intent(this,MainActivity.class);           //Déclaration Intent pour retourner sur la page de la musique
+    public void notificationInit() {
+        notifBuilder = new NotificationCompat.Builder(MainActivity.this, CHANNEL_ID);//Inititalisation notification
+        notifBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);            //Rend visible la notification quand le téléphone est vérouillé et permet le controle de la musique
+        notifBuilder.setSmallIcon(R.drawable.image_notif_musique);                   //Image de la notification
+        notifBuilder.setContentTitle("My notification");                             //Titre de la notification
+        notifBuilder.setContentText("Much longer text that cannot fit one line..."); //Text de la notification
+        notifBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);               //Défini la priorité de la notification
+        notifBuilder.setOngoing(true);                                               //Empêche l'utilisateur de supprimer la notification
+        notifBuilder.setNotificationSilent();                                        //Désactive le son de la notification
+        //notifBuilder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
+
+
+        Intent musiquePlayerIntent = new Intent(this, MainActivity.class);           //Déclaration Intent pour retourner sur la page de la musique
         PendingIntent musiquePlayerPenInt = PendingIntent.getActivity(this, 0, musiquePlayerIntent, 0); //Déclaration d'un pendingIntent pour utiliser l'intent précédent dans une notification
+        notifBuilder.setContentIntent(musiquePlayerPenInt);                          //Ajoute l'intent à l'appui sur la notification (retour application)
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, CHANNEL_ID);//Inititalisation notification
-        builder.setSmallIcon(R.drawable.image_notif_musique);                   //Image de la notification
-        builder.setContentTitle("My notification");                             //Titre de la notification
-        builder.setContentText("Much longer text that cannot fit one line..."); //Text de la notification
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);               //Défini la priorité de la notification
-        builder.setOngoing(true);                                               //Empêche l'utilisateur de supprimer la notification
-        builder.setNotificationSilent();                                        //Désactive le son de la notification
-        builder.setContentIntent(musiquePlayerPenInt);                          //Ajoute l'intent à l'appui sur la notification (retour application)
-        //builder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
+        //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
+        Intent musiqueIntentPrecedent = new Intent(this, MainActivity.class);
+        PendingIntent musiquePenIntPrecedent = PendingIntent.getActivity(this, 0, musiqueIntentPrecedent, 0);
+        Intent musiqueIntentSuivant = new Intent(this, MainActivity.class);
+        PendingIntent musiquePenIntSuivant = PendingIntent.getActivity(this, 0, musiqueIntentSuivant, 0);
+        Intent musiqueIntentDemaPause = new Intent(this, MainActivity.class);
+        PendingIntent musiquePenIntDemaPause = PendingIntent.getActivity(this, 0, musiqueIntentDemaPause, 0);
+        //Il faut juste créer trois fonctions comme suit pour envoyer le sredirections des intents :
+        /*private CharSequence getMessageText(Intent intent) {
+        Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+        if (remoteInput != null) {
+            return remoteInput.getCharSequence(KEY_TEXT_REPLY);
+        }
+        return null;
+        }
+        */
 
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);//Création d'une gestion de notification
+        //Ajout des boutons à la notification pour le contrôle musique
+        notifBuilder.addAction(R.drawable.image_precedent, "Précédent", musiquePenIntPrecedent);
+        notifBuilder.addAction(R.drawable.image_pause, "Pause/Démarrer", musiquePenIntDemaPause);
+        notifBuilder.addAction(R.drawable.image_suivant, "Suivant", musiquePenIntSuivant);
+
+        notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                .setShowActionsInCompactView(0,1,2));
+
+
+        notifManagerCompat = NotificationManagerCompat.from(MainActivity.this);//Création d'une gestion de notification
 
         //Gestion si l'utilisateur utilise Android 8.0 ou supérieur
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notifChannel = new NotificationChannel(CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);//Création d'un Channel de notification pour les notifications d'Android 8.0 ou supérieur
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);//Création d'un NotificationManager pour les notifications d'Android 8.0 ou supérieur
+            notificationManager.createNotificationChannel(notifChannel);
         }
-
-        managerCompat.notify(NOTIFICATION_ID, builder.build());//Appel la notification builder
     }
 
 
@@ -149,7 +177,8 @@ public class MainActivity extends AppCompatActivity {
         int result = musiqueManager.requestAudioFocus(musiqueFocusChange,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
         {
-            musiquePlayer.start();
+            musiquePlayer.start();//Démarre la musique
+            notifManagerCompat.notify(NOTIFICATION_ID, notifBuilder.build());//Démarra la notification de contrôle musique
         }
     }
 
@@ -177,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     public void musiqueArret(View view)
     {
         if (musiquePlayer!=null)
@@ -186,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
             seekBarMusique.setProgress(0);
             txtViewMusiqueTemps.setText("00:00");
             txtViewMusiqueDuree.setText("00:00");
+            notifManagerCompat.cancel(NOTIFICATION_ID);//Arrête la notification de contrôle musique
         }
     }
 
