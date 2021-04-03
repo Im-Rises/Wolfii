@@ -4,18 +4,25 @@ package com.example.lecteurmusique;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.media.session.MediaButtonReceiver;
+
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.session.PlaybackState;
 import android.os.Build;
 import android.os.Bundle;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -43,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int NOTIFICATION_ID = 1;                               //Notification numéro
     private NotificationCompat.Builder notifBuilder;                     //Inititalisation notification
     private NotificationManagerCompat notifManagerCompat;                //Création d'une gestion de notification decompatibilité
+
 
 
     //Fonction d'apppel lors de la création de la page
@@ -102,16 +110,34 @@ public class MainActivity extends AppCompatActivity {
         musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener() {
             @Override
             public void onAudioFocusChange(int focusChange) {
-                if (focusChange==AudioManager.AUDIOFOCUS_LOSS)
+                if (focusChange==AudioManager.AUDIOFOCUS_LOSS) {
                     musiquePlayer.pause();
+                    handlerTemps.removeCallbacks(runnableTemps);
+                }
             }
         };
 
 
         //Inititalisation de la notification
         notificationInit();
-    }
 
+
+
+/*        //Notification BroadcastReceiver pour récupérer les appuis sur les touches de controles de la notification de controle musique
+
+//private BroadcastReceiver notifBroadcastReceiver;//Création d'un BroadcastReceiver pour récupérer les commmandes de la notification de contrôle
+MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)
+        notifBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.e("TEST","Réception intent appui bouton notif");
+                txtViewMusiqueTemps.setText("fontionne");
+            }
+        };
+
+            private LocalBroadcastManager notibroadcasttest;
+        */
+    }
 
 
     public void notificationInit() {
@@ -126,34 +152,43 @@ public class MainActivity extends AppCompatActivity {
         //notifBuilder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
 
 
-        Intent musiquePlayerIntent = new Intent(this, MainActivity.class);           //Déclaration Intent pour retourner sur la page de la musique
+        Intent musiquePlayerIntent = new Intent(this, MainActivity.class);//Déclaration Intent pour retourner sur la page de la musique
         PendingIntent musiquePlayerPenInt = PendingIntent.getActivity(this, 0, musiquePlayerIntent, 0); //Déclaration d'un pendingIntent pour utiliser l'intent précédent dans une notification
         notifBuilder.setContentIntent(musiquePlayerPenInt);                          //Ajoute l'intent à l'appui sur la notification (retour application)
 
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
-        Intent musiqueIntentPrecedent = new Intent(this, MainActivity.class);
-        PendingIntent musiquePenIntPrecedent = PendingIntent.getActivity(this, 0, musiqueIntentPrecedent, 0);
-        Intent musiqueIntentSuivant = new Intent(this, MainActivity.class);
-        PendingIntent musiquePenIntSuivant = PendingIntent.getActivity(this, 0, musiqueIntentSuivant, 0);
-        Intent musiqueIntentDemaPause = new Intent(this, MainActivity.class);
-        PendingIntent musiquePenIntDemaPause = PendingIntent.getActivity(this, 0, musiqueIntentDemaPause, 0);
-        //Il faut juste créer trois fonctions comme suit pour envoyer le sredirections des intents :
-        /*private CharSequence getMessageText(Intent intent) {
-        Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
-        if (remoteInput != null) {
-            return remoteInput.getCharSequence(KEY_TEXT_REPLY);
-        }
-        return null;
-        }
-        */
+        Intent musiqueIntentPrecedent = new Intent(this, MusiqueBroadcastReceiver.class)
+            .setAction("PRECEDENT")
+            .putExtra("Test",0);
+        PendingIntent musiquePenIntPrecedent = PendingIntent.getBroadcast(this,1,musiqueIntentPrecedent,0);
+
+        Intent musiqueIntentSuivant = new Intent(this, MusiqueBroadcastReceiver.class)
+                .setAction("SUIVANT")
+                .putExtra("Test",0);
+        PendingIntent musiquePenIntSuivant = PendingIntent.getBroadcast(this, 0, musiqueIntentSuivant, 0);
+
+        Intent musiqueIntentDemaPause = new Intent(this, MusiqueBroadcastReceiver.class)
+                .setAction("DEMAPAUSE")
+                .putExtra("Test",0);
+        PendingIntent musiquePenIntDemaPause = PendingIntent.getBroadcast(this, 0, musiqueIntentDemaPause, 0);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
         //Ajout des boutons à la notification pour le contrôle musique
-        notifBuilder.addAction(R.drawable.image_precedent, "Précédent", musiquePenIntPrecedent);
-        notifBuilder.addAction(R.drawable.image_pause, "Pause/Démarrer", musiquePenIntDemaPause);
-        notifBuilder.addAction(R.drawable.image_suivant, "Suivant", musiquePenIntSuivant);
+        notifBuilder.addAction(R.drawable.image_precedent, "Précédent", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE));//Ajout le bouton "musique précédente à la notification"
+        notifBuilder.addAction(R.drawable.image_pause, "Démarrer/Pause", musiquePenIntDemaPause);//Ajout le bouton "musique Demarrer/Pause à la notification"
+        notifBuilder.addAction(R.drawable.image_suivant, "Suivant", musiquePenIntSuivant);//Ajout le bouton "musique suivante à la notification"
 
-        notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                .setShowActionsInCompactView(0,1,2));
+        notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
+                .setShowActionsInCompactView(0,1,2));//Ajoute les boutons à la notification en mode compacté
 
 
         notifManagerCompat = NotificationManagerCompat.from(MainActivity.this);//Création d'une gestion de notification
@@ -162,10 +197,9 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notifChannel = new NotificationChannel(CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);//Création d'un Channel de notification pour les notifications d'Android 8.0 ou supérieur
             NotificationManager notificationManager = getSystemService(NotificationManager.class);//Création d'un NotificationManager pour les notifications d'Android 8.0 ou supérieur
-            notificationManager.createNotificationChannel(notifChannel);
+            notificationManager.createNotificationChannel(notifChannel);//Création du channel de notificatios
         }
     }
-
 
 
     public void musiqueDemaEtFocus()
