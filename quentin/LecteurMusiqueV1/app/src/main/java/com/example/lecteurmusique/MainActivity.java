@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
 
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la msuqiue
-    private TextView txtViewMusiqueTemps,txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
+    private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
 
 
     private MediaPlayer musiquePlayer;                          //Lecture musique
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener() {
             @Override
             public void onAudioFocusChange(int focusChange) {
-                if (focusChange==AudioManager.AUDIOFOCUS_LOSS) {
+                if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                     musiquePlayer.pause();
                     handlerTemps.removeCallbacks(runnableTemps);
                 }
@@ -134,7 +134,7 @@ MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTI
                 txtViewMusiqueTemps.setText("fontionne");
             }
         };
-
+            MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)
             private LocalBroadcastManager notibroadcasttest;
         */
     }
@@ -157,38 +157,32 @@ MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTI
         notifBuilder.setContentIntent(musiquePlayerPenInt);                          //Ajoute l'intent à l'appui sur la notification (retour application)
 
 
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
         Intent musiqueIntentPrecedent = new Intent(this, MusiqueBroadcastReceiver.class)
-            .setAction("PRECEDENT")
-            .putExtra("Test",0);
-        PendingIntent musiquePenIntPrecedent = PendingIntent.getBroadcast(this,1,musiqueIntentPrecedent,0);
+                .setAction("PRECEDENT")
+                .putExtra("Test", 0);
+        PendingIntent musiquePenIntPrecedent = PendingIntent.getBroadcast(this, 1, musiqueIntentPrecedent, 0);
 
         Intent musiqueIntentSuivant = new Intent(this, MusiqueBroadcastReceiver.class)
                 .setAction("SUIVANT")
-                .putExtra("Test",0);
+                .putExtra("Test", 0);
         PendingIntent musiquePenIntSuivant = PendingIntent.getBroadcast(this, 0, musiqueIntentSuivant, 0);
 
         Intent musiqueIntentDemaPause = new Intent(this, MusiqueBroadcastReceiver.class)
                 .setAction("DEMAPAUSE")
-                .putExtra("Test",0);
+                .putExtra("Test", 0);
         PendingIntent musiquePenIntDemaPause = PendingIntent.getBroadcast(this, 0, musiqueIntentDemaPause, 0);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
         //Ajout des boutons à la notification pour le contrôle musique
-        notifBuilder.addAction(R.drawable.image_precedent, "Précédent", MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE));//Ajout le bouton "musique précédente à la notification"
+        notifBuilder.addAction(R.drawable.image_precedent, "Précédent", musiquePenIntPrecedent);//Ajout le bouton "musique précédente à la notification"
         notifBuilder.addAction(R.drawable.image_pause, "Démarrer/Pause", musiquePenIntDemaPause);//Ajout le bouton "musique Demarrer/Pause à la notification"
         notifBuilder.addAction(R.drawable.image_suivant, "Suivant", musiquePenIntSuivant);//Ajout le bouton "musique suivante à la notification"
 
         notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
-                .setShowActionsInCompactView(0,1,2));//Ajoute les boutons à la notification en mode compacté
+                .setShowActionsInCompactView(0, 1, 2));//Ajoute les boutons à la notification en mode compacté
 
 
         notifManagerCompat = NotificationManagerCompat.from(MainActivity.this);//Création d'une gestion de notification
@@ -202,15 +196,13 @@ MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTI
     }
 
 
-    public void musiqueDemaEtFocus()
-    {
+    public void musiqueDemaEtFocus() {
         /*
         Fonction de demande d'utilisation unique des sorties audio du téléphone
         et démarrage de la musique.
          */
-        int result = musiqueManager.requestAudioFocus(musiqueFocusChange,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
-        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
-        {
+        int result = musiqueManager.requestAudioFocus(musiqueFocusChange, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             musiquePlayer.start();//Démarre la musique
             notifManagerCompat.notify(NOTIFICATION_ID, notifBuilder.build());//Démarra la notification de contrôle musique
         }
@@ -227,26 +219,21 @@ MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTI
             handlerTemps.postDelayed(runnableTemps, 400);
             //musiquePlayer.start();
             musiqueDemaEtFocus();
-        }
-        else if (!musiquePlayer.isPlaying()) {
-            handlerTemps.postDelayed(runnableTemps,400);
+        } else if (!musiquePlayer.isPlaying()) {
+            handlerTemps.postDelayed(runnableTemps, 400);
             //musiquePlayer.start();
             musiqueDemaEtFocus();
-        }
-        else
-        {
+        } else {
             musiquePlayer.pause();
             handlerTemps.removeCallbacks(runnableTemps);
         }
     }
 
     @SuppressLint("SetTextI18n")
-    public void musiqueArret(View view)
-    {
-        if (musiquePlayer!=null)
-        {
+    public void musiqueArret(View view) {
+        if (musiquePlayer != null) {
             musiquePlayer.release();
-            musiquePlayer=null;
+            musiquePlayer = null;
             seekBarMusique.setProgress(0);
             txtViewMusiqueTemps.setText("00:00");
             txtViewMusiqueDuree.setText("00:00");
@@ -256,11 +243,10 @@ MediaButtonReceiver.buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTI
 
 
     @SuppressLint("DefaultLocale")
-    private String millisecondesEnMinutesSeconde(int tmpsMillisecondes)
-    {
+    private String millisecondesEnMinutesSeconde(int tmpsMillisecondes) {
         return String.format("%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes),
-                TimeUnit.MILLISECONDS.toSeconds(tmpsMillisecondes) - TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes)*60);
+                TimeUnit.MILLISECONDS.toSeconds(tmpsMillisecondes) - TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes) * 60);
 
         //Autre méthode qui fonctionne pas ??? Fait planter l'application si on envoie le résultat de ce text dans un setText
         //return Integer.toString((tmpsMillisecondes/1000)/60).substring(0,2)+":"+Integer.toString(tmpsMillisecondes%60).substring(0,2);

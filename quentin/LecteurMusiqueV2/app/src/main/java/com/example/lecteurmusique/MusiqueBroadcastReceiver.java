@@ -9,6 +9,11 @@ public class MusiqueBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e("test de log de ","test 200");
-        /*MainActivity.fonctionAAppeler*/
+
     }
+
+    /*
+    Ici faire gestion de l'envoie de la mise à jour de l'UI par le service et faire
+    le commandement de la musique par le MainActivity au service.
+     */
 }

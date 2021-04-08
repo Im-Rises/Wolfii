@@ -13,6 +13,10 @@
         android:theme="@style/Theme.LecteurMusique">
 
 
+        <!--Déclaration d'un Service :-->
+        <service android:name=".MusiqueService"/>
+
+
         <!--Déclaration d'un BroadcastReceiver :-->
         <receiver android:name=".MusiqueBroadcastReceiver"  android:exported="true"/>
 
