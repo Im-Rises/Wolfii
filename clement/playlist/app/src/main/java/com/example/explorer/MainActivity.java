@@ -2,6 +2,7 @@ package com.example.explorer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +33,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String filename = "myfile";
+        String fileContents = "Hello world!";
+        try (FileOutputStream fos = context.openFileOutput(filename, Context.MODE_PRIVATE)) {
+            fos.write(fileContents.toByteArray());
+        }
+    }
+
+    private void touch(String inputPath, String inputFile) {
+        OutputStream f = null;
+        try {
+
+            f = new FileOutputStream(inputPath + inputFile);
+            f.write(new byte[1024], 0, 1);
+            Log.d("debug_create", "ça a fonctionné !");
+        }
+        catch (Exception e) {
+
+            Log.d("debug_create", e.getMessage());
+        }
     }
 
     private void mv(String inputPath, String inputFile, String outputPath) {
