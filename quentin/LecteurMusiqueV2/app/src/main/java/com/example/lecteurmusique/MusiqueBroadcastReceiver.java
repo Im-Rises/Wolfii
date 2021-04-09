@@ -8,8 +8,8 @@ import android.util.Log;
 public class MusiqueBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("test de log de ","test 200");
-
+        Log.e("Test classe Broadcast","Fonctionne !");
+        //context.startService(new Intent(context,MusiqueService.class));
     }
 
     /*

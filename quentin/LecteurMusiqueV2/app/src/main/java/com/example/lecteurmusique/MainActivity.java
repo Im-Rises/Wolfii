@@ -3,7 +3,13 @@ package com.example.lecteurmusique;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -41,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Gestion du déplacement par l'utilisateur du seekbar
+        seekBarMusique.setSoundEffectsEnabled(false);
         seekBarMusique.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -63,17 +70,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnMusiqueDemaPause.setSoundEffectsEnabled(false);
         btnMusiqueDemaPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Envoyer commande de démarrage et pause de la musique à la classe service.
-            }
+                //Envoyer commande de démarrage et pause de la musique à la classe BroadCastReceiver
+                startService(new Intent(MainActivity.this,MusiqueService.class));
+               }
         });
 
+        btnMusiqueArret.setSoundEffectsEnabled(false);
         btnMusiqueArret.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Envoyer commande d'arrêt de la musique à la classe service. Et même arrêt du service.
+                //Envoyer commande d'arrêt de la musique à la classe BroadCastReceiver
+                stopService(new Intent(MainActivity.this,MusiqueService.class));
             }
         });
 

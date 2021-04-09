@@ -1,5 +1,7 @@
+
 package com.example.lecteurmusique;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -35,7 +37,9 @@ public class MusiqueService extends Service {
     private Runnable runnableTemps;                             //Runnable pour mettre à jour toutes les secondes le seekbar et les temps relatifs à la musique
 
 
+
 /*---------------------------------------------------------FONCTIONS DE LA CLASSE SERVICE--------------------------------------------------------------*/
+
 
     @Nullable
     @Override
@@ -49,7 +53,6 @@ public class MusiqueService extends Service {
 
         //Gestion du focus de la musique
         musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));//initialise l'AudioManager
-
 
         //Gestion de l'interruption de la musique par une autre application
         musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener() {
@@ -67,8 +70,10 @@ public class MusiqueService extends Service {
             @Override
             public void run() {
                 if (musiquePlayer != null) {
+
 /*                    seekBarMusique.setProgress(musiquePlayer.getCurrentPosition());
                     txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));*/
+
                     //Remet dans la pile du handler un appel pour le Runnable (this)
                     handlerTemps.postDelayed(this, 400);
                 }
@@ -79,21 +84,25 @@ public class MusiqueService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        notificationInit();//Inititalisation de la notification
+        musiqueDemaPause();//Demarre la musique
+        startForeground(NOTIFICATION_ID,notificationInit());//Démarre le service en foreground afin de permettre de continuer la musique après l'avoir fermé
 
-        return super.onStartCommand(intent, flags, startId);
+        /*        return super.onStartCommand(intent, flags, startId);*/
+        return START_STICKY;//Si l'application est arrêté toatelement alors on redémarre le service
     }
 
 
     @Override
     public void onDestroy() {
+        musiqueArret();
+        stopForeground(true);
         super.onDestroy();
     }
 
 
 
-
 /*---------------------------------------------------------FONCTIONS DE GESTION MUSIQUE--------------------------------------------------------------*/
+
 
 
     public void musiqueDemaPause()
@@ -116,17 +125,23 @@ public class MusiqueService extends Service {
     public void musiqueInitialisation()
     {
         musiquePlayer = MediaPlayer.create(this, R.raw.musiquetest);
-        /*            txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(musiquePlayer.getDuration()));*/
+
+/*            txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(musiquePlayer.getDuration()));*/
+
         musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+
 /*            seekBarMusique.setMax(musiquePlayer.getDuration());
             musiquePlayer.seekTo(seekBarMusique.getProgress());*/
+
     }
 
     public void musiqueDemaEtFocus() {
-        /*
+
+/*
         Fonction de demande d'utilisation unique des sorties audio du téléphone
         et démarrage de la musique.
          */
+
         handlerTemps.postDelayed(runnableTemps, 400);
 
         int resultat;
@@ -145,7 +160,7 @@ public class MusiqueService extends Service {
 
         if (resultat == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             musiquePlayer.start();//Démarre la musique
-            notifManagerCompat.notify(NOTIFICATION_ID, notifBuilder.build());//Démarre la notification de contrôle musique
+            //notifManagerCompat.notify(NOTIFICATION_ID, notifBuilder.build());//Démarre la notification de contrôle musique
         }
     }
 
@@ -161,9 +176,11 @@ public class MusiqueService extends Service {
         if (musiquePlayer != null) {
             musiquePlayer.release();
             musiquePlayer = null;
+
 /*            seekBarMusique.setProgress(0);
             txtViewMusiqueTemps.setText("00:00");
             txtViewMusiqueDuree.setText("00:00");*/
+
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             {
@@ -183,9 +200,11 @@ public class MusiqueService extends Service {
 
 
 
+
 /*---------------------------------------------------------FONCTION GESTION NOTIFICATION--------------------------------------------------------------*/
 
-    public void notificationInit() {
+
+    public Notification notificationInit() {
         notifBuilder = new NotificationCompat.Builder(MusiqueService.this, CHANNEL_ID);//Inititalisation notification
         notifBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);            //Rend visible la notification quand le téléphone est vérouillé et permet le controle de la musique
         notifBuilder.setSmallIcon(R.drawable.image_notif_musique);                   //Image de la notification
@@ -203,7 +222,7 @@ public class MusiqueService extends Service {
         notifBuilder.setContentIntent(musiquePlayerPenInt);                          //Ajoute l'intent à l'appui sur la notification (retour application)
 
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////Gestion boutons notification/////////////////////////////////////////////////////////////////////
         //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
         Intent musiqueIntentPrecedent = new Intent(this, MusiqueBroadcastReceiver.class)
                 .setAction("PRECEDENT")
@@ -239,5 +258,7 @@ public class MusiqueService extends Service {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);//Création d'un NotificationManager pour les notifications d'Android 8.0 ou supérieur
             notificationManager.createNotificationChannel(notifChannel);//Création du channel de notificatios
         }
+
+        return notifBuilder.build();
     }
 }
