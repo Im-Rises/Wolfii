@@ -8,12 +8,24 @@ import android.util.Log;
 public class MusiqueBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("Test classe Broadcast","Fonctionne !");
-        //context.startService(new Intent(context,MusiqueService.class));
-    }
 
-    /*
-    Ici faire gestion de l'envoie de la mise à jour de l'UI par le service et faire
-    le commandement de la musique par le MainActivity au service.
-     */
+        Intent intentEnvoi = new Intent(context,MusiqueService.class);
+
+        switch(intent.getAction())
+        {
+            case "DEMAPAUSE":
+                //intentEnvoi.setAction("DEMAPAUSE");
+                //context.startService(intentEnvoi);
+                break;
+            case "PRECEDENT":
+                break;
+            case "SUIVANT":
+                break;
+            case "ARRET":
+                context.stopService(new Intent(context,MusiqueService.class));
+                break;
+            case "REJOUER":
+                break;
+        }
+    }
 }

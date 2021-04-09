@@ -5,15 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.util.concurrent.TimeUnit;
@@ -26,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btnMusiqueArret;                          //Bouton pour arrêter la musique
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
+
+    MusiqueService mService;
+    boolean mBound = false;
 
 
 
@@ -45,18 +52,52 @@ public class MainActivity extends AppCompatActivity {
         this.txtViewMusiqueDuree = (TextView) findViewById(R.id.txtViewMusiqueDuree);
 
 
+        startService(new Intent(MainActivity.this,MusiqueService.class));//Démarre le service
+
+
+
+/*--------------------------------------GESTION BOUTON DEMARRER------------------------------------------------*/
+
+        btnMusiqueDemaPause.setSoundEffectsEnabled(false);
+        btnMusiqueDemaPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Envoyer commande de démarrage et pause de la musique à la classe BroadCastReceiver
+                //startService(new Intent(MainActivity.this,MusiqueService.class).setAction("DEMAPAUSE"));
+                Intent intent = new Intent(MainActivity.this, MusiqueService.class);
+                bindService(intent, connection, Context.BIND_AUTO_CREATE);
+               }
+        });
+
+/*--------------------------------------GESTION BOUTON ARRET------------------------------------------------*/
+
+        btnMusiqueArret.setSoundEffectsEnabled(false);
+        btnMusiqueArret.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Envoyer commande d'arrêt de la musique à la classe BroadCastReceiver
+                stopService(new Intent(MainActivity.this,MusiqueService.class));
+                unbindService(connection);
+                mBound=false;
+            }
+        });
+
+
+
+/*--------------------------------------GESTION SEEKBAR------------------------------------------------*/
 
         //Gestion du déplacement par l'utilisateur du seekbar
         seekBarMusique.setSoundEffectsEnabled(false);
         seekBarMusique.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                /*if (musiquePlayer != null) {
-                    if (fromUser) {
-                        musiquePlayer.seekTo(progress);
-                    }
-                    txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));
-                }*/
+
+                if (fromUser && mBound) {
+                    int num = mService.getRandomNumber();
+                    Log.e("BIND FONCTIONNE", "bien");
+                    //musiquePlayer.seekTo(progress);
+                    //txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));
+                }
             }
 
             @Override
@@ -69,26 +110,29 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        btnMusiqueDemaPause.setSoundEffectsEnabled(false);
-        btnMusiqueDemaPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Envoyer commande de démarrage et pause de la musique à la classe BroadCastReceiver
-                startService(new Intent(MainActivity.this,MusiqueService.class));
-               }
-        });
-
-        btnMusiqueArret.setSoundEffectsEnabled(false);
-        btnMusiqueArret.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Envoyer commande d'arrêt de la musique à la classe BroadCastReceiver
-                stopService(new Intent(MainActivity.this,MusiqueService.class));
-            }
-        });
-
     }
+
+
+/*--------------------------------------GESTION BOUND SERVICE------------------------------------------------*/
+
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            MusiqueService.LocalBinder binder = (MusiqueService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+
+/*--------------------------------------AUTRES FONCTIONS------------------------------------------------*/
 
     @SuppressLint("DefaultLocale")
     private String millisecondesEnMinutesSeconde(int tmpsMillisecondes) {

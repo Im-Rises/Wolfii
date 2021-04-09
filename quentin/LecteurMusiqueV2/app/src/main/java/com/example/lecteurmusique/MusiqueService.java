@@ -11,13 +11,19 @@ import android.content.Intent;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.session.MediaSession;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import java.util.Random;
 
 public class MusiqueService extends Service {
 
@@ -26,26 +32,42 @@ public class MusiqueService extends Service {
     private AudioManager.OnAudioFocusChangeListener musiqueFocusChange;//OnAudioFocusChange pour gérer les interruptions par d'autres applications de la musique
     private AudioFocusRequest musiqueFocusRequest;//AudioFocusRequest pour les demande de focus audio pour Andorid 8.0 ou supérieur
 
+
     private static final String CHANNEL_ID = "NotifControlMusique";             //ID notification de control musique
     private static final String NOTIFICATION_CHANNEL_NAME = "NotifChannelName"; //CHANNEL name notification de control musique
     private static final int NOTIFICATION_ID = 1;                               //Notification numéro
     private NotificationCompat.Builder notifBuilder;                     //Inititalisation notification
-    private NotificationManagerCompat notifManagerCompat;                //Création d'une gestion de notification decompatibilité
+    private NotificationManagerCompat notifManagerCompat;                //Création d'une gestion de notification de compatibilité
 
 
     private Handler handlerTemps = new Handler();               //Handler pour appeler toutes les secondes le runnable
     private Runnable runnableTemps;                             //Runnable pour mettre à jour toutes les secondes le seekbar et les temps relatifs à la musique
 
 
+    private final IBinder binder = new LocalBinder();    // Binder given to clients
+    private final Random mGenerator = new Random();    // Random number generator
 
-/*---------------------------------------------------------FONCTIONS DE LA CLASSE SERVICE--------------------------------------------------------------*/
+//-----------------------------------------------------------------GESTION BOUND SERVICE-----------------------------------------------------------------------------
+/*    private MediaSession musiqueMediaSession;*/
 
+    public class LocalBinder extends Binder {
+        MusiqueService getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return MusiqueService.this;
+        }
+    }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
+
+    /** method for clients */
+    public int getRandomNumber() {
+        return mGenerator.nextInt(100);
+    }
+
+/*---------------------------------------------------------FONCTIONS DE LA CLASSE SERVICE--------------------------------------------------------------*/
 
     @Override
     public void onCreate() {
@@ -75,7 +97,7 @@ public class MusiqueService extends Service {
                     txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));*/
 
                     //Remet dans la pile du handler un appel pour le Runnable (this)
-                    handlerTemps.postDelayed(this, 400);
+                    handlerTemps.postDelayed(this, 1000);
                 }
             }
         };
@@ -84,10 +106,22 @@ public class MusiqueService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        musiqueDemaPause();//Demarre la musique
-        startForeground(NOTIFICATION_ID,notificationInit());//Démarre le service en foreground afin de permettre de continuer la musique après l'avoir fermé
+        //musiqueDemaPause();//Demarre la musique
 
-        /*        return super.onStartCommand(intent, flags, startId);*/
+/*        switch (intent.getAction())
+        {
+            case "DEMAPAUSE":
+
+                break;
+            case "PRECEDENT":
+                break;
+            case "SUIVANT":
+                break;
+            case "REJOUER":
+                break;
+        }*/
+
+        /*return super.onStartCommand(intent, flags, startId);*/
         return START_STICKY;//Si l'application est arrêté toatelement alors on redémarre le service
     }
 
@@ -95,7 +129,6 @@ public class MusiqueService extends Service {
     @Override
     public void onDestroy() {
         musiqueArret();
-        stopForeground(true);
         super.onDestroy();
     }
 
@@ -111,6 +144,7 @@ public class MusiqueService extends Service {
         {
             musiqueInitialisation();
             musiqueDemaEtFocus();
+            startForeground(NOTIFICATION_ID,notificationInit());//Démarre le service en foreground afin de permettre de continuer la musique après l'avoir fermé
         }
         else if (!musiquePlayer.isPlaying())
         {
@@ -124,11 +158,11 @@ public class MusiqueService extends Service {
 
     public void musiqueInitialisation()
     {
-        musiquePlayer = MediaPlayer.create(this, R.raw.musiquetest);
+        musiquePlayer = MediaPlayer.create(this, R.raw.musiquetest);//Création du MediaPlayer
 
 /*            txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(musiquePlayer.getDuration()));*/
 
-        musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+        musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);//Définis le mode de fonctionnement sur PARTIAL_WAKE_LOCK pour permettre à la musique de fonctionner sans être sur l'application
 
 /*            seekBarMusique.setMax(musiquePlayer.getDuration());
             musiquePlayer.seekTo(seekBarMusique.getProgress());*/
@@ -142,7 +176,7 @@ public class MusiqueService extends Service {
         et démarrage de la musique.
          */
 
-        handlerTemps.postDelayed(runnableTemps, 400);
+        handlerTemps.postDelayed(runnableTemps, 1000);
 
         int resultat;
 
@@ -160,13 +194,13 @@ public class MusiqueService extends Service {
 
         if (resultat == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             musiquePlayer.start();//Démarre la musique
-            //notifManagerCompat.notify(NOTIFICATION_ID, notifBuilder.build());//Démarre la notification de contrôle musique
         }
     }
 
     public void musiquePause()
     {
         musiquePlayer.pause();
+        /*Maj des boutons de la notif*/
         handlerTemps.removeCallbacks(runnableTemps);
     }
 
@@ -191,15 +225,32 @@ public class MusiqueService extends Service {
                 musiqueManager.abandonAudioFocus(musiqueFocusChange);
             }
 
-            notifManagerCompat.cancel(NOTIFICATION_ID);//Arrête la notification de contrôle musique
+            stopForeground(true);
+            //notifManagerCompat.cancel(NOTIFICATION_ID);//Arrête la notification de contrôle musique
         }
     }
 
 
+    public void musiqueSuivante()
+    {
+
+    }
+
+    public void musiquePrecedente()
+    {
+
+    }
+
+    public void musiqueBoucle()
+    {
+
+    }
 
 
+    public void notifUpdate()
+    {
 
-
+    }
 
 /*---------------------------------------------------------FONCTION GESTION NOTIFICATION--------------------------------------------------------------*/
 
@@ -224,30 +275,38 @@ public class MusiqueService extends Service {
 
         /////////////////////////////////////////////////////Gestion boutons notification/////////////////////////////////////////////////////////////////////
         //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
+
+        Intent musiqueIntentRejouer = new Intent(this, MusiqueBroadcastReceiver.class)
+                .setAction("Rejouer");
+        PendingIntent musiquePenIntRejouer = PendingIntent.getBroadcast(this, 0, musiqueIntentRejouer, 0);
+
         Intent musiqueIntentPrecedent = new Intent(this, MusiqueBroadcastReceiver.class)
-                .setAction("PRECEDENT")
-                .putExtra("Test", 0);
+                .setAction("PRECEDENT");
         PendingIntent musiquePenIntPrecedent = PendingIntent.getBroadcast(this, 1, musiqueIntentPrecedent, 0);
 
         Intent musiqueIntentSuivant = new Intent(this, MusiqueBroadcastReceiver.class)
-                .setAction("SUIVANT")
-                .putExtra("Test", 0);
+                .setAction("SUIVANT");
         PendingIntent musiquePenIntSuivant = PendingIntent.getBroadcast(this, 0, musiqueIntentSuivant, 0);
 
         Intent musiqueIntentDemaPause = new Intent(this, MusiqueBroadcastReceiver.class)
-                .setAction("DEMAPAUSE")
-                .putExtra("Test", 0);
+                .setAction("DEMAPAUSE");
         PendingIntent musiquePenIntDemaPause = PendingIntent.getBroadcast(this, 0, musiqueIntentDemaPause, 0);
+
+        Intent musiqueIntentArret = new Intent(this, MusiqueBroadcastReceiver.class)
+                .setAction("ARRET");
+        PendingIntent musiquePenIntArret = PendingIntent.getBroadcast(this, 0, musiqueIntentArret, 0);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
         //Ajout des boutons à la notification pour le contrôle musique
+        notifBuilder.addAction(R.drawable.image_rejouer, "Rejouer", musiquePenIntRejouer);//Ajout le bouton "musique rejouer" à la notification"
         notifBuilder.addAction(R.drawable.image_precedent, "Précédent", musiquePenIntPrecedent);//Ajout le bouton "musique précédente à la notification"
         notifBuilder.addAction(R.drawable.image_pause, "Démarrer/Pause", musiquePenIntDemaPause);//Ajout le bouton "musique Demarrer/Pause à la notification"
         notifBuilder.addAction(R.drawable.image_suivant, "Suivant", musiquePenIntSuivant);//Ajout le bouton "musique suivante à la notification"
+        notifBuilder.addAction(R.drawable.image_arret, "Arret", musiquePenIntArret);//Ajout le bouton "musique arret" à la notification"
+
 
         notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
-                .setShowActionsInCompactView(0, 1, 2));//Ajoute les boutons à la notification en mode compacté
+                .setShowActionsInCompactView(1, 2, 3));//Ajoute les boutons à la notification en mode compacté
 
 
         notifManagerCompat = NotificationManagerCompat.from(MusiqueService.this);//Création d'une gestion de notification

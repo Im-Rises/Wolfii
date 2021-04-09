@@ -22,11 +22,7 @@
 
 
         <!--Déclaration d'un BroadcastReceiver :-->
-        <receiver android:name=".MusiqueBroadcastReceiver"  android:exported="true">
-<!--            <intent-filter>
-                <action android:name="android.intent.action.DEMARRE_SERVICE"/>
-            </intent-filter>-->
-        </receiver>
+        <receiver android:name=".MusiqueBroadcastReceiver"  android:exported="true"></receiver>
 
 
         <activity
