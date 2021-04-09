@@ -31,87 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
 
-    MusiqueService mService;
-    boolean mBound = false;
-
-
-
-    //Fonction d'apppel lors de la création de la page
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //Code qui lie les objets du activity_main.xml à ceux dy MainActivity.xml*/
-        this.seekBarMusique = (SeekBar) findViewById(R.id.seekBarMusique);
-
-        this.btnMusiqueDemaPause = (Button) findViewById(R.id.btnDemaPause);
-        this.btnMusiqueArret = (Button) findViewById(R.id.btnArret);
-
-        this.txtViewMusiqueTemps = (TextView) findViewById(R.id.txtViewMusiqueTemps);
-        this.txtViewMusiqueDuree = (TextView) findViewById(R.id.txtViewMusiqueDuree);
-
-
-        startService(new Intent(MainActivity.this,MusiqueService.class));//Démarre le service
-
-
-
-/*--------------------------------------GESTION BOUTON DEMARRER------------------------------------------------*/
-
-        btnMusiqueDemaPause.setSoundEffectsEnabled(false);
-        btnMusiqueDemaPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Envoyer commande de démarrage et pause de la musique à la classe BroadCastReceiver
-                //startService(new Intent(MainActivity.this,MusiqueService.class).setAction("DEMAPAUSE"));
-                Intent intent = new Intent(MainActivity.this, MusiqueService.class);
-                bindService(intent, connection, Context.BIND_AUTO_CREATE);
-               }
-        });
-
-/*--------------------------------------GESTION BOUTON ARRET------------------------------------------------*/
-
-        btnMusiqueArret.setSoundEffectsEnabled(false);
-        btnMusiqueArret.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Envoyer commande d'arrêt de la musique à la classe BroadCastReceiver
-                stopService(new Intent(MainActivity.this,MusiqueService.class));
-                unbindService(connection);
-                mBound=false;
-            }
-        });
-
-
-
-/*--------------------------------------GESTION SEEKBAR------------------------------------------------*/
-
-        //Gestion du déplacement par l'utilisateur du seekbar
-        seekBarMusique.setSoundEffectsEnabled(false);
-        seekBarMusique.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                if (fromUser && mBound) {
-                    int num = mService.getRandomNumber();
-                    Log.e("BIND FONCTIONNE", "bien");
-                    //musiquePlayer.seekTo(progress);
-                    //txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-    }
-
+    private MusiqueService mService;
+    private boolean mBound = false;
 
 /*--------------------------------------GESTION BOUND SERVICE------------------------------------------------*/
 
@@ -130,6 +51,98 @@ public class MainActivity extends AppCompatActivity {
             mBound = false;
         }
     };
+
+/*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //Code qui lie les objets du activity_main.xml à ceux dy MainActivity.xml*/
+        this.seekBarMusique = (SeekBar) findViewById(R.id.seekBarMusique);
+
+        this.btnMusiqueDemaPause = (Button) findViewById(R.id.btnDemaPause);
+        this.btnMusiqueArret = (Button) findViewById(R.id.btnArret);
+
+        this.txtViewMusiqueTemps = (TextView) findViewById(R.id.txtViewMusiqueTemps);
+        this.txtViewMusiqueDuree = (TextView) findViewById(R.id.txtViewMusiqueDuree);
+
+
+        startService(new Intent(this,MusiqueService.class));//Démarre le service
+
+        Intent intent = new Intent(MainActivity.this, MusiqueService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+
+/*--------------------------------------HANDLER ET RUNNABLE POUR MAJ INTERFACE-------------------------------------*/
+
+
+
+
+
+
+
+
+
+/*--------------------------------------GESTION BOUTON DEMARRER------------------------------------------------*/
+
+        btnMusiqueDemaPause.setSoundEffectsEnabled(false);
+        btnMusiqueDemaPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Envoyer commande de démarrage et pause de la musique à la classe BroadCastReceiver
+                mService.musiqueDemaPause();
+               }
+        });
+
+/*--------------------------------------GESTION BOUTON ARRET------------------------------------------------*/
+
+        btnMusiqueArret.setSoundEffectsEnabled(false);
+        btnMusiqueArret.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Envoyer commande d'arrêt de la musique à la classe BroadCastReceiver
+                mService.musiqueArret();
+            }
+        });
+
+
+
+/*--------------------------------------GESTION SEEKBAR------------------------------------------------*/
+
+        //Gestion du déplacement par l'utilisateur du seekbar
+        seekBarMusique.setSoundEffectsEnabled(false);
+        seekBarMusique.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                if (fromUser && mBound) {
+                    //mService.musiqueDemaPause();
+                    //musiquePlayer.seekTo(progress);
+                    //txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+/*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
+    @Override
+    protected void onDestroy() {
+        //stopService(new Intent(MainActivity.this,MusiqueService.class));
+        unbindService(connection);
+        mBound=false;
+        super.onDestroy();
+    }
+
 
 
 /*--------------------------------------AUTRES FONCTIONS------------------------------------------------*/

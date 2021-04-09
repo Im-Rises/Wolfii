@@ -45,10 +45,8 @@ public class MusiqueService extends Service {
 
 
     private final IBinder binder = new LocalBinder();    // Binder given to clients
-    private final Random mGenerator = new Random();    // Random number generator
 
 //-----------------------------------------------------------------GESTION BOUND SERVICE-----------------------------------------------------------------------------
-/*    private MediaSession musiqueMediaSession;*/
 
     public class LocalBinder extends Binder {
         MusiqueService getService() {
@@ -62,12 +60,7 @@ public class MusiqueService extends Service {
         return binder;
     }
 
-    /** method for clients */
-    public int getRandomNumber() {
-        return mGenerator.nextInt(100);
-    }
-
-/*---------------------------------------------------------FONCTIONS DE LA CLASSE SERVICE--------------------------------------------------------------*/
+/*---------------------------------------------------------FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE--------------------------------------------------------------*/
 
     @Override
     public void onCreate() {
@@ -105,30 +98,13 @@ public class MusiqueService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        //musiqueDemaPause();//Demarre la musique
-
-/*        switch (intent.getAction())
-        {
-            case "DEMAPAUSE":
-
-                break;
-            case "PRECEDENT":
-                break;
-            case "SUIVANT":
-                break;
-            case "REJOUER":
-                break;
-        }*/
-
         /*return super.onStartCommand(intent, flags, startId);*/
-        return START_STICKY;//Si l'application est arrêté toatelement alors on redémarre le service
+        return START_STICKY;//Si l'application est arrêté toatalement alors on redémarre le service
     }
 
 
     @Override
     public void onDestroy() {
-        musiqueArret();
         super.onDestroy();
     }
 
@@ -228,6 +204,7 @@ public class MusiqueService extends Service {
             stopForeground(true);
             //notifManagerCompat.cancel(NOTIFICATION_ID);//Arrête la notification de contrôle musique
         }
+        stopSelf();
     }
 
 
