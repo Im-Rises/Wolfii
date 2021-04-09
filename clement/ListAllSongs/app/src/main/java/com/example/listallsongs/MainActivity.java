@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // on verifie un paquet de permission
         if(ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
@@ -50,12 +50,13 @@ public class MainActivity extends AppCompatActivity {
                         new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
             }
         }
+        // si tout est bon, on initialise le bordel
         else {
-            doSuff();
+            doStuff();
         }
     }
 
-    public void doSuff (){
+    public void doStuff (){
         listView = (ListView) findViewById(R.id.ListView);
         arrayList = new ArrayList<>();
         getMusic();
@@ -65,8 +66,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Log.i("debug_click", "click reussi !");
+                Log.i("debug_click", "click reussi ! ");
 
 
             }
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(this, "Permission Granted !", Toast.LENGTH_SHORT).show();
 
-                        // doStuff();
+                        doStuff();
                     }
                     else {
                         Toast.makeText(this, "No permission granted", Toast.LENGTH_SHORT).show();
