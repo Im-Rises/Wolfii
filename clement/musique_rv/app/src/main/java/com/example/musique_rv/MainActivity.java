@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSION_REQUEST = 1;
 
 
-    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
                         new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
             }
         }
+        refreshRV(); // pour refresh notre RecyclerView
+    }
+    @SuppressLint("WrongConstant")
+    public void refreshRV() {
         // creation du recyclerview
         mRecyclerView = (RecyclerView) findViewById(R.id.myRecyclerView);
         maMusique = getMusic(); // on recupere ici toutes les musiques sous forme d'un tableau
