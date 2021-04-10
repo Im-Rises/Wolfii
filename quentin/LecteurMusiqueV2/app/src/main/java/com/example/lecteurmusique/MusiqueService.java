@@ -46,7 +46,7 @@ public class MusiqueService extends Service {
 
     private final IBinder binder = new LocalBinder();    // Binder given to clients
 
-//-----------------------------------------------------------------GESTION BOUND SERVICE-----------------------------------------------------------------------------
+//-----------------------------------------------------------------GESTION BOUND CALLBACK SERVICE-----------------------------------------------------------------------------
 
     public class LocalBinder extends Binder {
         MusiqueService getService() {
@@ -59,6 +59,8 @@ public class MusiqueService extends Service {
     public IBinder onBind(Intent intent) {
         return binder;
     }
+
+
 
 /*---------------------------------------------------------FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE--------------------------------------------------------------*/
 
@@ -224,9 +226,28 @@ public class MusiqueService extends Service {
     }
 
 
+/*-----------------------------------------------------FONCTIONS MAJ INTERFCE ET NOTIFICATION--------------------------------------------------------------*/
     public void notifUpdate()
     {
 
+    }
+
+
+/*--------------------------------------------------------------FONCTIONS GETTER--------------------------------------------------------------*/
+
+    public int getMusiquePlayerPosition()
+    {
+        return musiquePlayer.getCurrentPosition();
+    }
+
+    public int getMusiquePlayerDuration()
+    {
+        return musiquePlayer.getDuration();
+    }
+
+    public boolean getMusiquePlayerIsPlaying()
+    {
+        return musiquePlayer.isPlaying();
     }
 
 /*---------------------------------------------------------FONCTION GESTION NOTIFICATION--------------------------------------------------------------*/
