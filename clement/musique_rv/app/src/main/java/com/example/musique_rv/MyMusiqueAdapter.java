@@ -1,8 +1,10 @@
 package com.example.musique_rv;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,45 +12,77 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-class MyVideoGamesAdapter extends RecyclerView.Adapter<MyVideoGamesAdapter.MyViewHolder> {
+class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyViewHolder> {
+    // classe qui est responsable de chaque cellule
+    // responsable du recyclage des view
+    // view holder = accelerer le rendu de la liste, il sera déclaré au sein de l'adapter
     List<Musique> mesMusiques;
-
-    MyVideoGamesAdapter(List<Musique> mesMusiques) {
+    MyMusiqueAdapter(List<Musique> mesMusiques) {
         this.mesMusiques = mesMusiques;
     }
 
+    public Object getItem(int position) {
+        return mesMusiques.get(position);
+    }
+
+    public interface MusiqueItemClickListener {
+        void onMusiqueItemClick(View view, Musique musique, int position);
+        void onMusiqueItemLongClick(View view, Musique musique, int position);
+    }
+    private MusiqueItemClickListener mMusiqueItemClickListener;
+
+    public void setmMusiqueItemClickListener(MusiqueItemClickListener mMusiqueItemClickListener) {
+        this.mMusiqueItemClickListener = mMusiqueItemClickListener;
+    }
     @NonNull
     @Override
-    public MyVideoGamesAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyMusiqueAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // on cherche notre vue avec inflater
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        // on va chercher notre layout
         View view = layoutInflater.inflate(R.layout.musique_item, parent, false);
+        // on renvoie le viewholder
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyVideoGamesAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyMusiqueAdapter.MyViewHolder holder, int position) {
+        // affiche les viewholder en donnant la position
         holder.display(mesMusiques.get(position));
+        Log.d("position", position + "");
     }
 
     @Override
     public int getItemCount() {
-        return mesMusiques.size();
+        return mesMusiques.size(); // pour ne pas être embete avec les tailles de liste
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView mNameTV;
-        private TextView mPriceTV;
+        private TextView mName;
 
         public MyViewHolder(@NonNull View itemView) {
+            // itemview = vue de chaque cellule
             super(itemView);
 
-            mNameTV = (TextView) itemView.findViewById(R.id.name);
-            mPriceTV = (TextView) itemView.findViewById(R.id.path);
+            // afficher le nom de la musique courante
+            mName = (TextView) itemView.findViewById(R.id.name);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mMusiqueItemClickListener != null) {
+                        mMusiqueItemClickListener.onMusiqueItemClick(
+                                itemView,
+                                (Musique) getItem(getAdapterPosition()),
+                                getAdapterPosition());
+                        Log.d("yes", "ca a marche !");
+                    }
+                }
+            });
+        }
+        void display(Musique musique) {
+            // ne jamais le mettre dans le constructeur
+            mName.setText(musique.getName());
         }
 
-        void display(Musique jeuVideo) {
-            mNameTV.setText(jeuVideo.getName());
-            mPriceTV.setText(jeuVideo.getPath());
-        }
     }
 }

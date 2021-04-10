@@ -1,5 +1,7 @@
 package com.example.musique_rv;
 
+// plain old java object (POJO)
+
 public class Musique {
     private String name;
     private String path;
