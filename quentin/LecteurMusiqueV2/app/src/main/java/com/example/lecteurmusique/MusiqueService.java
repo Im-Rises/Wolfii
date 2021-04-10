@@ -220,7 +220,7 @@ public class MusiqueService extends Service {
 
     public void musiqueBoucle()
     {
-
+        musiquePlayer.setLooping(!musiquePlayer.isLooping());
     }
 
 

@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnMusiqueDemaPause;                         //Bouton pour démarrer et mettre en pause la musique
     private Button btnMusiqueArret;                          //Bouton pour arrêter la musique
+    private Button btnMusiqueBoucle;                          //Bouton pour boucler la musique
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
 
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.btnMusiqueDemaPause = (Button) findViewById(R.id.btnDemaPause);
         this.btnMusiqueArret = (Button) findViewById(R.id.btnArret);
+        this.btnMusiqueBoucle = (Button) findViewById(R.id.btnRejouer);
 
         this.txtViewMusiqueTemps = (TextView) findViewById(R.id.txtViewMusiqueTemps);
         this.txtViewMusiqueDuree = (TextView) findViewById(R.id.txtViewMusiqueDuree);
@@ -105,7 +107,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+/*---------------------------------------GESTION BOUCLE MUSIQUE---------------------------------------------*/
 
+        btnMusiqueBoucle.setSoundEffectsEnabled(false);
+        btnMusiqueBoucle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Active désactive la boucle de la musique actuelle
+                mService.musiqueBoucle();
+            }
+        });
 
 /*--------------------------------------GESTION SEEKBAR------------------------------------------------*/
 
