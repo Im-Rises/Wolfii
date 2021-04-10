@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                         new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
             }
         }
-        refreshRV(); // pour refresh notre RecyclerView
+        refreshRV();
     }
     @SuppressLint("WrongConstant")
     public void refreshRV() {
