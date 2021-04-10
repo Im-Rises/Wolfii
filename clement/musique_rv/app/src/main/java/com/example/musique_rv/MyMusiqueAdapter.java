@@ -74,8 +74,19 @@ class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyViewHolde
                                 itemView,
                                 (Musique) getItem(getAdapterPosition()),
                                 getAdapterPosition());
-                        Log.d("yes", "ca a marche !");
                     }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mMusiqueItemClickListener != null) {
+                        mMusiqueItemClickListener.onMusiqueItemLongClick(
+                                itemView,
+                                (Musique)getItem(getAdapterPosition()),
+                                getAdapterPosition());
+                    }
+                    return false;
                 }
             });
         }

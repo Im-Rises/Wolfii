@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSION_REQUEST = 1;
 
 
-    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
                         new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
             }
         }
+        refreshRV();
+    }
+    @SuppressLint("WrongConstant")
+    public void refreshRV() {
         // creation du recyclerview
         mRecyclerView = (RecyclerView) findViewById(R.id.myRecyclerView);
         maMusique = getMusic(); // on recupere ici toutes les musiques sous forme d'un tableau
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         monAdapter.setmMusiqueItemClickListener(new MyMusiqueAdapter.MusiqueItemClickListener() {
             @Override
             public void onMusiqueItemClick(View view, Musique musique, int position) {
-                Toast.makeText(MainActivity.this, "onCarItemClick : " + musique.getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
                 Log.d("debug_musique", musique.getName());
             }
 
