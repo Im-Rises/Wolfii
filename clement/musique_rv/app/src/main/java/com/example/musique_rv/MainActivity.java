@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         monAdapter.setmMusiqueItemClickListener(new MyMusiqueAdapter.MusiqueItemClickListener() {
             @Override
             public void onMusiqueItemClick(View view, Musique musique, int position) {
-                Toast.makeText(MainActivity.this, "onCarItemClick : " + musique.getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
                 Log.d("debug_musique", musique.getName());
             }
 
