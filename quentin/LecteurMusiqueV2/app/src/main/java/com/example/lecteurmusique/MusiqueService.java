@@ -46,6 +46,11 @@ public class MusiqueService extends Service {
 
     private final IBinder binder = new LocalBinder();    // Binder given to clients
 
+
+    private static final String ACTION_STRING_ACTIVITY = "ToActivity";
+
+
+
 //-----------------------------------------------------------------GESTION BOUND CALLBACK SERVICE-----------------------------------------------------------------------------
 
     public class LocalBinder extends Binder {
@@ -90,7 +95,7 @@ public class MusiqueService extends Service {
 
 /*                    seekBarMusique.setProgress(musiquePlayer.getCurrentPosition());
                     txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));*/
-
+                    envoieBroadcast();
                     //Remet dans la pile du handler un appel pour le Runnable (this)
                     handlerTemps.postDelayed(this, 1000);
                 }
@@ -113,8 +118,6 @@ public class MusiqueService extends Service {
 
 
 /*---------------------------------------------------------FONCTIONS DE GESTION MUSIQUE--------------------------------------------------------------*/
-
-
 
     public void musiqueDemaPause()
     {
@@ -148,7 +151,6 @@ public class MusiqueService extends Service {
     }
 
     public void musiqueDemaEtFocus() {
-
 /*
         Fonction de demande d'utilisation unique des sorties audio du téléphone
         et démarrage de la musique.
@@ -220,7 +222,7 @@ public class MusiqueService extends Service {
 
     }
 
-    public void musiqueBoucle()
+    public void musiqueBoucleDeboucle()
     {
         musiquePlayer.setLooping(!musiquePlayer.isLooping());
     }
@@ -232,6 +234,14 @@ public class MusiqueService extends Service {
 
     }
 
+
+/*-----------------------------------------------------FONCTIONS ENVOIE BROADCAST--------------------------------------------------------------*/
+    public void envoieBroadcast()
+    {
+        Intent new_intent = new Intent();
+        new_intent.setAction(ACTION_STRING_ACTIVITY);
+        sendBroadcast(new_intent);
+    }
 
 /*--------------------------------------------------------------FONCTIONS GETTER--------------------------------------------------------------*/
 
@@ -249,6 +259,16 @@ public class MusiqueService extends Service {
     {
         return musiquePlayer.isPlaying();
     }
+
+    public boolean getMusiquePlayerIsSet(){ return (musiquePlayer != null); }
+
+
+/*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
+
+    public void setMusiquePlayerPosition(int seekBarPosition){
+        musiquePlayer.seekTo(seekBarPosition);
+    }
+
 
 /*---------------------------------------------------------FONCTION GESTION NOTIFICATION--------------------------------------------------------------*/
 

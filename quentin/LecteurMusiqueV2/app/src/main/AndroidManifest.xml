@@ -22,8 +22,7 @@
 
 
         <!--Déclaration d'un BroadcastReceiver :-->
-        <receiver android:name=".MusiqueBroadcastReceiver"  android:exported="true"></receiver>
-
+        <receiver android:name=".MusiqueBroadcastReceiver"  android:exported="true"/>
 
         <activity
             android:name=".MainActivity"

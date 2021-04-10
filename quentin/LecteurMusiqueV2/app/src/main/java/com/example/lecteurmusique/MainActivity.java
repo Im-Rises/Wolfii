@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private MusiqueService mService;
     private boolean mBound = false;
 
+    private static final String ACTION_STRING_ACTIVITY = "ToActivity";
+
 /*--------------------------------------GESTION BOUND SERVICE------------------------------------------------*/
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -70,21 +72,6 @@ public class MainActivity extends AppCompatActivity {
         this.txtViewMusiqueDuree = (TextView) findViewById(R.id.txtViewMusiqueDuree);
 
 
-        startService(new Intent(this,MusiqueService.class));//Démarre le service
-
-        Intent intent = new Intent(MainActivity.this, MusiqueService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-
-/*--------------------------------------HANDLER ET RUNNABLE POUR MAJ INTERFACE-------------------------------------*/
-
-
-
-
-
-
-
-
-
 /*--------------------------------------GESTION BOUTON DEMARRER------------------------------------------------*/
 
         btnMusiqueDemaPause.setSoundEffectsEnabled(false);
@@ -93,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Envoyer commande de démarrage et pause de la musique à la classe BroadCastReceiver
                 mService.musiqueDemaPause();
+                seekBarMusique.setMax(mService.getMusiquePlayerDuration());
                }
         });
 
@@ -114,7 +102,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Active désactive la boucle de la musique actuelle
-                mService.musiqueBoucle();
+                if (mService.getMusiquePlayerIsSet())
+                {
+                    mService.musiqueBoucleDeboucle();
+/*                    if (btnMusiqueBoucle.getText()=="Rejouer") {
+                        Log.e("Change texte","?");
+                        btnMusiqueBoucle.setText("Suivant");
+                    }
+                    else {
+                        Log.e("Change pas texte","?");
+                        btnMusiqueBoucle.setText("Rejouer");
+                    }*/
+                }
             }
         });
 
@@ -126,10 +125,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                if (fromUser && mBound) {
-                    //mService.musiqueDemaPause();
-                    //musiquePlayer.seekTo(progress);
-                    //txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));
+                if (fromUser && mBound && mService.getMusiquePlayerIsSet()) {
+                    mService.setMusiquePlayerPosition(progress);
+                    txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
                 }
             }
 
@@ -145,15 +143,58 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+/*--------------------------------------FONCTION ONSTART------------------------------------------------*/
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, MusiqueService.class));//Démarre le service
+        Intent intent = new Intent(MainActivity.this, MusiqueService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+
+        //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_ACTIVITY
+        if (broadcastReceiverMajInterface != null) {
+            IntentFilter intentFilter = new IntentFilter(ACTION_STRING_ACTIVITY);
+            registerReceiver(broadcastReceiverMajInterface, intentFilter);
+        }
+    }
+
+
+
 /*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         //stopService(new Intent(MainActivity.this,MusiqueService.class));
         unbindService(connection);
         mBound=false;
-        super.onDestroy();
+
+        unregisterReceiver(broadcastReceiverMajInterface);
     }
 
+/*----------------------------------BROADCASTRECEIVER--------------------------------------------------*/
+
+    private BroadcastReceiver broadcastReceiverMajInterface = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            majInterface();
+            //Toast.makeText(getApplicationContext(), "received message in activity..!", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+/*--------------------------------------FONTION MAJ INTERFACE---------------------------------------------------*/
+
+    public void majInterface()
+    {
+        if (mService.getMusiquePlayerIsPlaying())
+        {
+            //seekBarMusique.setMax(mService.getMusiquePlayerDuration());
+            //txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
+            seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
+            txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
+        }
+    }
 
 
 /*--------------------------------------AUTRES FONCTIONS------------------------------------------------*/
