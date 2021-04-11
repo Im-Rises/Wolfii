@@ -156,6 +156,17 @@ public class MainActivity extends AppCompatActivity {
     public void cmdBoucleDebouble(View view) {
         //Active désactive la boucle de la musique actuelle
         mService.musiqueBoucleDeboucle();
+        //Toast.makeText(getApplicationContext(), "Lecture répétée de la musique en cours", Toast.LENGTH_SHORT).show();
+    }
+
+    public void cmdMusiqueStuivante(View view)
+    {
+
+    }
+
+    public void cmdMusiquePrecedente(View view)
+    {
+
     }
 
 

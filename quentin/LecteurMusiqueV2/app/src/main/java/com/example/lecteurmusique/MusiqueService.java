@@ -6,18 +6,23 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -48,6 +53,7 @@ public class MusiqueService extends Service {
 
 
     private static final String ACTION_STRING_ACTIVITY = "ToActivity";
+    private static final String ACTION_STRING_SERVICE = "ToService";
 
 
 
@@ -196,6 +202,7 @@ public class MusiqueService extends Service {
                 musiqueManager.abandonAudioFocus(musiqueFocusChange);
             }
 
+            unregisterReceiver(broadcastReceiverNotifCmd);
             stopForeground(true);
             //notifManagerCompat.cancel(NOTIFICATION_ID);//Arrête la notification de contrôle musique
         }
@@ -217,13 +224,6 @@ public class MusiqueService extends Service {
     {
         if (musiquePlayer!=null)
             musiquePlayer.setLooping(!musiquePlayer.isLooping());
-    }
-
-
-/*-----------------------------------------------------FONCTIONS MAJ INTERFCE ET NOTIFICATION--------------------------------------------------------------*/
-    public void notifUpdate()
-    {
-
     }
 
 
@@ -262,6 +262,33 @@ public class MusiqueService extends Service {
     }
 
 
+
+/*---------------------------------------------------------FONCTION BORADCASTRECEIVER NOTIFICATION COMMANDE--------------------------------------------------------------*/
+
+    private BroadcastReceiver broadcastReceiverNotifCmd = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.e("Reception message","Test : "+intent.getStringExtra("test"));
+            //Toast.makeText(getApplicationContext(), "received message in activity..!", Toast.LENGTH_SHORT).show();
+
+            switch(intent.getStringExtra("test"))
+            {
+                case "REJOUER":
+                    break;
+                case "DEMAPAUSE":
+                    Toast.makeText(getApplicationContext(), "received message in activity..!", Toast.LENGTH_SHORT).show();
+                    break;
+                case "PRECEDENT":
+                    break;
+                case "SUIVANT":
+                    break;
+                case "ARRET":
+                    break;
+            }
+        }
+    };
+
 /*---------------------------------------------------------FONCTION GESTION NOTIFICATION--------------------------------------------------------------*/
 
 
@@ -284,28 +311,40 @@ public class MusiqueService extends Service {
 
 
         /////////////////////////////////////////////////////Gestion boutons notification/////////////////////////////////////////////////////////////////////
+        //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_ACTIVITY
+        if (broadcastReceiverNotifCmd != null) {
+            IntentFilter intentFilter = new IntentFilter(ACTION_STRING_SERVICE);
+            registerReceiver(broadcastReceiverNotifCmd, intentFilter);
+        }
+
         //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
+        Intent musiqueIntentRejouer = new Intent()
+                .setAction(ACTION_STRING_SERVICE)
+                .putExtra("test","extra1");
+        PendingIntent musiquePenIntRejouer = PendingIntent.getBroadcast(this, 1, musiqueIntentRejouer, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent musiqueIntentRejouer = new Intent(this, MusiqueBroadcastReceiver.class)
-                .setAction("Rejouer");
-        PendingIntent musiquePenIntRejouer = PendingIntent.getBroadcast(this, 0, musiqueIntentRejouer, 0);
+        Intent musiqueIntentPrecedent = new Intent()
+                .setAction(ACTION_STRING_SERVICE)
+                .putExtra("test","extra2");
+        PendingIntent musiquePenIntPrecedent = PendingIntent.getBroadcast(this, 2, musiqueIntentPrecedent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent musiqueIntentPrecedent = new Intent(this, MusiqueBroadcastReceiver.class)
-                .setAction("PRECEDENT");
-        PendingIntent musiquePenIntPrecedent = PendingIntent.getBroadcast(this, 1, musiqueIntentPrecedent, 0);
+        Intent musiqueIntentDemaPause = new Intent()
+                .setAction(ACTION_STRING_SERVICE)
+                .putExtra("test","DEMAPAUSE");
+        PendingIntent musiquePenIntDemaPause = PendingIntent.getBroadcast(this, 3, musiqueIntentDemaPause, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent musiqueIntentSuivant = new Intent(this, MusiqueBroadcastReceiver.class)
-                .setAction("SUIVANT");
-        PendingIntent musiquePenIntSuivant = PendingIntent.getBroadcast(this, 0, musiqueIntentSuivant, 0);
+        Intent musiqueIntentSuivant = new Intent()
+                .setAction(ACTION_STRING_SERVICE)
+                .putExtra("test","extra4");
+        PendingIntent musiquePenIntSuivant = PendingIntent.getBroadcast(this, 4, musiqueIntentSuivant, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent musiqueIntentDemaPause = new Intent(this, MusiqueBroadcastReceiver.class)
-                .setAction("DEMAPAUSE");
-        PendingIntent musiquePenIntDemaPause = PendingIntent.getBroadcast(this, 0, musiqueIntentDemaPause, 0);
-
-        Intent musiqueIntentArret = new Intent(this, MusiqueBroadcastReceiver.class)
-                .setAction("ARRET");
-        PendingIntent musiquePenIntArret = PendingIntent.getBroadcast(this, 0, musiqueIntentArret, 0);
+        Intent musiqueIntentArret = new Intent()
+                .setAction(ACTION_STRING_SERVICE)
+                .putExtra("test","extra5");
+        PendingIntent musiquePenIntArret = PendingIntent.getBroadcast(this, 5, musiqueIntentArret, PendingIntent.FLAG_UPDATE_CURRENT);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
         //Ajout des boutons à la notification pour le contrôle musique
         notifBuilder.addAction(R.drawable.image_rejouer, "Rejouer", musiquePenIntRejouer);//Ajout le bouton "musique rejouer" à la notification"
