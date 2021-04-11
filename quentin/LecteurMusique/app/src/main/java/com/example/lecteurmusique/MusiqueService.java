@@ -11,6 +11,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -34,7 +35,7 @@ public class MusiqueService extends Service {
 
     private MediaPlayer musiquePlayer;//Lecture musique
     private AudioManager musiqueManager;//AudioManager pour appeler la gestion de l'interruption musique via musiqueFocusmanager
-    private AudioManager.OnAudioFocusChangeListener musiqueFocusChange;//OnAudioFocusChange pour gérer les interruptions par d'autres applications de la musique
+
     private AudioFocusRequest musiqueFocusRequest;//AudioFocusRequest pour les demande de focus audio pour Andorid 8.0 ou supérieur
 
 
@@ -46,7 +47,6 @@ public class MusiqueService extends Service {
 
 
     private Handler handlerTemps = new Handler();               //Handler pour appeler toutes les secondes le runnable
-    private Runnable runnableTemps;                             //Runnable pour mettre à jour toutes les secondes le seekbar et les temps relatifs à la musique
 
 
     private final IBinder binder = new LocalBinder();    // Binder given to clients
@@ -54,16 +54,21 @@ public class MusiqueService extends Service {
 
     private static final String ACTION_STRING_ACTIVITY = "ToActivity";
 
+
     private static final String ACTION_STRING_SERVICE = "ToService";
     private static final String NAME_NOTIFICATION = "NOTIFICATION";
+
+
 
 /*A FAIRE :
 *
 * Replacer le stopSelf je ne sais où
+* Corrigé le bug de la notification qui s'enlève parfois
+* Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
 *
  */
 
-//-----------------------------------------------------------------GESTION BOUND CALLBACK SERVICE-----------------------------------------------------------------------------
+//-----------------------------------------------------------------GESTION BOUND SERVICE-----------------------------------------------------------------------------
 
     public class LocalBinder extends Binder {
         MusiqueService getService() {
@@ -77,9 +82,9 @@ public class MusiqueService extends Service {
         return binder;
     }
 
+/*///////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE//////////////////////////////////////////
 
-
-/*---------------------------------------------------------FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE--------------------------------------------------------------*/
+/*---------------------------------------------------------FONCTION ONCREATE--------------------------------------------------------------*/
 
     @Override
     public void onCreate() {
@@ -87,46 +92,64 @@ public class MusiqueService extends Service {
 
         //Gestion du focus de la musique
         musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));//initialise l'AudioManager
-
-        //Gestion de l'interruption de la musique par une autre application
-        musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener() {
-            @Override
-            public void onAudioFocusChange(int focusChange) {
-                if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-                    musiquePause();
-                }
-            }
-        };
-
-
-        //Gestion du déplacement de la maj auto du seekbar et des textView
-        runnableTemps = new Runnable() {
-            @Override
-            public void run() {
-                if (musiquePlayer != null) {
-
-/*                    seekBarMusique.setProgress(musiquePlayer.getCurrentPosition());
-                    txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));*/
-                    envoieBroadcast();
-                    //Remet dans la pile du handler un appel pour le Runnable (this)
-                    handlerTemps.postDelayed(this, 1000);
-                }
-            }
-        };
     }
+
+    /*---------------------------------------------------------FONCTION ONSTARTCOMMAND--------------------------------------------------------------*/
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        /*return super.onStartCommand(intent, flags, startId);*/
+        //return super.onStartCommand(intent, flags, startId);
         return START_STICKY;//Si l'application est arrêté toatalement alors on redémarre le service
     }
 
+/*---------------------------------------------------------FONCTION ONDESTROY--------------------------------------------------------------*/
 
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 
+/*---------------------------------------------------------RUNNABLE MAJ INTERFACES--------------------------------------------------------------*/
+
+
+    //Gestion du déplacement de la maj auto du seekbar et des textView
+    private Runnable runnableTemps = new Runnable() {
+        @Override
+        public void run() {
+            if (musiquePlayer != null) {
+
+/*                    seekBarMusique.setProgress(musiquePlayer.getCurrentPosition());
+                    txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));*/
+                envoieBroadcast();
+                //Remet dans la pile du handler un appel pour le Runnable (this)
+                handlerTemps.postDelayed(this, 1000);
+            }
+        }
+    };
+
+
+/*---------------------------------------------------------GESTION AUDIOFOCUS--------------------------------------------------------------*/
+
+    //OnAudioFocusChange pour gérer les interruptions par d'autres applications de la musique
+    private AudioManager.OnAudioFocusChangeListener musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener(){
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            Log.e("Type de focusChange", " : " + focusChange);
+
+            switch (focusChange) {
+                case AudioManager.AUDIOFOCUS_GAIN://Cas de regain du focus audio lorsqu'une application a demandé temporairement le focus audio
+                    musiquePlayer.start();
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS://Cas de demande d'un focus permanent par une autre application
+                    musiquePause();
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT://Cas de demande d'un focus temporaire par une autre application
+                    musiquePause();
+                    break;
+                default:
+            }
+        }
+    };
 
 
 /*---------------------------------------------------------FONCTIONS DE GESTION MUSIQUE--------------------------------------------------------------*/
@@ -167,8 +190,15 @@ public class MusiqueService extends Service {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
+            AudioAttributes audioAttributesParametre = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build();
+
             musiqueFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
                     .setOnAudioFocusChangeListener(musiqueFocusChange)
+                    .setAudioAttributes(audioAttributesParametre)
+                    //.setWillPauseWhenDucked(true)//Si une application demande de diminuer le volume de la musique alors la fonction musiqueFocusChange s'active (Selon Android Studio documentation c'est acceptable de ne pas l'activer pour un elcteur de musique)
                     .build();
             resultat = musiqueManager.requestAudioFocus(musiqueFocusRequest);
         }
@@ -248,7 +278,6 @@ public class MusiqueService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.e("Reception message","Test : "+intent.getStringExtra("test"));
             //Toast.makeText(getApplicationContext(), "Message reçu", Toast.LENGTH_SHORT).show();
 
             switch(intent.getStringExtra(NAME_NOTIFICATION))

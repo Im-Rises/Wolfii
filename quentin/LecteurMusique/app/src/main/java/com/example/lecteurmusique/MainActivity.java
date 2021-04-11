@@ -26,10 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
 
-    private Button btnMusiqueDemaPause;                         //Bouton pour démarrer et mettre en pause la musique
-    private Button btnMusiqueArret;                          //Bouton pour arrêter la musique
-    private Button btnMusiqueBoucle;                          //Bouton pour boucler la musique
-
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
 
     private MusiqueService mService;                            //Déclaration pointeur vers le service
