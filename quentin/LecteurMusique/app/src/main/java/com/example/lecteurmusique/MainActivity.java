@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
 
-    private MusiqueService mService;
-    private boolean mBound = false;
+    private MusiqueService mService;                            //Déclaration pointeur vers le service
+    private boolean mBound = false;                             //Variable qui témoigne de l'activation du service
 
-    private static final String ACTION_STRING_ACTIVITY = "ToActivity";
+    private static final String ACTION_STRING_ACTIVITY = "ToActivity";  //Action pour envoyer un Boradcast dans l'activité
 
 
 /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
@@ -44,11 +44,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.txtViewMusiqueTemps = (TextView) findViewById(R.id.txtViewMusiqueTemps);
-        this.txtViewMusiqueDuree = (TextView) findViewById(R.id.txtViewMusiqueDuree);
+        //Liaisons des Boutons, des TextViews et du SeekBar de l'interface dans la code.
 
-        seekBarMusique=(SeekBar) findViewById(R.id.seekBarMusique);
-        seekBarMusique.setOnSeekBarChangeListener(new seekBarEcouteur());
+        this.txtViewMusiqueTemps = (TextView) findViewById(R.id.txtViewMusiqueTemps);
+        this.txtViewMusiqueTemps.setSoundEffectsEnabled(false);
+
+        this.txtViewMusiqueDuree = (TextView) findViewById(R.id.txtViewMusiqueDuree);
+        this.txtViewMusiqueDuree.setSoundEffectsEnabled(false);
+
+        this.seekBarMusique=(SeekBar) findViewById(R.id.seekBarMusique);
+        this.seekBarMusique.setSoundEffectsEnabled(false);
+        this.seekBarMusique.setOnSeekBarChangeListener(new seekBarEcouteur());
     }
 
 
@@ -57,7 +63,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        startService(new Intent(this, MusiqueService.class));//Démarre le service
+
+        //Démarre le service MusiqueService
+        startService(new Intent(this, MusiqueService.class));
+
+        //Création d'une Bound Session
         Intent intent = new Intent(MainActivity.this, MusiqueService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
 
@@ -73,12 +83,15 @@ public class MainActivity extends AppCompatActivity {
 /*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        //stopService(new Intent(MainActivity.this,MusiqueService.class));
+        //Arrêt Bound Session
         unbindService(connection);
         mBound=false;
 
+        //Arrêt broadcast receiver de mise à jour de l'interface
         unregisterReceiver(broadcastReceiverMajInterface);
+
+        //Appel destructeur de la classe parente Activité (supprime l'activité)
+        super.onDestroy();
     }
 
 
@@ -102,13 +115,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-/*----------------------------------BROADCASTRECEIVER--------------------------------------------------*/
+/*----------------------------------GESTION BROADCASTRECEIVER--------------------------------------------------*/
 
     private BroadcastReceiver broadcastReceiverMajInterface = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            majInterface();
-            //Toast.makeText(getApplicationContext(), "received message in activity..!", Toast.LENGTH_SHORT).show();
+            majInterface();//Mise à jour de l'interface
         }
     };
 
@@ -121,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class seekBarEcouteur implements SeekBar.OnSeekBarChangeListener {
 
+        //Evenement qui s'enclenche sur le déplacement du seekbar
         public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser)
         {
             if (fromUser && mBound && mService.getMusiquePlayerIsSet()) {
@@ -129,8 +142,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //Evenement qui s'enclenche sur l'appuit sur le seekbar
         public void onStartTrackingTouch(SeekBar seekBar) {}
 
+        //Evenement qui s'enclenche sur la fin du déplacement du seekbar
         public void onStopTrackingTouch(SeekBar seekBar) {}
     }
 
@@ -178,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
         {
             //seekBarMusique.setMax(mService.getMusiquePlayerDuration());
             //txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
+            seekBarMusique.setMax(mService.getMusiquePlayerDuration());
+            txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
             seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
             txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
         }

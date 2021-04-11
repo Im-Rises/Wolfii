@@ -53,9 +53,15 @@ public class MusiqueService extends Service {
 
 
     private static final String ACTION_STRING_ACTIVITY = "ToActivity";
+
     private static final String ACTION_STRING_SERVICE = "ToService";
+    private static final String NAME_NOTIFICATION = "NOTIFICATION";
 
-
+/*A FAIRE :
+*
+* Replacer le stopSelf je ne sais où
+*
+ */
 
 //-----------------------------------------------------------------GESTION BOUND CALLBACK SERVICE-----------------------------------------------------------------------------
 
@@ -206,7 +212,6 @@ public class MusiqueService extends Service {
             stopForeground(true);
             //notifManagerCompat.cancel(NOTIFICATION_ID);//Arrête la notification de contrôle musique
         }
-        stopSelf();
     }
 
 
@@ -235,32 +240,6 @@ public class MusiqueService extends Service {
         sendBroadcast(new_intent);
     }
 
-/*--------------------------------------------------------------FONCTIONS GETTER--------------------------------------------------------------*/
-
-    public int getMusiquePlayerPosition()
-    {
-        return musiquePlayer.getCurrentPosition();
-    }
-
-    public int getMusiquePlayerDuration()
-    {
-        return musiquePlayer.getDuration();
-    }
-
-    public boolean getMusiquePlayerIsPlaying()
-    {
-        return musiquePlayer.isPlaying();
-    }
-
-    public boolean getMusiquePlayerIsSet(){ return (musiquePlayer != null); }
-
-
-/*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
-
-    public void setMusiquePlayerPosition(int seekBarPosition){
-        musiquePlayer.seekTo(seekBarPosition);
-    }
-
 
 
 /*---------------------------------------------------------FONCTION BORADCASTRECEIVER NOTIFICATION COMMANDE--------------------------------------------------------------*/
@@ -270,20 +249,22 @@ public class MusiqueService extends Service {
         public void onReceive(Context context, Intent intent) {
 
             Log.e("Reception message","Test : "+intent.getStringExtra("test"));
-            //Toast.makeText(getApplicationContext(), "received message in activity..!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Message reçu", Toast.LENGTH_SHORT).show();
 
-            switch(intent.getStringExtra("test"))
+            switch(intent.getStringExtra(NAME_NOTIFICATION))
             {
                 case "REJOUER":
+                    musiqueBoucleDeboucle();
                     break;
                 case "DEMAPAUSE":
-                    Toast.makeText(getApplicationContext(), "received message in activity..!", Toast.LENGTH_SHORT).show();
+                    musiqueDemaPause();
                     break;
                 case "PRECEDENT":
                     break;
                 case "SUIVANT":
                     break;
                 case "ARRET":
+                    musiqueArret();
                     break;
             }
         }
@@ -320,27 +301,27 @@ public class MusiqueService extends Service {
         //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
         Intent musiqueIntentRejouer = new Intent()
                 .setAction(ACTION_STRING_SERVICE)
-                .putExtra("test","extra1");
+                .putExtra(NAME_NOTIFICATION,"REJOUER");
         PendingIntent musiquePenIntRejouer = PendingIntent.getBroadcast(this, 1, musiqueIntentRejouer, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentPrecedent = new Intent()
                 .setAction(ACTION_STRING_SERVICE)
-                .putExtra("test","extra2");
+                .putExtra(NAME_NOTIFICATION,"PRECEDENT");
         PendingIntent musiquePenIntPrecedent = PendingIntent.getBroadcast(this, 2, musiqueIntentPrecedent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentDemaPause = new Intent()
                 .setAction(ACTION_STRING_SERVICE)
-                .putExtra("test","DEMAPAUSE");
+                .putExtra(NAME_NOTIFICATION,"DEMAPAUSE");
         PendingIntent musiquePenIntDemaPause = PendingIntent.getBroadcast(this, 3, musiqueIntentDemaPause, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentSuivant = new Intent()
                 .setAction(ACTION_STRING_SERVICE)
-                .putExtra("test","extra4");
+                .putExtra(NAME_NOTIFICATION,"SUIVANT");
         PendingIntent musiquePenIntSuivant = PendingIntent.getBroadcast(this, 4, musiqueIntentSuivant, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentArret = new Intent()
                 .setAction(ACTION_STRING_SERVICE)
-                .putExtra("test","extra5");
+                .putExtra(NAME_NOTIFICATION,"ARRET");
         PendingIntent musiquePenIntArret = PendingIntent.getBroadcast(this, 5, musiqueIntentArret, PendingIntent.FLAG_UPDATE_CURRENT);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -368,5 +349,34 @@ public class MusiqueService extends Service {
         }
 
         return notifBuilder.build();
+    }
+
+
+
+
+    /*--------------------------------------------------------------FONCTIONS GETTER--------------------------------------------------------------*/
+
+    public int getMusiquePlayerPosition()
+    {
+        return musiquePlayer.getCurrentPosition();
+    }
+
+    public int getMusiquePlayerDuration()
+    {
+        return musiquePlayer.getDuration();
+    }
+
+    public boolean getMusiquePlayerIsPlaying()
+    {
+        return musiquePlayer.isPlaying();
+    }
+
+    public boolean getMusiquePlayerIsSet(){ return (musiquePlayer != null); }
+
+
+    /*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
+
+    public void setMusiquePlayerPosition(int seekBarPosition){
+        musiquePlayer.seekTo(seekBarPosition);
     }
 }
