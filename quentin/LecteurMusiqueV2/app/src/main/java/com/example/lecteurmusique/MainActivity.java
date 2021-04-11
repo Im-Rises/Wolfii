@@ -37,23 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String ACTION_STRING_ACTIVITY = "ToActivity";
 
-/*--------------------------------------GESTION BOUND SERVICE------------------------------------------------*/
-
-    private ServiceConnection connection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            MusiqueService.LocalBinder binder = (MusiqueService.LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
 
 /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
     @Override
@@ -61,86 +44,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Code qui lie les objets du activity_main.xml à ceux dy MainActivity.xml*/
-        this.seekBarMusique = (SeekBar) findViewById(R.id.seekBarMusique);
-
-        this.btnMusiqueDemaPause = (Button) findViewById(R.id.btnDemaPause);
-        this.btnMusiqueArret = (Button) findViewById(R.id.btnArret);
-        this.btnMusiqueBoucle = (Button) findViewById(R.id.btnRejouer);
-
         this.txtViewMusiqueTemps = (TextView) findViewById(R.id.txtViewMusiqueTemps);
         this.txtViewMusiqueDuree = (TextView) findViewById(R.id.txtViewMusiqueDuree);
 
-
-/*--------------------------------------GESTION BOUTON DEMARRER------------------------------------------------*/
-
-        btnMusiqueDemaPause.setSoundEffectsEnabled(false);
-        btnMusiqueDemaPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Envoyer commande de démarrage et pause de la musique à la classe BroadCastReceiver
-                mService.musiqueDemaPause();
-                seekBarMusique.setMax(mService.getMusiquePlayerDuration());
-               }
-        });
-
-/*--------------------------------------GESTION BOUTON ARRET------------------------------------------------*/
-
-        btnMusiqueArret.setSoundEffectsEnabled(false);
-        btnMusiqueArret.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Envoyer commande d'arrêt de la musique à la classe BroadCastReceiver
-                mService.musiqueArret();
-            }
-        });
-
-/*---------------------------------------GESTION BOUCLE MUSIQUE---------------------------------------------*/
-
-        btnMusiqueBoucle.setSoundEffectsEnabled(false);
-        btnMusiqueBoucle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Active désactive la boucle de la musique actuelle
-                if (mService.getMusiquePlayerIsSet())
-                {
-                    mService.musiqueBoucleDeboucle();
-/*                    if (btnMusiqueBoucle.getText()=="Rejouer") {
-                        Log.e("Change texte","?");
-                        btnMusiqueBoucle.setText("Suivant");
-                    }
-                    else {
-                        Log.e("Change pas texte","?");
-                        btnMusiqueBoucle.setText("Rejouer");
-                    }*/
-                }
-            }
-        });
-
-/*--------------------------------------GESTION SEEKBAR------------------------------------------------*/
-
-        //Gestion du déplacement par l'utilisateur du seekbar
-        seekBarMusique.setSoundEffectsEnabled(false);
-        seekBarMusique.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                if (fromUser && mBound && mService.getMusiquePlayerIsSet()) {
-                    mService.setMusiquePlayerPosition(progress);
-                    txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+        seekBarMusique=(SeekBar) findViewById(R.id.seekBarMusique);
+        seekBarMusique.setOnSeekBarChangeListener(new seekBarEcouteur());
     }
 
 
@@ -173,6 +81,27 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(broadcastReceiverMajInterface);
     }
 
+
+/*--------------------------------------GESTION BOUND SERVICE------------------------------------------------*/
+
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            MusiqueService.LocalBinder binder = (MusiqueService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+
+
 /*----------------------------------BROADCASTRECEIVER--------------------------------------------------*/
 
     private BroadcastReceiver broadcastReceiverMajInterface = new BroadcastReceiver() {
@@ -182,6 +111,53 @@ public class MainActivity extends AppCompatActivity {
             //Toast.makeText(getApplicationContext(), "received message in activity..!", Toast.LENGTH_SHORT).show();
         }
     };
+
+
+
+
+
+
+/*--------------------------------------FONCTION/CLASS SEEKBAR------------------------------------------------*/
+
+    private class seekBarEcouteur implements SeekBar.OnSeekBarChangeListener {
+
+        public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser)
+        {
+            if (fromUser && mBound && mService.getMusiquePlayerIsSet()) {
+                mService.setMusiquePlayerPosition(progress);
+                txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
+            }
+        }
+
+        public void onStartTrackingTouch(SeekBar seekBar) {}
+
+        public void onStopTrackingTouch(SeekBar seekBar) {}
+    }
+
+
+/*--------------------------------------FONCTION BOUTONS------------------------------------------------*/
+
+    public void cmdDemaPause(View view)
+    {
+        //Envoyer commande de démarrage et pause de la musique à la classe BroadCastReceiver
+        mService.musiqueDemaPause();
+        seekBarMusique.setMax(mService.getMusiquePlayerDuration());
+    }
+
+
+    public void cmdArret(View view)
+    {
+        //Envoyer commande d'arrêt de la musique à la classe BroadCastReceiver
+        mService.musiqueArret();
+        seekBarMusique.setProgress(0);
+        txtViewMusiqueTemps.setText("00:00");
+    }
+
+    public void cmdBoucleDebouble(View view) {
+        //Active désactive la boucle de la musique actuelle
+        mService.musiqueBoucleDeboucle();
+    }
+
 
 /*--------------------------------------FONTION MAJ INTERFACE---------------------------------------------------*/
 

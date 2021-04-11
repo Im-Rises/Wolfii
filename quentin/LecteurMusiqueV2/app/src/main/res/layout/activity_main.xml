@@ -45,6 +45,7 @@
         android:layout_marginEnd="112dp"
         android:layout_marginRight="112dp"
         android:layout_marginBottom="60dp"
+        android:onClick="cmdDemaPause"
         android:text="Demarrer/Pause"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -58,6 +59,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="60dp"
+        android:onClick="cmdArret"
         android:text="Arret"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,6 +84,7 @@
         android:id="@+id/btnRejouer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="cmdBoucleDebouble"
         android:text="Rejouer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnDemaPause"

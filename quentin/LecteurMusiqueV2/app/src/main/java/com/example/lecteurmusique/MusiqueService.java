@@ -140,14 +140,7 @@ public class MusiqueService extends Service {
     public void musiqueInitialisation()
     {
         musiquePlayer = MediaPlayer.create(this, R.raw.musiquetest);//Création du MediaPlayer
-
-/*            txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(musiquePlayer.getDuration()));*/
-
         musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);//Définis le mode de fonctionnement sur PARTIAL_WAKE_LOCK pour permettre à la musique de fonctionner sans être sur l'application
-
-/*            seekBarMusique.setMax(musiquePlayer.getDuration());
-            musiquePlayer.seekTo(seekBarMusique.getProgress());*/
-
     }
 
     public void musiqueDemaEtFocus() {
@@ -179,22 +172,20 @@ public class MusiqueService extends Service {
 
     public void musiquePause()
     {
+        handlerTemps.removeCallbacks(runnableTemps);
         musiquePlayer.pause();
         /*Maj des boutons de la notif*/
-        handlerTemps.removeCallbacks(runnableTemps);
     }
 
 
     public void musiqueArret()
     {
         if (musiquePlayer != null) {
+
+            handlerTemps.removeCallbacks(runnableTemps);
+
             musiquePlayer.release();
             musiquePlayer = null;
-
-/*            seekBarMusique.setProgress(0);
-            txtViewMusiqueTemps.setText("00:00");
-            txtViewMusiqueDuree.setText("00:00");*/
-
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             {
@@ -224,7 +215,8 @@ public class MusiqueService extends Service {
 
     public void musiqueBoucleDeboucle()
     {
-        musiquePlayer.setLooping(!musiquePlayer.isLooping());
+        if (musiquePlayer!=null)
+            musiquePlayer.setLooping(!musiquePlayer.isLooping());
     }
 
 
