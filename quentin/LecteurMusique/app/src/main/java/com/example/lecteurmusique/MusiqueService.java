@@ -68,22 +68,7 @@ public class MusiqueService extends Service {
 *
  */
 
-//-----------------------------------------------------------------GESTION BOUND SERVICE-----------------------------------------------------------------------------
-
-    public class LocalBinder extends Binder {
-        MusiqueService getService() {
-            // Return this instance of LocalService so clients can call public methods
-            return MusiqueService.this;
-        }
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return binder;
-    }
-
 /*///////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE//////////////////////////////////////////
-
 /*---------------------------------------------------------FONCTION ONCREATE--------------------------------------------------------------*/
 
     @Override
@@ -106,8 +91,26 @@ public class MusiqueService extends Service {
 
     @Override
     public void onDestroy() {
+        //musiquePlayer.stop();
         super.onDestroy();
+        Toast.makeText(getApplicationContext(), "Test onDestroy du service", Toast.LENGTH_SHORT).show();
     }
+
+
+//-----------------------------------------------------------------GESTION BOUND SERVICE-----------------------------------------------------------------------------
+
+    public class LocalBinder extends Binder {
+        MusiqueService getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return MusiqueService.this;
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return binder;
+    }
+
 
 /*---------------------------------------------------------RUNNABLE MAJ INTERFACES--------------------------------------------------------------*/
 
@@ -361,7 +364,7 @@ public class MusiqueService extends Service {
         notifBuilder.addAction(R.drawable.image_precedent, "Précédent", musiquePenIntPrecedent);//Ajout le bouton "musique précédente à la notification"
         notifBuilder.addAction(R.drawable.image_pause, "Démarrer/Pause", musiquePenIntDemaPause);//Ajout le bouton "musique Demarrer/Pause à la notification"
         notifBuilder.addAction(R.drawable.image_suivant, "Suivant", musiquePenIntSuivant);//Ajout le bouton "musique suivante à la notification"
-        notifBuilder.addAction(R.drawable.image_arret, "Arret", musiquePenIntArret);//Ajout le bouton "musique arret" à la notification"
+        notifBuilder.addAction(R.drawable.image_nettoyer, "Arret", musiquePenIntArret);//Ajout le bouton "musique arret" à la notification"
 
 
         notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"

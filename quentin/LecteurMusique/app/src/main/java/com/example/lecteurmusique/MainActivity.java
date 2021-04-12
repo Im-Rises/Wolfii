@@ -1,6 +1,7 @@
 package com.example.lecteurmusique;
 
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
@@ -33,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String ACTION_STRING_ACTIVITY = "ToActivity";  //Action pour envoyer un Boradcast dans l'activité
 
+    /*A FAIRE :
+     *
+     * Revoir si les variables globales des BROADCASTRECERIVER doivent-être statics
+     * Gérer application quand on la ferme car erreur, l'activity effectue une exception et n'arrive pas à fermer l'activity
+     */
 
 /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
     @Override
@@ -75,10 +81,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /*--------------------------------------FONCTION ONSTOP------------------------------------------------*/
 
-/*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
+/*    @Override
+    protected void onStop() {
+        //Toast.makeText(getApplicationContext(), "Message", Toast.LENGTH_SHORT).show();
+        super.onStop();
+    }*/
+
+    /*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
     @Override
     protected void onDestroy() {
+        //Toast.makeText(getApplicationContext(), "Destruction de la page Activity", Toast.LENGTH_SHORT).show();
+
+        //Arrête le service si aucune musique n'est en cours
+        if (!mService.getMusiquePlayerIsSet() || !mService.getMusiquePlayerIsPlaying())
+        {
+            //stopService();
+        }
+
         //Arrêt Bound Session
         unbindService(connection);
         mBound=false;
@@ -119,9 +140,6 @@ public class MainActivity extends AppCompatActivity {
             majInterface();//Mise à jour de l'interface
         }
     };
-
-
-
 
 
 
