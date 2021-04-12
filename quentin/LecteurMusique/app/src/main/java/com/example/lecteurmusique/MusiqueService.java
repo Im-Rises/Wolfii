@@ -62,7 +62,6 @@ public class MusiqueService extends Service {
 
 /*A FAIRE :
 *
-* Replacer le stopSelf je ne sais où
 * Corrigé le bug de la notification qui s'enlève parfois
 * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
 *
@@ -91,9 +90,9 @@ public class MusiqueService extends Service {
 
     @Override
     public void onDestroy() {
-        //musiquePlayer.stop();
+        //Toast.makeText(getApplicationContext(), "TEST StopSelf", Toast.LENGTH_SHORT).show();
+        musiqueArret();
         super.onDestroy();
-        Toast.makeText(getApplicationContext(), "Test onDestroy du service", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -296,7 +295,7 @@ public class MusiqueService extends Service {
                 case "SUIVANT":
                     break;
                 case "ARRET":
-                    musiqueArret();
+                    stopSelf();
                     break;
             }
         }

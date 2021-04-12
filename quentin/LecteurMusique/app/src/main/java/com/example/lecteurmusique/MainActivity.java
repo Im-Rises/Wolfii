@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     /*A FAIRE :
      *
      * Revoir si les variables globales des BROADCASTRECERIVER doivent-être statics
-     * Gérer application quand on la ferme car erreur, l'activity effectue une exception et n'arrive pas à fermer l'activity
+     * Ajouter vérification si le service est en fonctionnement pour les OnDestroy de l'Activité et du Service
      */
 
 /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
@@ -71,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Création d'une Bound Session
         Intent intent = new Intent(MainActivity.this, MusiqueService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        bindService(intent, connection, 0);//Permet l'arrêt du Service avant l'arrêt du BoundService (permettant d'arrêter le service par les boutons notification)
+        //bindService(intent, connection, Context.BIND_AUTO_CREATE);//Arrêt du Service autorisé que si le BoundService est au préalable arrêté
 
         //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_ACTIVITY
         if (broadcastReceiverMajInterface != null) {
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         //Arrête le service si aucune musique n'est en cours
         if (!mService.getMusiquePlayerIsSet() || !mService.getMusiquePlayerIsPlaying())
         {
-            //stopService();
+            stopService(new Intent(MainActivity.this,MusiqueService.class));
         }
 
         //Arrêt Bound Session
