@@ -1,4 +1,4 @@
-package com.example.musique_rv;
+package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -27,7 +26,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MusiqueRV extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private List<Musique> maMusique;
@@ -41,15 +40,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // on verifie un paquet de permission
-        if(ContextCompat.checkSelfPermission(MainActivity.this,
+        if(ContextCompat.checkSelfPermission(MusiqueRV.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+            if(ActivityCompat.shouldShowRequestPermissionRationale(MusiqueRV.this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(MainActivity.this,
+                ActivityCompat.requestPermissions(MusiqueRV.this,
                         new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
             }
             else {
-                ActivityCompat.requestPermissions(MainActivity.this,
+                ActivityCompat.requestPermissions(MusiqueRV.this,
                         new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
             }
         }
@@ -65,22 +64,14 @@ public class MainActivity extends AppCompatActivity {
         monAdapter.setmMusiqueItemClickListener(new MyMusiqueAdapter.MusiqueItemClickListener() {
             @Override
             public void onMusiqueItemClick(View view, Musique musique, int position) {
-                Toast.makeText(MainActivity.this, "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MusiqueRV.this, "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
                 Log.d("debug_musique", musique.getName());
-
-                Intent intent = new Intent(MainActivity.this, Lecteur.class);
-                startActivity(intent);
-
-                // position c'est l'index de la musique concernée
-                // maMusique => toutes les musiques
-
             }
 
             @Override
             public void onMusiqueItemLongClick(View view, Musique musique, int position) {
-                Toast.makeText(MainActivity.this, "ah toi tu attends une suppression !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MusiqueRV.this, "ah toi tu attends une suppression !", Toast.LENGTH_SHORT).show();
                 Log.d("debug_longclick", "suppression ?");
-
             }
         });
 
@@ -89,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public ArrayList getMusic() {
         ArrayList<Musique> maMusique= new ArrayList<Musique>();
-        ContentResolver contentResolver = getContentResolver(); // rechercher toutes les données voulues
-        Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI; // charger les docs externes
+        ContentResolver contentResolver = getContentResolver();
+        Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor songCursor = contentResolver.query(songUri, null, null, null, null);
 
         if(songCursor != null && songCursor.moveToFirst()) {
@@ -100,15 +91,13 @@ public class MainActivity extends AppCompatActivity {
             int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
             int songLocation = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
-            int songDuration = songCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
             do {
                 // on recupere une par une certaines metadonnees des nos musiques
                 String currentTitle = songCursor.getString(songTitle);
                 String currentArtist = songCursor.getString(songArtist);
                 String currentPath = songCursor.getString(songLocation);
-                String currentDuration = songCursor.getString(songDuration);
                 // on ajoute cette musique a notre array
-                maMusique.add(new Musique(currentTitle, currentPath, currentArtist, currentDuration));
+                maMusique.add(new Musique(currentTitle, currentPath));
             } while(songCursor.moveToNext()); // on arrete quand on est arrive a la fin du curseur
         }
         return maMusique;

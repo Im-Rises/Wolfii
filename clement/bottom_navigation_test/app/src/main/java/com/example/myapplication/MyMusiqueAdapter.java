@@ -1,4 +1,4 @@
-package com.example.musique_rv;
+package com.example.myapplication;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,15 +17,6 @@ class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyViewHolde
     // responsable du recyclage des view
     // view holder = accelerer le rendu de la liste, il sera déclaré au sein de l'adapter
     List<Musique> mesMusiques;
-
-    public List<Musique> getMesMusiques() {
-        return mesMusiques;
-    }
-
-    public void setMesMusiques(List<Musique> mesMusiques) {
-        this.mesMusiques = mesMusiques;
-    }
-
     MyMusiqueAdapter(List<Musique> mesMusiques) {
         this.mesMusiques = mesMusiques;
     }
