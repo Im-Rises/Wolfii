@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 */
 
                 mService.setMusiquePlaylist(maMusique, position);
+                mService.musiqueArret();
                 mService.musiqueDemaPause();
                 // position c'est l'index de la musique concernée
                 // maMusique => toutes les musiques
