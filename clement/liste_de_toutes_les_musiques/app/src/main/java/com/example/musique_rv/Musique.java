@@ -2,6 +2,12 @@ package com.example.musique_rv;
 
 // plain old java object (POJO)
 
+import android.net.Uri;
+
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class Musique {
     private String name;
     private String path;
@@ -15,10 +21,10 @@ public class Musique {
         this.duration = duration;
     }
 
-
     // GETTER
     public String getName() {return name;}
     public String getPath() {return path;}
+    public Uri getPathUri() {return Uri.fromFile(new File(path));}
     public String getDuration() {return duration;}
     public String getAuthor() {return author;}
 }

@@ -28,6 +28,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MusiqueService extends Service {
@@ -58,7 +60,8 @@ public class MusiqueService extends Service {
     private static final String NAME_NOTIFICATION = "NOTIFICATION";
 
 
-
+    private ArrayList<Musique> maMusique = new ArrayList<Musique>();
+    private int positionMusique;
     /*A FAIRE :
      *
      * Corrigé le bug de la notification qui s'enlève parfois
@@ -159,6 +162,8 @@ public class MusiqueService extends Service {
     {
         if (musiquePlayer == null)
         {
+            Toast.makeText(getApplicationContext(), positionMusique + "\n" + maMusique.get(positionMusique).getPathUri() , Toast.LENGTH_SHORT).show();
+
             musiqueInitialisation();
             musiqueDemaEtFocus();
             startForeground(NOTIFICATION_ID,notificationInit());//Démarre le service en foreground afin de permettre de continuer la musique après l'avoir fermé
@@ -175,7 +180,7 @@ public class MusiqueService extends Service {
 
     public void musiqueInitialisation()
     {
-        musiquePlayer = MediaPlayer.create(this, R.raw.musiquetest);//Création du MediaPlayer
+        musiquePlayer = MediaPlayer.create(this, maMusique.get(positionMusique).getPathUri());//Création du MediaPlayer
         musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);//Définis le mode de fonctionnement sur PARTIAL_WAKE_LOCK pour permettre à la musique de fonctionner sans être sur l'application
     }
 
@@ -408,5 +413,17 @@ public class MusiqueService extends Service {
 
     public void setMusiquePlayerPosition(int seekBarPosition){
         musiquePlayer.seekTo(seekBarPosition);
+    }
+
+    public ArrayList<Musique> copyArrayList(ArrayList<Musique> musiques) {
+        ArrayList<Musique> mus = new ArrayList<Musique>();
+        for(Musique m : musiques)
+            mus.add(m);
+        return mus;
+    }
+    public void setMusiquePlaylist(ArrayList<Musique> musique, int position) {
+        maMusique = copyArrayList(musique);
+        this.positionMusique = position;
+
     }
 }

@@ -8,12 +8,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -30,15 +33,20 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private List<Musique> maMusique;
+    private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
     private static final int MY_PERMISSION_REQUEST = 1;
+    private MusiqueService mService;                            //Déclaration pointeur vers le service
+    private boolean mBound = false;                             //Variable qui témoigne de l'activation du service
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startService(new Intent(MainActivity.this, MusiqueService.class));
+        Intent intent = new Intent(MainActivity.this, MusiqueService.class);
+        bindService(intent, connection, 0);
 
         // on verifie un paquet de permission
         if(ContextCompat.checkSelfPermission(MainActivity.this,
@@ -66,11 +74,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMusiqueItemClick(View view, Musique musique, int position) {
                 Toast.makeText(MainActivity.this, "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
-                Log.d("debug_musique", musique.getName());
-
+                Log.d("debug_musique", musique.getPath());
+                /*
                 Intent intent = new Intent(MainActivity.this, Lecteur.class);
                 startActivity(intent);
+                */
 
+                mService.setMusiquePlaylist(maMusique, position);
+                mService.musiqueDemaPause();
                 // position c'est l'index de la musique concernée
                 // maMusique => toutes les musiques
 
@@ -108,9 +119,24 @@ public class MainActivity extends AppCompatActivity {
                 String currentPath = songCursor.getString(songLocation);
                 String currentDuration = songCursor.getString(songDuration);
                 // on ajoute cette musique a notre array
-                maMusique.add(new Musique(currentTitle, currentPath, currentArtist, currentDuration));
+                maMusique.add(new Musique(currentTitle, currentArtist, currentPath, currentDuration));
             } while(songCursor.moveToNext()); // on arrete quand on est arrive a la fin du curseur
         }
         return maMusique;
     }
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            MusiqueService.LocalBinder binder = (MusiqueService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 }
