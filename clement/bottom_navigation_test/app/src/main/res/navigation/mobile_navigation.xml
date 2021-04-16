@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_listallsongs" />
 
     <fragment
+        android:id="@+id/navigation_artiste"
+        android:name="com.example.wolfii.ListAllArtistsFragment"
+        android:label="@string/queue_artist"
+        tools:layout="@layout/fragment_listallsongs" />
+
+    <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.wolfii.ControleMusiqueFragment"
         android:label="@string/lecteur"
