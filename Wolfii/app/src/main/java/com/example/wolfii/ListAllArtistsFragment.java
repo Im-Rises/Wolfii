@@ -23,8 +23,8 @@ import java.util.ArrayList;
 public class ListAllArtistsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private ArrayList<Musique> maMusique;
-    private MyMusiqueAdapter monAdapter;
+    private ArrayList<String> mesArtistes;
+    private MyArtisteAdapter monAdapter;
     private boolean mBound = false;
     private MusiqueService mService;                            //Déclaration pointeur vers le service
 
@@ -40,34 +40,18 @@ public class ListAllArtistsFragment extends Fragment {
 
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
-        maMusique = MainActivity.maMusique; // on recupere ici toutes les musiques sous forme d'un tableau
+        mesArtistes = MainActivity.mesArtistes; // on recupere ici toutes les musiques sous forme d'un tableau
 
-        monAdapter = new MyMusiqueAdapter(maMusique);
-        monAdapter.setmMusiqueItemClickListener(new MyMusiqueAdapter.MusiqueItemClickListener() {
+        monAdapter = new MyArtisteAdapter(mesArtistes);
+        monAdapter.setmArtisteItemClickListener(new MyArtisteAdapter.ArtisteItemClickListener() {
+
             @Override
-            public void onMusiqueItemClick(View view, Musique musique, int position) {
-
-                Toast.makeText(getActivity(), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
-
-                // ------ FAIRE EN SORTE QU'ON PUISSE LIRE LA MUSIQUE ICI
-
-                //mService.setMusiquePlaylist(maMusique, position);
-                //mService.musiqueArret();
-                //mService.musiqueDemaPause();
-                /*
-                Intent intent = new Intent(getActivity(), Lecteur.class);
-                startActivity(intent);
-
-                 */
-
-
-                // position c'est l'index de la musique concernée
-                // maMusique => toutes les musiques
+            public void onArtisteItemClick(View view, String musique, int position) {
 
             }
 
             @Override
-            public void onMusiqueItemLongClick(View view, Musique musique, int position) {
+            public void onArtisteItemLongClick(View view, String artiste, int position) {
                 //Toast.makeText(MainActivity.this, "ah toi tu attends une suppression !", Toast.LENGTH_SHORT).show();
                 Log.d("debug_longclick", "suppression ?");
 
