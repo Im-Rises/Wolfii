@@ -74,15 +74,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMusiqueItemClick(View view, Musique musique, int position) {
                 Toast.makeText(MainActivity.this, "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
-                Log.d("debug_musique", musique.getPath());
-                /*
-                Intent intent = new Intent(MainActivity.this, Lecteur.class);
-                startActivity(intent);
-                */
 
                 mService.setMusiquePlaylist(maMusique, position);
                 mService.musiqueArret();
                 mService.musiqueDemaPause();
+
+                Intent intent = new Intent(MainActivity.this, Lecteur.class);
+                startActivity(intent);
                 // position c'est l'index de la musique concernée
                 // maMusique => toutes les musiques
 
