@@ -1,7 +1,6 @@
-package com.example.wolfii.ui.home;
+package com.example.wolfii;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,9 +22,8 @@ import com.example.wolfii.R;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
+public class ListAllSongsFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
     private RecyclerView mRecyclerView;
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
@@ -34,7 +32,6 @@ public class HomeFragment extends Fragment {
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         // creation du recyclerview
