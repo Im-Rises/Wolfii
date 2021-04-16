@@ -60,13 +60,6 @@ public class MusiqueService extends Service {
 
 
 
-/*A FAIRE :
-*
-* Corrigé le bug de la notification qui s'enlève parfois
-* Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
-*
- */
-
 /*///////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE//////////////////////////////////////////
 /*---------------------------------------------------------FONCTION ONCREATE--------------------------------------------------------------*/
 

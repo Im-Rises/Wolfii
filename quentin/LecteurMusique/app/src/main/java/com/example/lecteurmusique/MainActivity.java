@@ -36,8 +36,16 @@ public class MainActivity extends AppCompatActivity {
 
     /*A FAIRE :
      *
-     * Revoir si les variables globales des BROADCASTRECERIVER doivent-être statics
      * Ajouter vérification si le service est en fonctionnement pour les OnDestroy de l'Activité et du Service
+     * Ajouter musique en pause si jack débranché
+     * Ajouter images des mp3 sur notification
+     * Date d’envoi de votre message : Hier, à 18:36
+     * Ainsi que maj notif
+     * Date d’envoi de votre message : Hier, à 18:36
+     * Et ajout nom musique sur notif
+     * Corrigé le bug de la notification qui s'enlève parfois
+     * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
+     *
      */
 
 /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
