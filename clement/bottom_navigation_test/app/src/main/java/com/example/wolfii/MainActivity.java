@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,6 +25,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     public static ArrayList<Musique> maMusique = new ArrayList<Musique>();
     private static final int MY_PERMISSION_REQUEST = 1;
+    private MusiqueService mService;                            //Déclaration pointeur vers le service
+    private boolean mBound = false;                             //Variable qui témoigne de l'activation du service
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         maMusique = getMusic();
     }
+
+    // On recupere toutes les musiques disponibles sur le telephone
     public ArrayList getMusic() {
         ArrayList<Musique> maMusique= new ArrayList<Musique>();
         ContentResolver contentResolver = getContentResolver(); // rechercher toutes les données voulues
@@ -80,5 +86,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return maMusique;
     }
+
 
 }

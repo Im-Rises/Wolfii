@@ -1,7 +1,11 @@
 package com.example.wolfii;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +32,17 @@ public class ListAllSongsFragment extends Fragment {
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
     private boolean mBound = false;
+    private MusiqueService mService;                            //Déclaration pointeur vers le service
+
 
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        getActivity().startService(new Intent(getActivity(), MusiqueService.class));
+        Intent intent = new Intent(getActivity(), MusiqueService.class);
+        getActivity().bindService(intent, connection, 0);
 
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
@@ -44,14 +54,18 @@ public class ListAllSongsFragment extends Fragment {
             public void onMusiqueItemClick(View view, Musique musique, int position) {
 
                 Toast.makeText(getActivity(), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
-                /*
-                mService.setMusiquePlaylist(maMusique, position);
-                mService.musiqueArret();
-                mService.musiqueDemaPause();
 
-                Intent intent = new Intent(MainActivity.this, Lecteur.class);
+                // ------ FAIRE EN SORTE QU'ON PUISSE LIRE LA MUSIQUE ICI
+
+                //mService.setMusiquePlaylist(maMusique, position);
+                //mService.musiqueArret();
+                //mService.musiqueDemaPause();
+                /*
+                Intent intent = new Intent(getActivity(), Lecteur.class);
                 startActivity(intent);
+
                  */
+
                  
                 // position c'est l'index de la musique concernée
                 // maMusique => toutes les musiques
@@ -71,4 +85,19 @@ public class ListAllSongsFragment extends Fragment {
 
         return root;
     }
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            MusiqueService.LocalBinder binder = (MusiqueService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 }
