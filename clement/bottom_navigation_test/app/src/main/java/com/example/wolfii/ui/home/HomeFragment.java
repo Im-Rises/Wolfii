@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
         monAdapter.setmMusiqueItemClickListener(new MyMusiqueAdapter.MusiqueItemClickListener() {
             @Override
             public void onMusiqueItemClick(View view, Musique musique, int position) {
-                /*
+
                 Toast.makeText(MainActivity.this, "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
 
                 mService.setMusiquePlaylist(maMusique, position);
@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
 
                 Intent intent = new Intent(MainActivity.this, Lecteur.class);
                 startActivity(intent);
-                 */
+                 
                 // position c'est l'index de la musique concernée
                 // maMusique => toutes les musiques
 
