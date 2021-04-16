@@ -1,2 +1,0 @@
-include ':app'
-rootProject.name = "musique_affichage_recycler_view"
