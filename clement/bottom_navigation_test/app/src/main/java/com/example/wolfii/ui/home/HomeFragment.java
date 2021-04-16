@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -45,14 +46,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onMusiqueItemClick(View view, Musique musique, int position) {
 
-                Toast.makeText(MainActivity.this, "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getActivity(), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
+                /*
                 mService.setMusiquePlaylist(maMusique, position);
                 mService.musiqueArret();
                 mService.musiqueDemaPause();
 
                 Intent intent = new Intent(MainActivity.this, Lecteur.class);
                 startActivity(intent);
+                 */
                  
                 // position c'est l'index de la musique concernée
                 // maMusique => toutes les musiques
