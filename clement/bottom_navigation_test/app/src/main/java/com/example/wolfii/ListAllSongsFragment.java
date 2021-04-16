@@ -15,14 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.wolfii.MainActivity;
-import com.example.wolfii.Musique;
-import com.example.wolfii.MyMusiqueAdapter;
-import com.example.wolfii.R;
 
 import java.util.ArrayList;
 
@@ -38,7 +32,7 @@ public class ListAllSongsFragment extends Fragment {
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        View root = inflater.inflate(R.layout.fragment_listallsongs, container, false);
 
         getActivity().startService(new Intent(getActivity(), MusiqueService.class));
         Intent intent = new Intent(getActivity(), MusiqueService.class);

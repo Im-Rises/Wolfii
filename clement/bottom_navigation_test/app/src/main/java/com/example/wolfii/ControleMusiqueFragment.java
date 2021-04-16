@@ -9,13 +9,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.example.wolfii.MusiqueService;
-import com.example.wolfii.R;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +25,7 @@ public class ControleMusiqueFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View root = inflater.inflate(R.layout.fragment_controle_musique, container, false);
 
         //Liaisons des Boutons, des TextViews et du SeekBar de l'interface dans la code.
         this.txtViewMusiqueTemps = (TextView) root.findViewById(R.id.txtViewMusiqueTemps);
