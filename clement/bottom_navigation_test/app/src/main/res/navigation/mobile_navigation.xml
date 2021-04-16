@@ -8,18 +8,17 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.wolfii.ListAllSongsFragment"
-        android:label="@string/title_home"
+        android:label="@string/queue"
         tools:layout="@layout/fragment_listallsongs" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.wolfii.ControleMusiqueFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/lecteur"
         tools:layout="@layout/fragment_controle_musique" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.wolfii.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 </navigation>
