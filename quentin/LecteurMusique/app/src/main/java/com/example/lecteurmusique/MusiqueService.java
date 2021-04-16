@@ -59,14 +59,12 @@ public class MusiqueService extends Service {
     private static final String NAME_NOTIFICATION = "NOTIFICATION";
 
 
-
 /*///////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE//////////////////////////////////////////
 /*---------------------------------------------------------FONCTION ONCREATE--------------------------------------------------------------*/
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         //Gestion du focus de la musique
         musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));//initialise l'AudioManager
     }
@@ -234,6 +232,7 @@ public class MusiqueService extends Service {
             }
 
             unregisterReceiver(broadcastReceiverNotifCmd);
+            unregisterReceiver(broadcastReceiverJack);
             stopForeground(true);
             //notifManagerCompat.cancel(NOTIFICATION_ID);//Arrête la notification de contrôle musique
         }
@@ -272,7 +271,6 @@ public class MusiqueService extends Service {
     private BroadcastReceiver broadcastReceiverNotifCmd = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             //Toast.makeText(getApplicationContext(), "Message reçu", Toast.LENGTH_SHORT).show();
 
             switch(intent.getStringExtra(NAME_NOTIFICATION))
@@ -294,8 +292,23 @@ public class MusiqueService extends Service {
         }
     };
 
-/*---------------------------------------------------------FONCTION GESTION NOTIFICATION--------------------------------------------------------------*/
 
+
+    /*----------------------------------------------BROADCASTRECEIVER PAUSE MUISQUE JACK DEBRANCHEE--------------------------------------------------------------*/
+    //Gestion du débranchement d'une prise jack pour écouter la musique
+    private BroadcastReceiver broadcastReceiverJack= new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+                musiquePause();
+            }
+        }
+    };
+
+
+
+
+/*---------------------------------------------------------FONCTION GESTION NOTIFICATION--------------------------------------------------------------*/
 
     public Notification notificationInit() {
         notifBuilder = new NotificationCompat.Builder(MusiqueService.this, CHANNEL_ID);//Inititalisation notification
@@ -317,10 +330,11 @@ public class MusiqueService extends Service {
 
         /////////////////////////////////////////////////////Gestion boutons notification/////////////////////////////////////////////////////////////////////
         //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_ACTIVITY
-        if (broadcastReceiverNotifCmd != null) {
-            IntentFilter intentFilter = new IntentFilter(ACTION_STRING_SERVICE);
-            registerReceiver(broadcastReceiverNotifCmd, intentFilter);
-        }
+        IntentFilter intentFilterNotif = new IntentFilter(ACTION_STRING_SERVICE);
+        registerReceiver(broadcastReceiverNotifCmd, intentFilterNotif);
+
+        IntentFilter intentFilterJack = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(broadcastReceiverJack,intentFilterJack);
 
         //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
         Intent musiqueIntentRejouer = new Intent()
@@ -378,7 +392,7 @@ public class MusiqueService extends Service {
 
 
 
-    /*--------------------------------------------------------------FONCTIONS GETTER--------------------------------------------------------------*/
+/*--------------------------------------------------------------FONCTIONS GETTER--------------------------------------------------------------*/
 
     public int getMusiquePlayerPosition()
     {
@@ -398,9 +412,10 @@ public class MusiqueService extends Service {
     public boolean getMusiquePlayerIsSet(){ return (musiquePlayer != null); }
 
 
-    /*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
+/*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
 
     public void setMusiquePlayerPosition(int seekBarPosition){
         musiquePlayer.seekTo(seekBarPosition);
     }
+
 }
