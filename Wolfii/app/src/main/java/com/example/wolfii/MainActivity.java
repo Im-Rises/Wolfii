@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -31,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSION_REQUEST = 1;
 
 
-    private MusiqueService mService;                            //Déclaration pointeur vers le service
-    private boolean mBound = false;                             //Variable qui témoigne de l'activation du service
+    public static MusiqueService mService;                            //Déclaration pointeur vers le service
+    public static boolean mBound = false;                             //Variable qui témoigne de l'activation du service
 
 
     @Override
@@ -44,17 +45,30 @@ public class MainActivity extends AppCompatActivity {
         //////////////DEMMARRAGE SERVICE ET CONNEXION/////////////////
         //////////////////////////////////////////////////////////////
         if (!MusiqueService.estActif) {
+            Toast.makeText(this,"Activation service",Toast.LENGTH_LONG).show();
             startService(new Intent(MainActivity.this, MusiqueService.class));
         }
+        else
+        {
+            Toast.makeText(this,"Service déjà actif",Toast.LENGTH_LONG).show();
+        }
+
+        /*        if (MusiqueService.estActif)
+            Toast.makeText(this,"Service actif",Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this,"Service pas actif",Toast.LENGTH_LONG).show();*/
+
 
         //Création d'une Intent pour la connexion BoundService
         Intent intent = new Intent(MainActivity.this, MusiqueService.class);
         bindService(intent, connection, 0);//Permet l'arrêt du Service avant l'arrêt du BoundService (permettant d'arrêter le service par les boutons notification)
         //bindService(intent, connection, Context.BIND_AUTO_CREATE);//Arrêt du Service autorisé que si le BoundService est au préalable arrêté
 
+
         //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////
+
+
+
 
 
         // on verifie un paquet de permission
@@ -142,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
             MusiqueService.LocalBinder binder = (MusiqueService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
+            Toast.makeText(MainActivity.this,"Connexion réussie",Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -165,10 +180,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    //////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////
 
 }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import java.util.concurrent.TimeUnit;
 
 public class ControleMusiqueFragment extends Fragment {
+
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
