@@ -42,16 +42,32 @@ public class ListAllArtistsFragment extends Fragment {
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
         mesArtistes = MainActivity.mesArtistes; // on recupere ici toutes les musiques sous forme d'un tableau
 
-        monAdapter = new MyArtisteAdapter(mesArtistes);
-        monAdapter.setmArtisteItemClickListener(new MyArtisteAdapter.ArtisteItemClickListener() {
-
+        monAdapter = new MyArtisteAdapter (mesArtistes);
+        monAdapter.setmMusiqueItemClickListener(new MyArtisteAdapter.MusiqueItemClickListener() {
             @Override
-            public void onArtisteItemClick(View view, String musique, int position) {
+            public void onMusiqueItemClick(View view, Musique musique, int position) {
+
+                Toast.makeText(getActivity(), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
+
+                // ------ FAIRE EN SORTE QU'ON PUISSE LIRE LA MUSIQUE ICI
+
+                //mService.setMusiquePlaylist(mesArtistes, position);
+                //mService.musiqueArret();
+                //mService.musiqueDemaPause();
+                /*
+                Intent intent = new Intent(getActivity(), Lecteur.class);
+                startActivity(intent);
+
+                 */
+
+
+                // position c'est l'index de la musique concernée
+                // mesArtistes => toutes les musiques
 
             }
 
             @Override
-            public void onArtisteItemLongClick(View view, String artiste, int position) {
+            public void onMusiqueItemLongClick(View view, Musique musique, int position) {
                 //Toast.makeText(MainActivity.this, "ah toi tu attends une suppression !", Toast.LENGTH_SHORT).show();
                 Log.d("debug_longclick", "suppression ?");
 

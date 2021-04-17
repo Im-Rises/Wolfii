@@ -24,7 +24,7 @@
         tools:layout="@layout/fragment_controle_musique" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.wolfii.ui.notifications.NotificationsFragment"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_search"
+        android:name="com.example.wolfii.SearchFragment"
+        tools:layout="@layout/fragment_search" />
 </navigation>

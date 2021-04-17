@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">wolfii</string>
     <string name="queue_artist">Artistes</string>
-    <string name="queue">Playlist Aléatoire</string>
+    <string name="queue">Nouveautés</string>
     <string name="lecteur">Wolfii</string>
+    <string name="search">Rechercher</string>
 </resources>

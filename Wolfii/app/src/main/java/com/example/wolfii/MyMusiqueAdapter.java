@@ -44,7 +44,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
     }
     @NonNull
     @Override
-    public MyMusiqueAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // on cherche notre vue avec inflater
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         // on va chercher notre layout
@@ -54,7 +54,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyMusiqueAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         // affiche les viewholder en donnant la position
         holder.display(mesMusiques.get(position));
         Log.d("position", position + "");
