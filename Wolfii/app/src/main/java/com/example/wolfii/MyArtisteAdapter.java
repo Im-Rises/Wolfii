@@ -19,7 +19,7 @@ public class MyArtisteAdapter extends RecyclerView.Adapter<MyArtisteAdapter.MyVi
     List<String> mesArtistes;
 
 
-    public void setMesMusiques(List<String> mesArtistes) {
+    public void setMesArtistes(List<String> mesArtistes) {
         this.mesArtistes = mesArtistes;
     }
 
@@ -31,14 +31,14 @@ public class MyArtisteAdapter extends RecyclerView.Adapter<MyArtisteAdapter.MyVi
         return mesArtistes.get(position);
     }
 
-    public interface MusiqueItemClickListener {
-        void onMusiqueItemClick(View view, Musique musique, int position);
-        void onMusiqueItemLongClick(View view, Musique musique, int position);
+    public interface ArtisteItemClickListener {
+        void onArtisteItemClick(View view, String musique, int position);
+        void onArtisteItemLongClick(View view, String musique, int position);
     }
-    private MusiqueItemClickListener mMusiqueItemClickListener;
+    private ArtisteItemClickListener mArtisteItemClickListener;
 
-    public void setmMusiqueItemClickListener(MusiqueItemClickListener mMusiqueItemClickListener) {
-        this.mMusiqueItemClickListener = mMusiqueItemClickListener;
+    public void setmArtisteItemClickListener(ArtisteItemClickListener mArtisteItemClickListener) {
+        this.mArtisteItemClickListener = mArtisteItemClickListener;
     }
     @NonNull
     @Override
@@ -75,10 +75,10 @@ public class MyArtisteAdapter extends RecyclerView.Adapter<MyArtisteAdapter.MyVi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mMusiqueItemClickListener != null) {
-                        mMusiqueItemClickListener.onMusiqueItemClick(
+                    if (mArtisteItemClickListener != null) {
+                        mArtisteItemClickListener.onArtisteItemClick(
                                 itemView,
-                                (Musique) getItem(getAdapterPosition()),
+                                (String) getItem(getAdapterPosition()),
                                 getAdapterPosition());
                     }
                 }
@@ -86,10 +86,10 @@ public class MyArtisteAdapter extends RecyclerView.Adapter<MyArtisteAdapter.MyVi
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if (mMusiqueItemClickListener != null) {
-                        mMusiqueItemClickListener.onMusiqueItemLongClick(
+                    if (mArtisteItemClickListener != null) {
+                        mArtisteItemClickListener.onArtisteItemLongClick(
                                 itemView,
-                                (Musique)getItem(getAdapterPosition()),
+                                (String)getItem(getAdapterPosition()),
                                 getAdapterPosition());
                     }
                     return false;

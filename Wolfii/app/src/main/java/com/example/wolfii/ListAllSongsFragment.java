@@ -42,7 +42,7 @@ public class ListAllSongsFragment extends Fragment {
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
         maMusique = MainActivity.maMusique; // on recupere ici toutes les musiques sous forme d'un tableau
 
-        monAdapter = new MyMusiqueAdapter(maMusique);
+        monAdapter = new MyMusiqueAdapter (maMusique);
         monAdapter.setmMusiqueItemClickListener(new MyMusiqueAdapter.MusiqueItemClickListener() {
             @Override
             public void onMusiqueItemClick(View view, Musique musique, int position) {

@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_musique"
+        android:title="@string/lecteur" />
+
+    <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_queue"
         android:title="@string/queue" />
@@ -11,12 +16,12 @@
         android:title="@string/queue_artist"/>
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_musique"
-        android:title="@string/lecteur" />
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="test" />
+        android:id="@+id/navigation_identification"
+        android:icon="@drawable/ic_mic"
+        android:title="@string/shazam" />
 </menu>
