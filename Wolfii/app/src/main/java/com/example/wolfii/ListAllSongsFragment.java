@@ -1,6 +1,7 @@
 package com.example.wolfii;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -42,7 +44,7 @@ public class ListAllSongsFragment extends Fragment {
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
         maMusique = MainActivity.maMusique; // on recupere ici toutes les musiques sous forme d'un tableau
 
-        monAdapter = new MyMusiqueAdapter (maMusique);
+        monAdapter = new MyMusiqueAdapter (maMusique, getActivity ());
         monAdapter.setmMusiqueItemClickListener(new MyMusiqueAdapter.MusiqueItemClickListener() {
             @Override
             public void onMusiqueItemClick(View view, Musique musique, int position) {
@@ -69,7 +71,19 @@ public class ListAllSongsFragment extends Fragment {
             @Override
             public void onMusiqueItemLongClick(View view, Musique musique, int position) {
                 //Toast.makeText(MainActivity.this, "ah toi tu attends une suppression !", Toast.LENGTH_SHORT).show();
-                Log.d("debug_longclick", "suppression ?");
+                Dialog dialog = new Dialog(getActivity ());
+
+                // set content view
+                dialog.setContentView(R.layout.dialog_update);
+
+                // initialize width and height
+                int width = WindowManager.LayoutParams.MATCH_PARENT;
+                int height = WindowManager.LayoutParams.WRAP_CONTENT;
+                //set layout
+                dialog.getWindow().setLayout(width, height);
+                //show dialog
+                dialog.show();
+
 
             }
         });
