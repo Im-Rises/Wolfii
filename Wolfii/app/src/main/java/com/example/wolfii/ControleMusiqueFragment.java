@@ -24,32 +24,30 @@ import static com.example.wolfii.MainActivity.mService;
 
 
 
+/*A FAIRE :
+ *
+ * Ajouter images des mp3 sur notification
+ * Ainsi que maj notif
+ * Et ajout nom musique sur notif
+ * Corrigé le bug de la notification qui s'enlève si on arrête une musique depuis l'application
+ * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
+ * Vérifier le cycle de vie des fragments sur Android Studio pour l'arrêt des BroadcastReceiver etc...
+ *
+ */
+
+
 public class ControleMusiqueFragment extends Fragment {
 
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
 
-    private Button btnDemaPause, btnArret,btnSuivant,btnPrecedent,btnRejouer;  //boutons de la page
+    private Button cmdDemaPause, cmdArret,cmdPrecedent,cmdSuivant,cmdRejouer;  //boutons de la page
 
 
     private static final String ACTION_STRING_ACTIVITY = "ToActivity";  //Action pour envoyer un Boradcast dans l'activité
 
 
-    /*A FAIRE :
-     *
-     * Ajouter vérification si le service est en fonctionnement pour les OnDestroy de l'Activité et du Service
-     * Ajouter musique en pause si jack débranché
-     * Ajouter images des mp3 sur notification
-     * Date d’envoi de votre message : Hier, à 18:36
-     * Ainsi que maj notif
-     * Date d’envoi de votre message : Hier, à 18:36
-     * Et ajout nom musique sur notif
-     * Corrigé le bug de la notification qui s'enlève parfois
-     * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
-     * Vérifier le cycle de vie des fragments sur Android Studio pour l'arrêt des BroadcastReceiver etc...
-     *
-     */
 
     /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,18 +60,33 @@ public class ControleMusiqueFragment extends Fragment {
         this.txtViewMusiqueDuree = (TextView) root.findViewById(R.id.txtViewMusiqueDuree);
         this.txtViewMusiqueDuree.setSoundEffectsEnabled(false);
 
-        this.btnDemaPause = (Button) root.findViewById(R.id.btnDemaPause);
-        this.btnDemaPause.setSoundEffectsEnabled(false);
 
-        this.btnArret = (Button) root.findViewById(R.id.btnArret);
-        this.btnArret.setSoundEffectsEnabled(false);
 
-        this.btnRejouer = (Button) root.findViewById(R.id.btnRejouer);
-        this.btnRejouer.setSoundEffectsEnabled(false);
+        this.cmdDemaPause = (Button) root.findViewById(R.id.btnDemaPause);
+        this.cmdDemaPause.setSoundEffectsEnabled(false);
+        this.cmdDemaPause.setOnClickListener(new EcouteurBtnDemaPause());
+
+        this.cmdArret = (Button) root.findViewById(R.id.btnArret);
+        this.cmdArret.setSoundEffectsEnabled(false);
+        this.cmdArret.setOnClickListener(new EcouteurBtnArret());
+
+
+/*        this.cmdPrecedent = (Button) root.findViewById(R.id.btnPrecedent);
+        this.cmdPrecedent.setSoundEffectsEnabled(false);
+        this.cmdPrecedent.setOnClickListener(new cmdBtnPrecedentEcouteur());
+
+        this.cmdSuivant = (Button) root.findViewById(R.id.btnSuivant);
+        this.cmdSuivant.setSoundEffectsEnabled(false);
+        this.cmdSuivant.setOnClickListener(new cmdBtnSuivantEcouteur());*/
+
+
+        this.cmdRejouer = (Button) root.findViewById(R.id.btnRejouer);
+        this.cmdRejouer.setSoundEffectsEnabled(false);
+        this.cmdRejouer.setOnClickListener(new EcouteurBtnRejouer());
 
         this.seekBarMusique=(SeekBar) root.findViewById(R.id.seekBarMusique);
         this.seekBarMusique.setSoundEffectsEnabled(false);
-        this.seekBarMusique.setOnSeekBarChangeListener(new seekBarEcouteur());
+        this.seekBarMusique.setOnSeekBarChangeListener(new SeekBarEcouteur());
 
         IntentFilter intentFilter = new IntentFilter(ACTION_STRING_ACTIVITY);
         getActivity().registerReceiver(broadcastReceiverMajInterface, intentFilter);
@@ -92,16 +105,14 @@ public class ControleMusiqueFragment extends Fragment {
     /*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
     @Override
     public void onDestroy() {
-
+        super.onDestroy();
         //Arrêt broadcast receiver de mise à jour de l'interface
         getActivity().unregisterReceiver(broadcastReceiverMajInterface);
-
-        super.onDestroy();
     }
 
     /*--------------------------------------FONCTION/CLASS SEEKBAR------------------------------------------------*/
 
-    private class seekBarEcouteur implements SeekBar.OnSeekBarChangeListener {
+    private class SeekBarEcouteur implements SeekBar.OnSeekBarChangeListener {
 
         //Evenement qui s'enclenche sur le déplacement du seekbar
         public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser)
@@ -123,29 +134,33 @@ public class ControleMusiqueFragment extends Fragment {
 
     /*--------------------------------------FONCTION BOUTONS------------------------------------------------*/
 
-    public void cmdDemaPause(View view)
-    {
-        //Envoyer commande de démarrage et pause de la musique à la classe BroadCastReceiver
-        mService.musiqueDemaPause();
-        seekBarMusique.setMax(mService.getMusiquePlayerDuration());
+    private class EcouteurBtnDemaPause implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            mService.musiqueDemaPause();
+            seekBarMusique.setMax(mService.getMusiquePlayerDuration());
+        }
+    }
+
+    private class EcouteurBtnArret implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            mService.musiqueArret();
+            seekBarMusique.setProgress(0);
+            txtViewMusiqueTemps.setText("00:00");
+        }
+    }
+
+    private class EcouteurBtnRejouer implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            //Active désactive la boucle de la musique actuelle
+            mService.musiqueBoucleDeboucle();
+        }
     }
 
 
-    public void cmdArret(View view)
-    {
-        //Envoyer commande d'arrêt de la musique à la classe BroadCastReceiver
-        mService.musiqueArret();
-        seekBarMusique.setProgress(0);
-        txtViewMusiqueTemps.setText("00:00");
-    }
-
-    public void cmdBoucleDebouble(View view) {
-        //Active désactive la boucle de la musique actuelle
-        mService.musiqueBoucleDeboucle();
-        //Toast.makeText(getApplicationContext(), "Lecture répétée de la musique en cours", Toast.LENGTH_SHORT).show();
-    }
-
-    public void cmdMusiqueStuivante(View view)
+/*    public void cmdMusiqueStuivante(View view)
     {
 
     }
@@ -153,7 +168,8 @@ public class ControleMusiqueFragment extends Fragment {
     public void cmdMusiquePrecedente(View view)
     {
 
-    }
+    }*/
+
 
 
     /*----------------------------------GESTION BROADCASTRECEIVER--------------------------------------------------*/

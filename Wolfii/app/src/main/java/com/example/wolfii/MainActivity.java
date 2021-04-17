@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
+
     public static ArrayList<Musique> maMusique = new ArrayList<>();
     public static ArrayList<String> mesArtistes = new ArrayList<>();
     private static final int MY_PERMISSION_REQUEST = 1;
@@ -146,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
             MusiqueService.LocalBinder binder = (MusiqueService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
-            Toast.makeText(MainActivity.this,"Connexion réussie",Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         //Arrête le service si aucune musique n'est en cours
         if (!mService.getMusiquePlayerIsSet() || !mService.getMusiquePlayerIsPlaying())
         {
-            //
+            Toast.makeText(MainActivity.this,"Arrêt service",Toast.LENGTH_LONG).show();
             stopService(new Intent(MainActivity.this,MusiqueService.class));
         }
     }
