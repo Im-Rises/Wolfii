@@ -32,6 +32,8 @@ import static com.example.wolfii.MainActivity.mService;
  * Corrigé le bug de la notification qui s'enlève si on arrête une musique depuis l'application
  * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
  * Vérifier le cycle de vie des fragments sur Android Studio pour l'arrêt des BroadcastReceiver etc...
+ * Ajouter un arret du service si l'application a été swipe et que la notif est présente et qu'on apputi sur arrêter
+ * Remplacer musique arret par une autre fonction qui arrête pas la notif etc... quand on appuit sur le bouton "MusiqueSuivante" ou "musiquePrecedente"
  *
  */
 
@@ -86,7 +88,7 @@ public class ControleMusiqueFragment extends Fragment {
 
         this.seekBarMusique=(SeekBar) root.findViewById(R.id.seekBarMusique);
         this.seekBarMusique.setSoundEffectsEnabled(false);
-        this.seekBarMusique.setOnSeekBarChangeListener(new SeekBarEcouteur());
+        this.seekBarMusique.setOnSeekBarChangeListener(new EcouteurSeekBar());
 
         IntentFilter intentFilter = new IntentFilter(ACTION_STRING_ACTIVITY);
         getActivity().registerReceiver(broadcastReceiverMajInterface, intentFilter);
@@ -112,7 +114,7 @@ public class ControleMusiqueFragment extends Fragment {
 
     /*--------------------------------------FONCTION/CLASS SEEKBAR------------------------------------------------*/
 
-    private class SeekBarEcouteur implements SeekBar.OnSeekBarChangeListener {
+    private class EcouteurSeekBar implements SeekBar.OnSeekBarChangeListener {
 
         //Evenement qui s'enclenche sur le déplacement du seekbar
         public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser)

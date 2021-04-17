@@ -78,7 +78,6 @@ public class MusiqueService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(getApplicationContext(), "TEST StopSelf", Toast.LENGTH_SHORT).show();
         estActif=false;
         super.onDestroy();
     }
@@ -108,9 +107,8 @@ public class MusiqueService extends Service {
         public void run() {
             if (musiquePlayer != null) {
 
-/*                    seekBarMusique.setProgress(musiquePlayer.getCurrentPosition());
-                    txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(musiquePlayer.getCurrentPosition()));*/
                 envoieBroadcast();
+
                 //Remet dans la pile du handler un appel pour le Runnable (this)
                 handlerTemps.postDelayed(this, 1000);
             }
@@ -161,7 +159,6 @@ public class MusiqueService extends Service {
     public void musiqueDemaPause() {
         if (musiquePlayer == null) {
             Toast.makeText(getApplicationContext(), positionMusique + "\n" + maMusique.get(positionMusique).getPathUri(), Toast.LENGTH_SHORT).show();
-
             musiqueInitialisation();
             musiqueDemaEtFocus();
             startForeground(NOTIFICATION_ID, notificationInit());//Démarre le service en foreground afin de permettre de continuer la musique après l'avoir fermé
@@ -175,7 +172,9 @@ public class MusiqueService extends Service {
     public void musiqueInitialisation() {
         musiquePlayer = MediaPlayer.create(this, maMusique.get(positionMusique).getPathUri());//Création du MediaPlayer
         musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);//Définis le mode de fonctionnement sur PARTIAL_WAKE_LOCK pour permettre à la musique de fonctionner sans être sur l'application
+        musiquePlayer.setOnCompletionListener(new EcouteurMusiqueFinie());
     }
+
 
     public void musiqueDemaEtFocus() {
 /*
@@ -196,7 +195,7 @@ public class MusiqueService extends Service {
             musiqueFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
                     .setOnAudioFocusChangeListener(musiqueFocusChange)
                     .setAudioAttributes(audioAttributesParametre)
-                    //.setWillPauseWhenDucked(true)//Si une application demande de diminuer le volume de la musique alors la fonction musiqueFocusChange s'active (Selon Android Studio documentation c'est acceptable de ne pas l'activer pour un elcteur de musique)
+                    //.setWillPauseWhenDucked(true)//Si une application demande de diminuer le volume de la musique alors la fonction musiqueFocusChange s'active (Selon Android Studio documentation c'est acceptable de ne pas l'activer pour un lecteur de musique)
                     .build();
             resultat = musiqueManager.requestAudioFocus(musiqueFocusRequest);
         } else {
@@ -209,9 +208,9 @@ public class MusiqueService extends Service {
     }
 
     public void musiquePause() {
-        handlerTemps.removeCallbacks(runnableTemps);
         musiquePlayer.pause();
-        /*Maj des boutons de la notif*/
+        handlerTemps.removeCallbacks(runnableTemps);
+        envoieBroadcast();
     }
 
 
@@ -232,22 +231,48 @@ public class MusiqueService extends Service {
             unregisterReceiver(broadcastReceiverNotifCmd);
             unregisterReceiver(broadcastReceiverJack);
             stopForeground(true);
-            //notifManagerCompat.cancel(NOTIFICATION_ID);//Arrête la notification de contrôle musique
         }
     }
 
 
     public void musiqueSuivante() {
+        //Remplacer musique arret par une autre fonction qui arrête pas la notif etc...
+        musiqueArret();
+        positionMusique++;
 
+        if (positionMusique>= maMusique.size())
+            positionMusique=0;
+
+        musiqueDemaPause();
     }
 
     public void musiquePrecedente() {
+        //Remplacer musique arret par une autre fonction qui arrête pas la notif etc...
+        musiqueArret();
+        positionMusique--;
 
+        if (positionMusique < 0)
+            positionMusique=0;
+
+        musiqueDemaPause();
     }
 
     public void musiqueBoucleDeboucle() {
         if (musiquePlayer != null)
             musiquePlayer.setLooping(!musiquePlayer.isLooping());
+    }
+
+
+
+    /*-----------------------------------------------------GESTION ARRIVEE EN FIN DE MUSIQUE--------------------------------------------------------------*/
+
+    private class EcouteurMusiqueFinie implements MediaPlayer.OnCompletionListener {
+        @Override
+        public void onCompletion(MediaPlayer mp) {
+            //Si on arrive au bout de la musique et qu'elle n'est pas en mode boucle
+            //on passe à la musique suivante (pas de besoin de véirifer si la musique boucle)
+                musiqueSuivante();
+        }
     }
 
 
@@ -276,8 +301,10 @@ public class MusiqueService extends Service {
                     musiqueDemaPause();
                     break;
                 case "PRECEDENT":
+                    musiquePrecedente();
                     break;
                 case "SUIVANT":
+                    musiqueSuivante();
                     break;
                 case "ARRET":
                     musiqueArret();

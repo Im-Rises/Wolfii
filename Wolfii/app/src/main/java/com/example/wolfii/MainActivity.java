@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         //////////////////////////////////////////////////////////////
         if (!MusiqueService.estActif)
         {
+            Toast.makeText(MainActivity.this,"Démarrage du service",Toast.LENGTH_LONG).show();
             startService(new Intent(MainActivity.this, MusiqueService.class));
         }
 
