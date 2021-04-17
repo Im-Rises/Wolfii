@@ -27,7 +27,15 @@ public class ListAllArtistsFragment extends Fragment {
     private ArrayList<String> mesArtistes;
     private MyArtisteAdapter monAdapter;
     private boolean mBound = false;
-    private MusiqueService mService;                            //Déclaration pointeur vers le service
+    private MusiqueService mService;
+
+/*
+* ----------------------------------------------ATTENTION POUR CLEMENT-------------------------------------------------------------------------
+* Je n'ai rien modifié, ce message est là juste pour t'informer de :
+* Déso d'écrire ici mais c'est pour te rappeler qu'il faut supprimer le mService et mBound ici, on s'en fiche
+* il faut utiliser celui du mainActivity ! Car sinon on le déclare deux fois !!! Surtout que tu gères pas son arrêt donc il ya des fuites de mémoire !
+*
+ */
 
 
     @SuppressLint("WrongConstant")
