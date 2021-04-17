@@ -44,26 +44,16 @@ public class MainActivity extends AppCompatActivity {
         //////////////////////////////////////////////////////////////
         //////////////DEMMARRAGE SERVICE ET CONNEXION/////////////////
         //////////////////////////////////////////////////////////////
-        if (!MusiqueService.estActif) {
-            Toast.makeText(this,"Activation service",Toast.LENGTH_LONG).show();
+        if (!MusiqueService.estActif)
+        {
             startService(new Intent(MainActivity.this, MusiqueService.class));
         }
-        else
-        {
-            Toast.makeText(this,"Service déjà actif",Toast.LENGTH_LONG).show();
-        }
-
-        /*        if (MusiqueService.estActif)
-            Toast.makeText(this,"Service actif",Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(this,"Service pas actif",Toast.LENGTH_LONG).show();*/
 
 
         //Création d'une Intent pour la connexion BoundService
         Intent intent = new Intent(MainActivity.this, MusiqueService.class);
         bindService(intent, connection, 0);//Permet l'arrêt du Service avant l'arrêt du BoundService (permettant d'arrêter le service par les boutons notification)
         //bindService(intent, connection, Context.BIND_AUTO_CREATE);//Arrêt du Service autorisé que si le BoundService est au préalable arrêté
-
 
         //////////////////////////////////////////////////////////////
 
@@ -178,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
         {
             stopService(new Intent(MainActivity.this,MusiqueService.class));
         }
-
     }
     //////////////////////////////////////////////////////////////
 

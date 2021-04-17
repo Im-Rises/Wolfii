@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,14 +19,21 @@ import androidx.fragment.app.Fragment;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.example.wolfii.MainActivity.mBound;
+import static com.example.wolfii.MainActivity.mService;
+
+
+
 public class ControleMusiqueFragment extends Fragment {
 
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
 
-    private MusiqueService mService;                            //Déclaration pointeur vers le service
-    private boolean mBound = false;                             //Variable qui témoigne de l'activation du service
+    private Button btnDemaPause, btnArret,btnSuivant,btnPrecedent,btnRejouer;  //boutons de la page
+
+/*    private MusiqueService mService;                            //Déclaration pointeur vers le service
+    private boolean mBound = false;                             //Variable qui témoigne de l'activation du service*/
 
     private static final String ACTION_STRING_ACTIVITY = "ToActivity";  //Action pour envoyer un Boradcast dans l'activité
 
@@ -55,6 +63,15 @@ public class ControleMusiqueFragment extends Fragment {
 
         this.txtViewMusiqueDuree = (TextView) root.findViewById(R.id.txtViewMusiqueDuree);
         this.txtViewMusiqueDuree.setSoundEffectsEnabled(false);
+
+        this.btnDemaPause = (Button) root.findViewById(R.id.btnDemaPause);
+        this.btnDemaPause.setSoundEffectsEnabled(false);
+
+        this.btnArret = (Button) root.findViewById(R.id.btnArret);
+        this.btnArret.setSoundEffectsEnabled(false);
+
+        this.btnRejouer = (Button) root.findViewById(R.id.btnRejouer);
+        this.btnRejouer.setSoundEffectsEnabled(false);
 
         this.seekBarMusique=(SeekBar) root.findViewById(R.id.seekBarMusique);
         this.seekBarMusique.setSoundEffectsEnabled(false);

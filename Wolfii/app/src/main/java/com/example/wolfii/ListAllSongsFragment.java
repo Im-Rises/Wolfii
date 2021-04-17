@@ -24,23 +24,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.example.wolfii.MainActivity.mService;
+
 public class ListAllSongsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
-    private boolean mBound = false;
-    private MusiqueService mService;                            //Déclaration pointeur vers le service
+
 
 
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_listallsongs, container, false);
-
-        getActivity().startService(new Intent(getActivity(), MusiqueService.class));
-        Intent intent = new Intent(getActivity(), MusiqueService.class);
-        getActivity().bindService(intent, connection, 0);
 
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
@@ -53,20 +50,14 @@ public class ListAllSongsFragment extends Fragment {
 
                 Toast.makeText(getActivity(), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
 
-                // ------ FAIRE EN SORTE QU'ON PUISSE LIRE LA MUSIQUE ICI
+                mService.setMusiquePlaylist(maMusique, position);
+                mService.musiqueArret();
+                mService.musiqueDemaPause();
 
-                //mService.setMusiquePlaylist(maMusique, position);
-                //mService.musiqueArret();
-                //mService.musiqueDemaPause();
                 /*
                 Intent intent = new Intent(getActivity(), Lecteur.class);
                 startActivity(intent);
-
                  */
-
-                 
-                // position c'est l'index de la musique concernée
-                // maMusique => toutes les musiques
 
             }
 
@@ -105,19 +96,4 @@ public class ListAllSongsFragment extends Fragment {
     private void delete(Musique m) {
         new File(m.getPathUri ().toString()).delete();
     }
-    private ServiceConnection connection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            MusiqueService.LocalBinder binder = (MusiqueService.LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
 }
