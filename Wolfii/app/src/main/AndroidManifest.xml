@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.wolfii">
+
+    <!--Demande de permission d'accès au stockage du téléphone : -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <!--Demande de permission de garder le téléphone en fonctionnement quand il est en veille afin de continuer la musique : -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!--Demande de permission de faire passer un service au foreground afin de ne pas l'arrêter même si l'application est tuée : -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,9 +19,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Wolfii">
+
+        <!--Déclaration du service de gestion de la musique en arrière-plan : -->
+        <service android:name=".MusiqueService"/>
+
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTask">    <!--Défini l'activité en une seule tâche maximum (singletask) : Evite de relancer l'activité quand on appuit sur la notification de controle musique et qu'on est sur l'application-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

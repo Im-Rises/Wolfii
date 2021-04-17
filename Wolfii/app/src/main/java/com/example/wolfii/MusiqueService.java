@@ -28,11 +28,12 @@ import java.util.ArrayList;
 
 public class MusiqueService extends Service {
 
+    public static boolean estActif=false;//Variable qui définis si le service est en état de fonctionnement ou arrêté
+
     private MediaPlayer musiquePlayer;//Lecture musique
     private AudioManager musiqueManager;//AudioManager pour appeler la gestion de l'interruption musique via musiqueFocusmanager
 
     private AudioFocusRequest musiqueFocusRequest;//AudioFocusRequest pour les demande de focus audio pour Andorid 8.0 ou supérieur
-
 
     private static final String CHANNEL_ID = "NotifControlMusique";             //ID notification de control musique
     private static final String NOTIFICATION_CHANNEL_NAME = "NotifChannelName"; //CHANNEL name notification de control musique
@@ -40,28 +41,19 @@ public class MusiqueService extends Service {
     private NotificationCompat.Builder notifBuilder;                     //Inititalisation notification
     private NotificationManagerCompat notifManagerCompat;                //Création d'une gestion de notification de compatibilité
 
-
     private Handler handlerTemps = new Handler();               //Handler pour appeler toutes les secondes le runnable
-
 
     private final IBinder binder = new LocalBinder();    // Binder given to clients
 
-
     private static final String ACTION_STRING_ACTIVITY = "ToActivity";
-
 
     private static final String ACTION_STRING_SERVICE = "ToService";
     private static final String NAME_NOTIFICATION = "NOTIFICATION";
 
-
     private ArrayList<Musique> maMusique = new ArrayList<Musique>();
     private int positionMusique;
-    /*A FAIRE :
-     *
-     * Corrigé le bug de la notification qui s'enlève parfois
-     * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
-     *
-     */
+
+
 
 /*///////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE//////////////////////////////////////////
 /*---------------------------------------------------------FONCTION ONCREATE--------------------------------------------------------------*/
@@ -69,7 +61,7 @@ public class MusiqueService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        estActif=true;
         //Gestion du focus de la musique
         musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));//initialise l'AudioManager
     }
@@ -87,6 +79,7 @@ public class MusiqueService extends Service {
     @Override
     public void onDestroy() {
         //Toast.makeText(getApplicationContext(), "TEST StopSelf", Toast.LENGTH_SHORT).show();
+        estActif=false;
         musiqueArret();
         super.onDestroy();
     }
