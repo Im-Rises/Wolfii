@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class ListAllSongsFragment extends Fragment {
@@ -81,9 +83,16 @@ public class ListAllSongsFragment extends Fragment {
                 int height = WindowManager.LayoutParams.WRAP_CONTENT;
                 //set layout
                 dialog.getWindow().setLayout(width, height);
+                Button btn_delete = dialog.findViewById (R.id.bt_delete);
+                btn_delete.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Boolean aBoolean = new File (musique.getPathUri ().toString ()).delete ();
+                        Log.d ("debug_delete", aBoolean.toString ());
+
+                    }
+                });
                 //show dialog
                 dialog.show();
-
 
             }
         });
@@ -92,6 +101,9 @@ public class ListAllSongsFragment extends Fragment {
         mRecyclerView.setAdapter(monAdapter);
 
         return root;
+    }
+    private void delete(Musique m) {
+        new File(m.getPathUri ().toString()).delete();
     }
     private ServiceConnection connection = new ServiceConnection() {
 
