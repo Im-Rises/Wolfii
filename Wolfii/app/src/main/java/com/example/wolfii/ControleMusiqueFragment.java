@@ -29,9 +29,7 @@ import static com.example.wolfii.MainActivity.mService;
  * Ajouter images des mp3 sur notification
  * Ainsi que maj notif
  * Et ajout nom musique sur notif
- * Corrigé le bug de la notification qui s'enlève si on arrête une musique depuis l'application
  * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
- * Vérifier le cycle de vie des fragments sur Android Studio pour l'arrêt des BroadcastReceiver etc...
  * Ajouter un arret du service si l'application a été swipe et que la notif est présente et qu'on apputi sur arrêter
  * Remplacer musique arret par une autre fonction qui arrête pas la notif etc... quand on appuit sur le bouton "MusiqueSuivante" ou "musiquePrecedente"
  *
