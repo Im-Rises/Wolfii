@@ -23,7 +23,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/bt_parametres"
+            android:id="@+id/bt_settings"
             android:layout_marginStart="8dp"
             android:src="@drawable/ic_parametres"
             android:layout_marginLeft="8dp" />

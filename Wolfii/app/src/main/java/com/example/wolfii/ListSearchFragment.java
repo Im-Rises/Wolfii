@@ -1,12 +1,14 @@
 package com.example.wolfii;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,7 +42,7 @@ public class ListSearchFragment extends Fragment {
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
 
-        monAdapter = new MyMusiqueAdapter (this.musiques);
+        monAdapter = new MyMusiqueAdapter (this.musiques, getActivity ());
         monAdapter.setmMusiqueItemClickListener(new MyMusiqueAdapter.MusiqueItemClickListener() {
 
             @Override
@@ -50,6 +52,21 @@ public class ListSearchFragment extends Fragment {
 
             @Override
             public void onMusiqueItemLongClick (View view, Musique musique, int position) {
+
+                    Dialog dialog = new Dialog(getActivity ());
+
+                    // set content view
+                    dialog.setContentView(R.layout.dialog_update);
+
+                    // initialize width and height
+                    int width = WindowManager.LayoutParams.MATCH_PARENT;
+                    int height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    //set layout
+                    dialog.getWindow().setLayout(width, height);
+                    //show dialog
+                    dialog.show();
+
+
 
             }
 
