@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,6 @@ public class ControleMusiqueFragment extends Fragment {
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
-
     private MusiqueService mService;                            //Déclaration pointeur vers le service
     private boolean mBound = false;                             //Variable qui témoigne de l'activation du service
 
