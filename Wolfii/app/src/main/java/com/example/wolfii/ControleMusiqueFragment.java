@@ -32,6 +32,7 @@ import static com.example.wolfii.MainActivity.mService;
  * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
  * Ajouter un arret du service si l'application a été swipe et que la notif est présente et qu'on apputi sur arrêter
  * Remplacer musique arret par une autre fonction qui arrête pas la notif etc... quand on appuit sur le bouton "MusiqueSuivante" ou "musiquePrecedente"
+ * Revoir la mise à jour de la page contrôle musique quand on va dessus (au démarrage etc...)
  *
  */
 
