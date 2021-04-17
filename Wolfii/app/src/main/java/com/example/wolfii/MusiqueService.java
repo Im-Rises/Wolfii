@@ -78,9 +78,8 @@ public class MusiqueService extends Service {
 
     @Override
     public void onDestroy() {
-        //Toast.makeText(getApplicationContext(), "TEST StopSelf", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "TEST StopSelf", Toast.LENGTH_SHORT).show();
         estActif=false;
-        musiqueArret();
         super.onDestroy();
     }
 
@@ -281,7 +280,7 @@ public class MusiqueService extends Service {
                 case "SUIVANT":
                     break;
                 case "ARRET":
-                    stopSelf();
+                    musiqueArret();
                     break;
             }
         }

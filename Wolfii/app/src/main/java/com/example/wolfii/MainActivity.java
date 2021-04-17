@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         //Arrêt Bound Session
         unbindService(connection);
         mBound = false;
