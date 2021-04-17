@@ -77,9 +77,7 @@ public class ListAllSongsFragment extends Fragment {
                 Button btn_delete = dialog.findViewById (R.id.bt_delete);
                 btn_delete.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Boolean aBoolean = new File (musique.getPathUri ().toString ()).delete ();
-                        Log.d ("debug_delete", aBoolean.toString ());
-
+                        rm(musique.getPath());
                     }
                 });
                 //show dialog
@@ -93,7 +91,15 @@ public class ListAllSongsFragment extends Fragment {
 
         return root;
     }
-    private void delete(Musique m) {
-        new File(m.getPathUri ().toString()).delete();
+    private void rm(String path) {
+        try {
+            // delete the original file
+            File file = new File(path);
+            file.delete();
+            Log.d("debug_delete", "ok");
+        }
+        catch (Exception e) {
+            Log.e("tag", e.getMessage());
+        }
     }
 }

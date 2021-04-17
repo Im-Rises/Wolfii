@@ -32,8 +32,6 @@ public class ControleMusiqueFragment extends Fragment {
 
     private Button btnDemaPause, btnArret,btnSuivant,btnPrecedent,btnRejouer;  //boutons de la page
 
-/*    private MusiqueService mService;                            //Déclaration pointeur vers le service
-    private boolean mBound = false;                             //Variable qui témoigne de l'activation du service*/
 
     private static final String ACTION_STRING_ACTIVITY = "ToActivity";  //Action pour envoyer un Boradcast dans l'activité
 

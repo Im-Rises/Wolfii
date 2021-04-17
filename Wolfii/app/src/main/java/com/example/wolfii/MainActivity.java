@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         //Arrête le service si aucune musique n'est en cours
         if (!mService.getMusiquePlayerIsSet() || !mService.getMusiquePlayerIsPlaying())
         {
+            //
             stopService(new Intent(MainActivity.this,MusiqueService.class));
         }
     }
