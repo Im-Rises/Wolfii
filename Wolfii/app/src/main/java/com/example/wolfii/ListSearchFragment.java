@@ -20,14 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import static com.example.wolfii.MainActivity.mService;
+
 public class ListSearchFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MyMusiqueAdapter monAdapter;
-    private boolean mBound = false;
-    private MusiqueService mService;
     private String artiste;
+    private static ArrayList<Musique> musiques = new ArrayList<> ();
 
-    private ArrayList<Musique> musiques = new ArrayList<> ();
     ListSearchFragment(ArrayList<Musique> musiques, String artiste){
         this.musiques = musiques;
         this.artiste = artiste;
@@ -47,7 +47,9 @@ public class ListSearchFragment extends Fragment {
 
             @Override
             public void onMusiqueItemClick (View view, Musique musique, int position) {
-
+                mService.setMusiquePlaylist(musiques, position);
+                mService.musiqueArret();
+                mService.musiqueDemaPause();
             }
 
             @Override
