@@ -27,4 +27,9 @@
         android:id="@+id/navigation_search"
         android:name="com.example.wolfii.SearchFragment"
         tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/navigation_identification"
+        android:name="com.example.wolfii.IdentificationFragment"
+        tools:layout="@layout/fragment_identification" />
 </navigation>
