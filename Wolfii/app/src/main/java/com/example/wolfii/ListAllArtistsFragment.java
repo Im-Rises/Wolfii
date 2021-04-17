@@ -11,10 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +33,7 @@ public class ListAllArtistsFragment extends Fragment {
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_listallsongs, container, false);
+        View root = inflater.inflate(R.layout.fragment_mes_artistes, container, false);
 
         getActivity().startService(new Intent(getActivity(), MusiqueService.class));
         Intent intent = new Intent(getActivity(), MusiqueService.class);
@@ -43,41 +44,30 @@ public class ListAllArtistsFragment extends Fragment {
         mesArtistes = MainActivity.mesArtistes; // on recupere ici toutes les musiques sous forme d'un tableau
 
         monAdapter = new MyArtisteAdapter (mesArtistes);
-        monAdapter.setmMusiqueItemClickListener(new MyArtisteAdapter.MusiqueItemClickListener() {
+        monAdapter.setmArtisteItemClickListener(new MyArtisteAdapter.ArtisteItemClickListener() {
+
             @Override
-            public void onMusiqueItemClick(View view, Musique musique, int position) {
-
-                Toast.makeText(getActivity(), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
-
-                // ------ FAIRE EN SORTE QU'ON PUISSE LIRE LA MUSIQUE ICI
-
-                //mService.setMusiquePlaylist(mesArtistes, position);
-                //mService.musiqueArret();
-                //mService.musiqueDemaPause();
-                /*
-                Intent intent = new Intent(getActivity(), Lecteur.class);
-                startActivity(intent);
-
-                 */
-
-
-                // position c'est l'index de la musique concernée
-                // mesArtistes => toutes les musiques
-
+            public void onArtisteItemClick (View view, String artiste, int position) {
+                ArrayList<Musique> musiques = recuperer_musique (artiste);
             }
 
             @Override
-            public void onMusiqueItemLongClick(View view, Musique musique, int position) {
-                //Toast.makeText(MainActivity.this, "ah toi tu attends une suppression !", Toast.LENGTH_SHORT).show();
-                Log.d("debug_longclick", "suppression ?");
+            public void onArtisteItemLongClick (View view, String artiste, int position) {
 
             }
+
         });
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));
         mRecyclerView.setAdapter(monAdapter);
 
         return root;
+    }
+    private ArrayList<Musique> recuperer_musique(String artiste) {
+        // on recupere toutes les musiques selon l'artiste qui nous interesse
+        ArrayList<Musique> musiques = new ArrayList<> ();
+        for(Musique m : MainActivity.maMusique) if (m.getAuthor().equals (artiste) ) musiques.add (m);
+        return musiques;
     }
     private ServiceConnection connection = new ServiceConnection() {
 
