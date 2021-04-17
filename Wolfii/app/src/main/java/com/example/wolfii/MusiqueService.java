@@ -129,7 +129,7 @@ public class MusiqueService extends Service {
     /*---------------------------------------------------------GESTION AUDIOFOCUS--------------------------------------------------------------*/
 
     //OnAudioFocusChange pour gérer les interruptions par d'autres applications de la musique
-    private AudioManager.OnAudioFocusChangeListener musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener(){
+    private AudioManager.OnAudioFocusChangeListener musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
             Log.e("Type de focusChange", " : " + focusChange);
@@ -150,30 +150,37 @@ public class MusiqueService extends Service {
     };
 
 
+    /*----------------------------------------------BROADCASTRECEIVER PAUSE MUISQUE JACK DEBRANCHEE--------------------------------------------------------------*/
+
+    //Gestion du débranchement d'une prise jack pour écouter la musique
+    private BroadcastReceiver broadcastReceiverJack = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+                musiquePause();
+            }
+        }
+    };
+
+
+
     /*---------------------------------------------------------FONCTIONS DE GESTION MUSIQUE--------------------------------------------------------------*/
 
-    public void musiqueDemaPause()
-    {
-        if (musiquePlayer == null)
-        {
-            Toast.makeText(getApplicationContext(), positionMusique + "\n" + maMusique.get(positionMusique).getPathUri() , Toast.LENGTH_SHORT).show();
+    public void musiqueDemaPause() {
+        if (musiquePlayer == null) {
+            Toast.makeText(getApplicationContext(), positionMusique + "\n" + maMusique.get(positionMusique).getPathUri(), Toast.LENGTH_SHORT).show();
 
             musiqueInitialisation();
             musiqueDemaEtFocus();
-            startForeground(NOTIFICATION_ID,notificationInit());//Démarre le service en foreground afin de permettre de continuer la musique après l'avoir fermé
-        }
-        else if (!musiquePlayer.isPlaying())
-        {
+            startForeground(NOTIFICATION_ID, notificationInit());//Démarre le service en foreground afin de permettre de continuer la musique après l'avoir fermé
+        } else if (!musiquePlayer.isPlaying()) {
             musiqueDemaEtFocus();
-        }
-        else
-        {
+        } else {
             musiquePause();
         }
     }
 
-    public void musiqueInitialisation()
-    {
+    public void musiqueInitialisation() {
         musiquePlayer = MediaPlayer.create(this, maMusique.get(positionMusique).getPathUri());//Création du MediaPlayer
         musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);//Définis le mode de fonctionnement sur PARTIAL_WAKE_LOCK pour permettre à la musique de fonctionner sans être sur l'application
     }
@@ -188,8 +195,7 @@ public class MusiqueService extends Service {
 
         int resultat;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             AudioAttributes audioAttributesParametre = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -201,9 +207,7 @@ public class MusiqueService extends Service {
                     //.setWillPauseWhenDucked(true)//Si une application demande de diminuer le volume de la musique alors la fonction musiqueFocusChange s'active (Selon Android Studio documentation c'est acceptable de ne pas l'activer pour un elcteur de musique)
                     .build();
             resultat = musiqueManager.requestAudioFocus(musiqueFocusRequest);
-        }
-        else
-        {
+        } else {
             resultat = musiqueManager.requestAudioFocus(musiqueFocusChange, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         }
 
@@ -212,16 +216,14 @@ public class MusiqueService extends Service {
         }
     }
 
-    public void musiquePause()
-    {
+    public void musiquePause() {
         handlerTemps.removeCallbacks(runnableTemps);
         musiquePlayer.pause();
         /*Maj des boutons de la notif*/
     }
 
 
-    public void musiqueArret()
-    {
+    public void musiqueArret() {
         if (musiquePlayer != null) {
 
             handlerTemps.removeCallbacks(runnableTemps);
@@ -229,42 +231,36 @@ public class MusiqueService extends Service {
             musiquePlayer.release();
             musiquePlayer = null;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 musiqueManager.abandonAudioFocusRequest(musiqueFocusRequest);
-            }
-            else
-            {
+            } else {
                 musiqueManager.abandonAudioFocus(musiqueFocusChange);
             }
 
             unregisterReceiver(broadcastReceiverNotifCmd);
+            unregisterReceiver(broadcastReceiverJack);
             stopForeground(true);
             //notifManagerCompat.cancel(NOTIFICATION_ID);//Arrête la notification de contrôle musique
         }
     }
 
 
-    public void musiqueSuivante()
-    {
+    public void musiqueSuivante() {
 
     }
 
-    public void musiquePrecedente()
-    {
+    public void musiquePrecedente() {
 
     }
 
-    public void musiqueBoucleDeboucle()
-    {
-        if (musiquePlayer!=null)
+    public void musiqueBoucleDeboucle() {
+        if (musiquePlayer != null)
             musiquePlayer.setLooping(!musiquePlayer.isLooping());
     }
 
 
     /*-----------------------------------------------------FONCTIONS ENVOIE BROADCAST--------------------------------------------------------------*/
-    public void envoieBroadcast()
-    {
+    public void envoieBroadcast() {
         Intent new_intent = new Intent();
         new_intent.setAction(ACTION_STRING_ACTIVITY);
         sendBroadcast(new_intent);
@@ -280,8 +276,7 @@ public class MusiqueService extends Service {
 
             //Toast.makeText(getApplicationContext(), "Message reçu", Toast.LENGTH_SHORT).show();
 
-            switch(intent.getStringExtra(NAME_NOTIFICATION))
-            {
+            switch (intent.getStringExtra(NAME_NOTIFICATION)) {
                 case "REJOUER":
                     musiqueBoucleDeboucle();
                     break;
@@ -322,38 +317,41 @@ public class MusiqueService extends Service {
 
         /////////////////////////////////////////////////////Gestion boutons notification/////////////////////////////////////////////////////////////////////
         //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_ACTIVITY
-        if (broadcastReceiverNotifCmd != null) {
-            IntentFilter intentFilter = new IntentFilter(ACTION_STRING_SERVICE);
-            registerReceiver(broadcastReceiverNotifCmd, intentFilter);
-        }
+        //if (broadcastReceiverNotifCmd != null) {
+        IntentFilter intentFilter = new IntentFilter(ACTION_STRING_SERVICE);
+        registerReceiver(broadcastReceiverNotifCmd, intentFilter);
+        //}
+
+        IntentFilter intentFilterJack = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(broadcastReceiverJack, intentFilterJack);
+
 
         //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
         Intent musiqueIntentRejouer = new Intent()
                 .setAction(ACTION_STRING_SERVICE)
-                .putExtra(NAME_NOTIFICATION,"REJOUER");
+                .putExtra(NAME_NOTIFICATION, "REJOUER");
         PendingIntent musiquePenIntRejouer = PendingIntent.getBroadcast(this, 1, musiqueIntentRejouer, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentPrecedent = new Intent()
                 .setAction(ACTION_STRING_SERVICE)
-                .putExtra(NAME_NOTIFICATION,"PRECEDENT");
+                .putExtra(NAME_NOTIFICATION, "PRECEDENT");
         PendingIntent musiquePenIntPrecedent = PendingIntent.getBroadcast(this, 2, musiqueIntentPrecedent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentDemaPause = new Intent()
                 .setAction(ACTION_STRING_SERVICE)
-                .putExtra(NAME_NOTIFICATION,"DEMAPAUSE");
+                .putExtra(NAME_NOTIFICATION, "DEMAPAUSE");
         PendingIntent musiquePenIntDemaPause = PendingIntent.getBroadcast(this, 3, musiqueIntentDemaPause, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentSuivant = new Intent()
                 .setAction(ACTION_STRING_SERVICE)
-                .putExtra(NAME_NOTIFICATION,"SUIVANT");
+                .putExtra(NAME_NOTIFICATION, "SUIVANT");
         PendingIntent musiquePenIntSuivant = PendingIntent.getBroadcast(this, 4, musiqueIntentSuivant, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentArret = new Intent()
                 .setAction(ACTION_STRING_SERVICE)
-                .putExtra(NAME_NOTIFICATION,"ARRET");
+                .putExtra(NAME_NOTIFICATION, "ARRET");
         PendingIntent musiquePenIntArret = PendingIntent.getBroadcast(this, 5, musiqueIntentArret, PendingIntent.FLAG_UPDATE_CURRENT);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
         //Ajout des boutons à la notification pour le contrôle musique
@@ -385,39 +383,38 @@ public class MusiqueService extends Service {
 
     /*--------------------------------------------------------------FONCTIONS GETTER--------------------------------------------------------------*/
 
-    public int getMusiquePlayerPosition()
-    {
+    public int getMusiquePlayerPosition() {
         return musiquePlayer.getCurrentPosition();
     }
 
-    public int getMusiquePlayerDuration()
-    {
+    public int getMusiquePlayerDuration() {
         return musiquePlayer.getDuration();
     }
 
-    public boolean getMusiquePlayerIsPlaying()
-    {
+    public boolean getMusiquePlayerIsPlaying() {
         return musiquePlayer.isPlaying();
     }
 
-    public boolean getMusiquePlayerIsSet(){ return (musiquePlayer != null); }
+    public boolean getMusiquePlayerIsSet() {
+        return (musiquePlayer != null);
+    }
 
 
     /*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
 
-    public void setMusiquePlayerPosition(int seekBarPosition){
+    public void setMusiquePlayerPosition(int seekBarPosition) {
         musiquePlayer.seekTo(seekBarPosition);
     }
 
     public ArrayList<Musique> copyArrayList(ArrayList<Musique> musiques) {
         ArrayList<Musique> mus = new ArrayList<Musique>();
-        for(Musique m : musiques)
+        for (Musique m : musiques)
             mus.add(m);
         return mus;
     }
+
     public void setMusiquePlaylist(ArrayList<Musique> musique, int position) {
         maMusique = copyArrayList(musique);
         this.positionMusique = position;
-
     }
 }
