@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> mesArtistes = new ArrayList<>();
     private static final int MY_PERMISSION_REQUEST = 1;
 
+    public static boolean estActif=false;
 
     public static MusiqueService mService;                            //Déclaration pointeur vers le service
     public static boolean mBound = false;                             //Variable qui témoigne de l'activation du service
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        estActif=true;
 
         //////////////////////////////////////////////////////////////
         //////////////DEMMARRAGE SERVICE ET CONNEXION/////////////////
@@ -161,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+        estActif=false;
+
         //Arrêt Bound Session
         unbindService(connection);
         mBound = false;
@@ -168,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         //Arrête le service si aucune musique n'est en cours
         if (!mService.getMusiquePlayerIsSet() || !mService.getMusiquePlayerIsPlaying())
         {
-            Toast.makeText(MainActivity.this,"Arrêt service",Toast.LENGTH_LONG).show();
+            mService.musiqueArret();
             stopService(new Intent(MainActivity.this,MusiqueService.class));
         }
     }

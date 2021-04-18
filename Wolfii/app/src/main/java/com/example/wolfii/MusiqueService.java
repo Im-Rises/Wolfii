@@ -53,6 +53,8 @@ public class MusiqueService extends Service {
     private ArrayList<Musique> maMusique = new ArrayList<Musique>();
     private int positionMusique;
 
+    private boolean enPauseParAutreAppli =false;
+
 
 
 /*///////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE//////////////////////////////////////////
@@ -78,6 +80,7 @@ public class MusiqueService extends Service {
 
     @Override
     public void onDestroy() {
+        Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_LONG).show();
         estActif=false;
         super.onDestroy();
     }
@@ -126,15 +129,17 @@ public class MusiqueService extends Service {
 
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_GAIN://Cas de regain du focus audio lorsqu'une application a demandé temporairement le focus audio
-                    musiquePlayer.start();
+                    if(enPauseParAutreAppli) {
+                        musiqueDemaEtFocus();
+                    }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS://Cas de demande d'un focus permanent par une autre application
                     musiquePause();
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT://Cas de demande d'un focus temporaire par une autre application
                     musiquePause();
+                    enPauseParAutreAppli=true;
                     break;
-                default:
             }
         }
     };
@@ -308,6 +313,10 @@ public class MusiqueService extends Service {
                     break;
                 case "ARRET":
                     musiqueArret();
+                    if (!MainActivity.estActif)
+                    {
+                        stopSelf();
+                    }
                     break;
             }
         }
