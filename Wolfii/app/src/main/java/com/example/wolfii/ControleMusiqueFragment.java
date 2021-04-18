@@ -32,6 +32,7 @@ import static com.example.wolfii.MainActivity.mService;
  * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
  * Remplacer musique arret par une autre fonction qui arrête pas la notif etc... quand on appuit sur le bouton "MusiqueSuivante" ou "musiquePrecedente"
  * Revoir la mise à jour de la page contrôle musique quand on va dessus (au démarrage etc...)
+ * Modifier et rajouter l'arrêt de la musique avec un pour arreter la musique et l'autre pour arrêter la musique et l'autre pour tout arrêter (notif, foreground, focus etc...).
  *
  */
 
@@ -145,7 +146,7 @@ public class ControleMusiqueFragment extends Fragment {
     private class EcouteurBtnArret implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            mService.musiqueArret();
+            mService.arretTotal();
             seekBarMusique.setProgress(0);
             txtViewMusiqueTemps.setText("00:00");
         }

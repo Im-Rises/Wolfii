@@ -219,25 +219,28 @@ public class MusiqueService extends Service {
         envoieBroadcast();
     }
 
-
-    public void musiqueArret() {
+    public void arretTotal()
+    {
         if (musiquePlayer != null) {
-
-            handlerTemps.removeCallbacks(runnableTemps);
-
-            musiquePlayer.release();
-            musiquePlayer = null;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                musiqueManager.abandonAudioFocusRequest(musiqueFocusRequest);
-            } else {
-                musiqueManager.abandonAudioFocus(musiqueFocusChange);
-            }
-
-            unregisterReceiver(broadcastReceiverNotifCmd);
-            unregisterReceiver(broadcastReceiverJack);
+            musiqueArret();
             stopForeground(true);
         }
+    }
+
+    public void musiqueArret() {
+        handlerTemps.removeCallbacks(runnableTemps);
+
+        musiquePlayer.release();
+        musiquePlayer = null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            musiqueManager.abandonAudioFocusRequest(musiqueFocusRequest);
+        } else {
+            musiqueManager.abandonAudioFocus(musiqueFocusChange);
+        }
+
+        unregisterReceiver(broadcastReceiverNotifCmd);
+        unregisterReceiver(broadcastReceiverJack);
     }
 
 
@@ -313,7 +316,7 @@ public class MusiqueService extends Service {
                     musiqueSuivante();
                     break;
                 case "ARRET":
-                    musiqueArret();
+                    arretTotal();
                     if (!MainActivity.estActif)
                     {
                         stopSelf();

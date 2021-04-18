@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, MusiqueService.class);
         bindService(intent, connection, 0);//Permet l'arrêt du Service avant l'arrêt du BoundService (permettant d'arrêter le service par les boutons notification)
         //bindService(intent, connection, Context.BIND_AUTO_CREATE);//Arrêt du Service autorisé que si le BoundService est au préalable arrêté
-
         //////////////////////////////////////////////////////////////
 
 
@@ -133,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //////////////////////////////////A QUENTIN !!!/////////////////////////////////////////////////////
-
 
     //////////////////////////////////////////////////////////////
     //////////////////////////BOUND SERVICE///////////////////////
@@ -172,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         //Arrête le service si aucune musique n'est en cours
         if (!mService.getMusiquePlayerIsSet() || !mService.getMusiquePlayerIsPlaying())
         {
-            mService.musiqueArret();
+            mService.arretTotal();
             stopService(new Intent(MainActivity.this,MusiqueService.class));
         }
     }
