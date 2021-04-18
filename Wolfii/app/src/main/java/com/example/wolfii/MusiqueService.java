@@ -9,9 +9,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Build;
@@ -335,11 +338,16 @@ public class MusiqueService extends Service {
         notifBuilder.setSmallIcon(R.drawable.image_notif_musique);                   //Image de la notification
         notifBuilder.setContentTitle("My notification");                             //Titre de la notification
         notifBuilder.setContentText("Much longer text that cannot fit one line..."); //Text de la notification
-        //notifBuilder.setLargeIcon();                                                 //Ajoute l'image de la musique lu à la notification
         notifBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);               //Défini la priorité de la notification
         notifBuilder.setOngoing(true);                                               //Empêche l'utilisateur de supprimer la notification
         notifBuilder.setNotificationSilent();                                        //Désactive le son de la notification
         //notifBuilder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
+
+
+        //notifBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigLargeIcon(getImageMusique()));
+        notifBuilder.setLargeIcon(getImageMusique());                               //Ajoute l'image de la musique lu à la notification
+        //notifBuilder.setLargeIcon(null);                                          //Ajoute aucune image à la notification
+
 
 
         Intent musiquePlayerIntent = new Intent(this, MainActivity.class);//Déclaration Intent pour retourner sur la page de la musique
@@ -410,6 +418,19 @@ public class MusiqueService extends Service {
         return notifBuilder.build();
     }
 
+    public Bitmap getImageMusique() {
+        MediaMetadataRetriever mediaMetadataRechercheur = new MediaMetadataRetriever();
+        mediaMetadataRechercheur.setDataSource(maMusique.get(positionMusique).getPath());
+
+        byte [] image = mediaMetadataRechercheur.getEmbeddedPicture();
+
+        mediaMetadataRechercheur.release();
+
+        if (image!=null)
+            return BitmapFactory.decodeByteArray(image, 0, image.length);
+        else
+            return null;
+    }
 
 
 
