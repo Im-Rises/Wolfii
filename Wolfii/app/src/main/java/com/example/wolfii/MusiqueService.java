@@ -53,7 +53,7 @@ public class MusiqueService extends Service {
     private ArrayList<Musique> maMusique = new ArrayList<Musique>();
     private int positionMusique;
 
-    private boolean enPauseParAutreAppli =false;
+    private boolean enPauseParUtilisateur = false;
 
 
 
@@ -129,7 +129,7 @@ public class MusiqueService extends Service {
 
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_GAIN://Cas de regain du focus audio lorsqu'une application a demandé temporairement le focus audio
-                    if(enPauseParAutreAppli) {
+                    if (!enPauseParUtilisateur) {
                         musiqueDemaEtFocus();
                     }
                     break;
@@ -138,7 +138,6 @@ public class MusiqueService extends Service {
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT://Cas de demande d'un focus temporaire par une autre application
                     musiquePause();
-                    enPauseParAutreAppli=true;
                     break;
             }
         }
@@ -163,14 +162,16 @@ public class MusiqueService extends Service {
 
     public void musiqueDemaPause() {
         if (musiquePlayer == null) {
-            Toast.makeText(getApplicationContext(), positionMusique + "\n" + maMusique.get(positionMusique).getPathUri(), Toast.LENGTH_SHORT).show();
             musiqueInitialisation();
             musiqueDemaEtFocus();
             startForeground(NOTIFICATION_ID, notificationInit());//Démarre le service en foreground afin de permettre de continuer la musique après l'avoir fermé
+            enPauseParUtilisateur=false;
         } else if (!musiquePlayer.isPlaying()) {
             musiqueDemaEtFocus();
+            enPauseParUtilisateur=false;
         } else {
             musiquePause();
+            enPauseParUtilisateur=true;
         }
     }
 
