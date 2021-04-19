@@ -374,7 +374,7 @@ public class MusiqueService extends Service {
         notifBuilder.setOngoing(true);                                               //Empêche l'utilisateur de supprimer la notification
         notifBuilder.setNotificationSilent();                                        //Désactive le son de la notification
         //notifBuilder.setSubText(": "+(positionMusique+1)+"/"+maMusique.size()+" "+millisecondesEnMinutesSeconde(parseInt(maMusique.get(positionMusique).getDuration())));
-        notifBuilder.setSubText(": "+(positionMusique+1)+"/"+maMusique.size());//Donne le numéro de la musique sur la playlist en cours
+        notifBuilder.setSubText(": " + (positionMusique + 1) + "/" + maMusique.size());//Donne le numéro de la musique sur la playlist en cours
         notifBuilder.setShowWhen(false);                                                //Enlève l'affichage de l'heure à laquelle la notification est apaprue
         //notifBuilder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
         //notifBuilder.setLargeIcon(null);                                          //Ajoute aucune image à la notification
@@ -429,13 +429,18 @@ public class MusiqueService extends Service {
         notifBuilder.addAction(R.drawable.image_suivant, "Suivant", musiquePenIntSuivant);//Ajout le bouton "musique suivante à la notification"
         notifBuilder.addAction(R.drawable.image_nettoyer, "Arret", musiquePenIntArret);//Ajout le bouton "musique arret" à la notification"
 
+        if (Build.VERSION.SDK_INT < 30) {
+            mediaSessionInt();//Initialisation de MediaSession
 
-        mediaSessionInt();//Initialisation de MediaSession
-
-        notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
-                .setShowActionsInCompactView(1, 2, 3)//Ajoute les boutons à la notification en mode compacté
-                .setMediaSession(mediaSession.getSessionToken())//Ajout de la mediasession
-        );
+            notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
+                    .setShowActionsInCompactView(1, 2, 3)//Ajoute les boutons à la notification en mode compacté
+                    .setMediaSession(mediaSession.getSessionToken())//Ajout de la mediasession
+            );
+        } else {
+            notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
+                    .setShowActionsInCompactView(1, 2, 3)//Ajoute les boutons à la notification en mode compacté
+            );
+        }
 
         notifManagerCompat = NotificationManagerCompat.from(MusiqueService.this);//Création d'une gestion de notification
 
@@ -573,8 +578,10 @@ public class MusiqueService extends Service {
 
     private void arretMediaSession()
     {
-        mediaSession.setActive(false);
-        mediaSession.release();
+        if (Build.VERSION.SDK_INT < 30) {
+            mediaSession.setActive(false);
+            mediaSession.release();
+        }
     }
 
 
