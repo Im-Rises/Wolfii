@@ -20,6 +20,7 @@ import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.session.MediaSession;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -65,6 +66,8 @@ public class MusiqueService extends Service {
 
     private boolean enPauseParUtilisateur = true;
     private boolean enPauseParDemandeLongue = true;
+
+    //private MediaSession
 
 
 
@@ -362,7 +365,7 @@ public class MusiqueService extends Service {
         notifBuilder.setOngoing(true);                                               //Empêche l'utilisateur de supprimer la notification
         notifBuilder.setNotificationSilent();                                        //Désactive le son de la notification
         notifBuilder.setSubText(": "+(positionMusique+1)+"/"+maMusique.size());        //Donne le numéro de la musique sur la playlist en cours
-        notifBuilder.setShowWhen(false);                                                //enlève l'affichage de l'heure à laquelle la notification est apaprue
+        notifBuilder.setShowWhen(false);                                                //Enlève l'affichage de l'heure à laquelle la notification est apaprue
         //notifBuilder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
         //notifBuilder.setLargeIcon(null);                                          //Ajoute aucune image à la notification
 
@@ -429,6 +432,7 @@ public class MusiqueService extends Service {
         //Gestion si l'utilisateur utilise Android 8.0 ou supérieur
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notifChannel = new NotificationChannel(CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);//Création d'un Channel de notification pour les notifications d'Android 8.0 ou supérieur
+            notifChannel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);//Création d'un NotificationManager pour les notifications d'Android 8.0 ou supérieur
             notificationManager.createNotificationChannel(notifChannel);//Création du channel de notificatios
         }

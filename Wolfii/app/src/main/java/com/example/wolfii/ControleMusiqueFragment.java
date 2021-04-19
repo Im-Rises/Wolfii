@@ -27,7 +27,6 @@ import static com.example.wolfii.MainActivity.mService;
 /*A FAIRE :
  *
  * Ajouter MediaSession pour permettre le contrôle de la musique en lock screen (avec un bel écran).
- * Mettre une image de base si aucune image n'est trouvé pour la notif dans les mp3
  * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
  *
  */
