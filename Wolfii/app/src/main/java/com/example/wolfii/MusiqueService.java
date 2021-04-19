@@ -23,9 +23,11 @@ import android.media.MediaPlayer;
 import android.media.session.MediaSession;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.os.ResultReceiver;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -247,6 +249,7 @@ public class MusiqueService extends Service {
     {
         if (musiquePlayer != null) {
             protocoleArret();
+            arretMediaSession();
             stopForeground(true);
         }
     }
@@ -362,7 +365,7 @@ public class MusiqueService extends Service {
 
     public Notification notificationInit() {
         notifBuilder = new NotificationCompat.Builder(MusiqueService.this, CHANNEL_ID);//Inititalisation notification
-        notifBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);            //Rend visible la notification quand le téléphone est vérouillé et permet le controle de la musique
+        notifBuilder.setVisibility(NotificationCompat.VISIBILITY_SECRET);            //Rend invisible la notification quand le téléphone est vérouillé et permet le controle de la musique
         notifBuilder.setLargeIcon(recupImageMusique());                               //Ajoute l'image de la musique lu à la notification
         notifBuilder.setSmallIcon(R.drawable.image_notif_musique);                   //Icone de la notification
         notifBuilder.setContentTitle(maMusique.get(positionMusique).getName());     //Titre de la notification
@@ -511,6 +514,39 @@ public class MusiqueService extends Service {
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, recupImageMusique())
                 //.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, "Test Artist")
                 .build());
+
+        mediaSession.setCallback(new MediaSessionCompat.Callback() {
+            @Override
+            public void onPlay() {
+                Toast.makeText(getApplicationContext(),"Play",Toast.LENGTH_LONG).show();
+                super.onPlay();
+            }
+
+            @Override
+            public void onStop() {
+                Toast.makeText(getApplicationContext(),"Arret",Toast.LENGTH_LONG).show();
+                super.onStop();
+            }
+
+            @Override
+
+            public void onPause() {
+                Toast.makeText(getApplicationContext(),"Pause",Toast.LENGTH_LONG).show();
+                super.onPause();
+            }
+
+            @Override
+            public void onSkipToNext() {
+                Toast.makeText(getApplicationContext(),"Suivant",Toast.LENGTH_LONG).show();
+                super.onSkipToNext();
+            }
+
+            @Override
+            public void onSkipToPrevious() {
+                Toast.makeText(getApplicationContext(),"Precedent",Toast.LENGTH_LONG).show();
+                super.onSkipToPrevious();
+            }
+        });
 
         mediaSession.setActive(true);//Activation MediaSession
     }
