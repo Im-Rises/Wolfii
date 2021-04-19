@@ -51,7 +51,7 @@ public class ListAllSongsFragment extends Fragment {
                 Toast.makeText(getActivity(), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
 
                 mService.setMusiquePlaylist(maMusique, position);
-                mService.arretTotal();
+                mService.arretSimpleMusique();
                 mService.musiqueDemaPause();
 
                 /*

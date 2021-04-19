@@ -1,5 +1,6 @@
 package com.example.wolfii;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,8 +10,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -230,7 +234,7 @@ public class MusiqueService extends Service {
         envoieBroadcast(EXTRA_MAJ_SIMPLE);
     }
 
-    public void arretTotal()
+    public void arretTotalMusique()
     {
         if (musiquePlayer != null) {
             musiqueArret();
@@ -238,7 +242,14 @@ public class MusiqueService extends Service {
         }
     }
 
-    public void musiqueArret() {
+    public void arretSimpleMusique()
+    {
+        if (musiquePlayer != null) {
+            musiqueArret();
+        }
+    }
+
+    private void musiqueArret() {
         handlerTemps.removeCallbacks(runnableTemps);
 
         musiquePlayer.release();
@@ -252,11 +263,6 @@ public class MusiqueService extends Service {
 
         unregisterReceiver(broadcastReceiverNotifCmd);
         unregisterReceiver(broadcastReceiverJack);
-    }
-
-    public void arret()
-    {
-
     }
 
 
@@ -332,7 +338,7 @@ public class MusiqueService extends Service {
                     musiqueSuivante();
                     break;
                 case "ARRET":
-                    arretTotal();
+                    arretTotalMusique();
                     if (!MainActivity.estActif)
                     {
                         stopSelf();
@@ -348,16 +354,18 @@ public class MusiqueService extends Service {
     public Notification notificationInit() {
         notifBuilder = new NotificationCompat.Builder(MusiqueService.this, CHANNEL_ID);//Inititalisation notification
         notifBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);            //Rend visible la notification quand le téléphone est vérouillé et permet le controle de la musique
+        notifBuilder.setLargeIcon(recupImageMusique());                               //Ajoute l'image de la musique lu à la notification
         notifBuilder.setSmallIcon(R.drawable.image_notif_musique);                   //Icone de la notification
         notifBuilder.setContentTitle(maMusique.get(positionMusique).getName());     //Titre de la notification
         notifBuilder.setContentText(maMusique.get(positionMusique).getAuthor());        //Text de la notification
         notifBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);               //Défini la priorité de la notification
         notifBuilder.setOngoing(true);                                               //Empêche l'utilisateur de supprimer la notification
         notifBuilder.setNotificationSilent();                                        //Désactive le son de la notification
-        //notifBuilder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
-        notifBuilder.setLargeIcon(recupImageMusique());                               //Ajoute l'image de la musique lu à la notification
-        //notifBuilder.setLargeIcon(null);                                          //Ajoute aucune image à la notification
         notifBuilder.setSubText(": "+(positionMusique+1)+"/"+maMusique.size());        //Donne le numéro de la musique sur la playlist en cours
+        notifBuilder.setShowWhen(false);                                                //enlève l'affichage de l'heure à laquelle la notification est apaprue
+        //notifBuilder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
+        //notifBuilder.setLargeIcon(null);                                          //Ajoute aucune image à la notification
+
 
         //déclaration de l'enregistrement d'un BoradcastReceiver pour la gestion quand une prise jack est débranchée
         IntentFilter intentFilterJack = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
@@ -428,6 +436,9 @@ public class MusiqueService extends Service {
         return notifBuilder.build();
     }
 
+
+    /*-----------------------------------------------------------FONCTIONS RECUPERTATION IMAGE--------------------------------------------------------------*/
+
     public Bitmap recupImageMusique() {
         MediaMetadataRetriever mediaMetadataRechercheur = new MediaMetadataRetriever();
         mediaMetadataRechercheur.setDataSource(maMusique.get(positionMusique).getPath());
@@ -437,12 +448,24 @@ public class MusiqueService extends Service {
         mediaMetadataRechercheur.release();
 
         if (image!=null)
+            //Si une image n'est trouvé dans le fichier audio
             return BitmapFactory.decodeByteArray(image, 0, image.length);
         else
         {
-            //Mettre image de base
-            return null;
+            //Si aucune image n'est trouvé dans le fichier audio R.drawable.image_notif_musique
+            return xmlEnBitmap(R.drawable.image_notif_musique);
         }
+    }
+
+    private Bitmap xmlEnBitmap(int drawableRes) {
+        @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = getResources().getDrawable(drawableRes);
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 
 

@@ -48,7 +48,7 @@ public class ListSearchFragment extends Fragment {
             @Override
             public void onMusiqueItemClick (View view, Musique musique, int position) {
                 mService.setMusiquePlaylist(musiques, position);
-                mService.arretTotal();
+                mService.arretSimpleMusique();
                 mService.musiqueDemaPause();
             }
 
