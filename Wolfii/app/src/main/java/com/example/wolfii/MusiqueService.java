@@ -59,8 +59,8 @@ public class MusiqueService extends Service {
     private static final String DIRECTION_SERVICE = "TO_SERVICE";
     private static final String TYPE_NOTIFICATION = "TYPE_NOTIFICATION";
 
-    private boolean enPauseParUtilisateur = false;
-    private boolean enPauseParDemandeLongue = false;
+    private boolean enPauseParUtilisateur = true;
+    private boolean enPauseParDemandeLongue = true;
 
 
 
@@ -278,7 +278,7 @@ public class MusiqueService extends Service {
         positionMusique--;
 
         if (positionMusique < 0)
-            positionMusique=0;
+            positionMusique=maMusique.size()-1;
 
         musiqueDemaPause();
         envoieBroadcast(EXTRA_MAJ_INIT);
@@ -348,7 +348,7 @@ public class MusiqueService extends Service {
     public Notification notificationInit() {
         notifBuilder = new NotificationCompat.Builder(MusiqueService.this, CHANNEL_ID);//Inititalisation notification
         notifBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);            //Rend visible la notification quand le téléphone est vérouillé et permet le controle de la musique
-        notifBuilder.setSmallIcon(R.drawable.image_notif_musique);                   //Image de la notification
+        notifBuilder.setSmallIcon(R.drawable.image_notif_musique);                   //Icone de la notification
         notifBuilder.setContentTitle(maMusique.get(positionMusique).getName());     //Titre de la notification
         notifBuilder.setContentText(maMusique.get(positionMusique).getAuthor());        //Text de la notification
         notifBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);               //Défini la priorité de la notification
@@ -357,7 +357,7 @@ public class MusiqueService extends Service {
         //notifBuilder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
         notifBuilder.setLargeIcon(recupImageMusique());                               //Ajoute l'image de la musique lu à la notification
         //notifBuilder.setLargeIcon(null);                                          //Ajoute aucune image à la notification
-
+        notifBuilder.setSubText(": "+(positionMusique+1)+"/"+maMusique.size());        //Donne le numéro de la musique sur la playlist en cours
 
         //déclaration de l'enregistrement d'un BoradcastReceiver pour la gestion quand une prise jack est débranchée
         IntentFilter intentFilterJack = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
