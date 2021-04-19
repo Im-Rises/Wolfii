@@ -10,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,13 +26,9 @@ import static com.example.wolfii.MainActivity.mService;
 
 /*A FAIRE :
  *
- * Ajouter images des mp3 sur notification
- * Ainsi que maj notif
- * Et ajout nom musique sur notif
+ * Ajouter MediaSession pour permettre le contrôle de la musique en lock screen (avec un bel écran).
+ * Mettre une image de base si aucune image n'est trouvé pour la notif dans les mp3
  * Ajouter la maj de la notification et interface sur appui du bouton DemaPause ainsi que BoucleDeboucle
- * Remplacer musique arret par une autre fonction qui arrête pas la notif etc... quand on appuit sur le bouton "MusiqueSuivante" ou "musiquePrecedente"
- * Revoir la mise à jour de la page contrôle musique quand on va dessus (au démarrage etc...)
- * Modifier et rajouter l'arrêt de la musique avec un pour arreter la musique et l'autre pour arrêter la musique et l'autre pour tout arrêter (notif, foreground, focus etc...).
  *
  */
 
@@ -41,13 +37,16 @@ public class ControleMusiqueFragment extends Fragment {
 
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
 
-    private TextView txtViewMusiqueTemps, txtViewMusiqueDuree;   //TextView du temps de lecture de la musique
+    private TextView txtViewMusiqueTemps, txtViewMusiqueDuree, txtViewTitreMusique;   //TextView du temps de lecture de la musique
 
     private Button cmdDemaPause, cmdArret,cmdPrecedent,cmdSuivant,cmdRejouer;  //boutons de la page
 
+    private ImageView imgViewMusique;
 
-    private static final String ACTION_STRING_ACTIVITY = "ToActivity";  //Action pour envoyer un Boradcast dans l'activité
-
+    private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
+    private static final String TYPE_MAJ = "TYPE_MAJ";
+    private static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
+    private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
 
 
     /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
@@ -56,10 +55,10 @@ public class ControleMusiqueFragment extends Fragment {
 
         //Liaisons des Boutons, des TextViews et du SeekBar de l'interface dans la code.
         this.txtViewMusiqueTemps = (TextView) root.findViewById(R.id.txtViewMusiqueTemps);
-        this.txtViewMusiqueTemps.setSoundEffectsEnabled(false);
 
         this.txtViewMusiqueDuree = (TextView) root.findViewById(R.id.txtViewMusiqueDuree);
-        this.txtViewMusiqueDuree.setSoundEffectsEnabled(false);
+
+        this.txtViewTitreMusique = (TextView) root.findViewById(R.id.txtViewTitreMusique);
 
 
 
@@ -67,9 +66,9 @@ public class ControleMusiqueFragment extends Fragment {
         this.cmdDemaPause.setSoundEffectsEnabled(false);
         this.cmdDemaPause.setOnClickListener(new EcouteurBtnDemaPause());
 
-        this.cmdArret = (Button) root.findViewById(R.id.btnArret);
+/*        this.cmdArret = (Button) root.findViewById(R.id.btnArret);
         this.cmdArret.setSoundEffectsEnabled(false);
-        this.cmdArret.setOnClickListener(new EcouteurBtnArret());
+        this.cmdArret.setOnClickListener(new EcouteurBtnArret());*/
 
 
 /*        this.cmdPrecedent = (Button) root.findViewById(R.id.btnPrecedent);
@@ -89,8 +88,15 @@ public class ControleMusiqueFragment extends Fragment {
         this.seekBarMusique.setSoundEffectsEnabled(false);
         this.seekBarMusique.setOnSeekBarChangeListener(new EcouteurSeekBar());
 
-        IntentFilter intentFilter = new IntentFilter(ACTION_STRING_ACTIVITY);
+        this.imgViewMusique = (ImageView) root.findViewById(R.id.imgViewLogo);
+
+        //Enregistrement du receiver pour la mise à jour de l'interface
+        IntentFilter intentFilter = new IntentFilter(DIRECTION_ACTIVITY);
         getActivity().registerReceiver(broadcastReceiverMajInterface, intentFilter);
+
+        if (mService.getMusiquePlayerIsSet()) {
+            majInterfaceInit();//Mise à jour de l'interface
+        }
 
         return root;
     }
@@ -102,6 +108,16 @@ public class ControleMusiqueFragment extends Fragment {
         super.onStart();
     }
 
+
+    /*--------------------------------------FONCTION ONRESUME------------------------------------------------*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mService.getMusiquePlayerIsSet()) {
+            majInterfaceInit();
+        }
+    }
 
     /*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
     @Override
@@ -118,9 +134,9 @@ public class ControleMusiqueFragment extends Fragment {
         //Evenement qui s'enclenche sur le déplacement du seekbar
         public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser)
         {
-            if (fromUser && mBound && mService.getMusiquePlayerIsSet()) {
+            if (mService.getMusiquePlayerIsSet() && fromUser ) {
                 mService.setMusiquePlayerPosition(progress);
-                txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
+                txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(progress));
             }
         }
 
@@ -138,25 +154,28 @@ public class ControleMusiqueFragment extends Fragment {
     private class EcouteurBtnDemaPause implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            mService.musiqueDemaPause();
-            seekBarMusique.setMax(mService.getMusiquePlayerDuration());
+            if (mService.getMusiquePlayerIsSet())
+            {
+                mService.musiqueDemaPause();
+            }
         }
     }
 
-    private class EcouteurBtnArret implements View.OnClickListener{
+/*    private class EcouteurBtnArret implements View.OnClickListener{
         @Override
         public void onClick(View v) {
             mService.arretTotal();
             seekBarMusique.setProgress(0);
             txtViewMusiqueTemps.setText("00:00");
         }
-    }
+    }*/
 
     private class EcouteurBtnRejouer implements View.OnClickListener{
         @Override
         public void onClick(View v) {
             //Active désactive la boucle de la musique actuelle
-            mService.musiqueBoucleDeboucle();
+            if (mService.getMusiquePlayerIsSet())
+                mService.musiqueBoucleDeboucle();
         }
     }
 
@@ -178,24 +197,35 @@ public class ControleMusiqueFragment extends Fragment {
     private BroadcastReceiver broadcastReceiverMajInterface = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            majInterface();//Mise à jour de l'interface
+            if (mService.getMusiquePlayerIsSet()) {
+                switch (intent.getStringExtra(TYPE_MAJ)) {
+                    case EXTRA_MAJ_INIT:
+                        majInterfaceInit();//Mise à jour de l'interface
+                        break;
+                    case EXTRA_MAJ_SIMPLE:
+                        majInterface();//Mise à jour de l'interface
+                        break;
+                }
+            }
         }
     };
 
     /*--------------------------------------FONTION MAJ INTERFACE---------------------------------------------------*/
 
-    public void majInterface()
-    {
-        if (mService.getMusiquePlayerIsPlaying())
-        {
-            //seekBarMusique.setMax(mService.getMusiquePlayerDuration());
-            //txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
-            seekBarMusique.setMax(mService.getMusiquePlayerDuration());
-            txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
-            seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
-            txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
-        }
+    public void majInterfaceInit() {
+        seekBarMusique.setMax(mService.getMusiquePlayerDuration());
+        imgViewMusique.setImageBitmap(mService.recupImageMusique());
+        txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
+        txtViewTitreMusique.setText(mService.getMusiqueTitre());
+        majInterface();
     }
+
+
+    public void majInterface() {
+        seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
+        txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
+    }
+
 
     /*--------------------------------------AUTRES FONCTIONS------------------------------------------------*/
 

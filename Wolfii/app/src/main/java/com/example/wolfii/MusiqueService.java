@@ -48,13 +48,16 @@ public class MusiqueService extends Service {
 
     private final IBinder binder = new LocalBinder();    // Binder given to clients
 
-    private static final String ACTION_STRING_ACTIVITY = "ToActivity";
-
-    private static final String ACTION_STRING_SERVICE = "ToService";
-    private static final String NAME_NOTIFICATION = "NOTIFICATION";
-
     private ArrayList<Musique> maMusique = new ArrayList<Musique>();
     private int positionMusique;
+
+    private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
+    private static final String TYPE_MAJ = "TYPE_MAJ";
+    private static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
+    private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
+
+    private static final String DIRECTION_SERVICE = "TO_SERVICE";
+    private static final String TYPE_NOTIFICATION = "TYPE_NOTIFICATION";
 
     private boolean enPauseParUtilisateur = false;
 
@@ -113,7 +116,7 @@ public class MusiqueService extends Service {
         public void run() {
             if (musiquePlayer != null) {
 
-                envoieBroadcast();
+                envoieBroadcast(EXTRA_MAJ_SIMPLE);
 
                 //Remet dans la pile du handler un appel pour le Runnable (this)
                 handlerTemps.postDelayed(this, 1000);
@@ -219,7 +222,7 @@ public class MusiqueService extends Service {
     public void musiquePause() {
         musiquePlayer.pause();
         handlerTemps.removeCallbacks(runnableTemps);
-        envoieBroadcast();
+        envoieBroadcast(EXTRA_MAJ_SIMPLE);
     }
 
     public void arretTotal()
@@ -256,6 +259,7 @@ public class MusiqueService extends Service {
             positionMusique=0;
 
         musiqueDemaPause();
+        envoieBroadcast(EXTRA_MAJ_INIT);
     }
 
     public void musiquePrecedente() {
@@ -267,6 +271,7 @@ public class MusiqueService extends Service {
             positionMusique=0;
 
         musiqueDemaPause();
+        envoieBroadcast(EXTRA_MAJ_INIT);
     }
 
     public void musiqueBoucleDeboucle() {
@@ -289,10 +294,11 @@ public class MusiqueService extends Service {
 
 
     /*-----------------------------------------------------FONCTIONS ENVOIE BROADCAST--------------------------------------------------------------*/
-    public void envoieBroadcast() {
-        Intent new_intent = new Intent();
-        new_intent.setAction(ACTION_STRING_ACTIVITY);
-        sendBroadcast(new_intent);
+    public void envoieBroadcast(final String extra) {
+        Intent intent = new Intent()
+                .setAction(DIRECTION_ACTIVITY)
+                .putExtra(TYPE_MAJ,extra);
+        sendBroadcast(intent);
     }
 
 
@@ -302,10 +308,7 @@ public class MusiqueService extends Service {
     private BroadcastReceiver broadcastReceiverNotifCmd = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            //Toast.makeText(getApplicationContext(), "Message reçu", Toast.LENGTH_SHORT).show();
-
-            switch (intent.getStringExtra(NAME_NOTIFICATION)) {
+            switch (intent.getStringExtra(TYPE_NOTIFICATION)) {
                 case "REJOUER":
                     musiqueBoucleDeboucle();
                     break;
@@ -336,18 +339,19 @@ public class MusiqueService extends Service {
         notifBuilder = new NotificationCompat.Builder(MusiqueService.this, CHANNEL_ID);//Inititalisation notification
         notifBuilder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);            //Rend visible la notification quand le téléphone est vérouillé et permet le controle de la musique
         notifBuilder.setSmallIcon(R.drawable.image_notif_musique);                   //Image de la notification
-        notifBuilder.setContentTitle("My notification");                             //Titre de la notification
-        notifBuilder.setContentText("Much longer text that cannot fit one line..."); //Text de la notification
+        notifBuilder.setContentTitle(maMusique.get(positionMusique).getName());     //Titre de la notification
+        notifBuilder.setContentText(maMusique.get(positionMusique).getAuthor());        //Text de la notification
         notifBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);               //Défini la priorité de la notification
         notifBuilder.setOngoing(true);                                               //Empêche l'utilisateur de supprimer la notification
         notifBuilder.setNotificationSilent();                                        //Désactive le son de la notification
         //notifBuilder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
-
-
-        //notifBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigLargeIcon(getImageMusique()));
-        notifBuilder.setLargeIcon(getImageMusique());                               //Ajoute l'image de la musique lu à la notification
+        notifBuilder.setLargeIcon(recupImageMusique());                               //Ajoute l'image de la musique lu à la notification
         //notifBuilder.setLargeIcon(null);                                          //Ajoute aucune image à la notification
 
+
+        //déclaration de l'enregistrement d'un BoradcastReceiver pour la gestion quand une prise jack est débranchée
+        IntentFilter intentFilterJack = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(broadcastReceiverJack, intentFilterJack);
 
 
         Intent musiquePlayerIntent = new Intent(this, MainActivity.class);//Déclaration Intent pour retourner sur la page de la musique
@@ -355,43 +359,36 @@ public class MusiqueService extends Service {
         notifBuilder.setContentIntent(musiquePlayerPenInt);                          //Ajoute l'intent à l'appui sur la notification (retour application)
 
 
-        /////////////////////////////////////////////////////Gestion boutons notification/////////////////////////////////////////////////////////////////////
-        //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_ACTIVITY
-        //if (broadcastReceiverNotifCmd != null) {
-        IntentFilter intentFilter = new IntentFilter(ACTION_STRING_SERVICE);
+        //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_SERVICE
+        IntentFilter intentFilter = new IntentFilter(DIRECTION_SERVICE);
         registerReceiver(broadcastReceiverNotifCmd, intentFilter);
-        //}
-
-        IntentFilter intentFilterJack = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-        registerReceiver(broadcastReceiverJack, intentFilterJack);
 
 
         //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
         Intent musiqueIntentRejouer = new Intent()
-                .setAction(ACTION_STRING_SERVICE)
-                .putExtra(NAME_NOTIFICATION, "REJOUER");
+                .setAction(DIRECTION_SERVICE)
+                .putExtra(TYPE_NOTIFICATION, "REJOUER");
         PendingIntent musiquePenIntRejouer = PendingIntent.getBroadcast(this, 1, musiqueIntentRejouer, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentPrecedent = new Intent()
-                .setAction(ACTION_STRING_SERVICE)
-                .putExtra(NAME_NOTIFICATION, "PRECEDENT");
+                .setAction(DIRECTION_SERVICE)
+                .putExtra(TYPE_NOTIFICATION, "PRECEDENT");
         PendingIntent musiquePenIntPrecedent = PendingIntent.getBroadcast(this, 2, musiqueIntentPrecedent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentDemaPause = new Intent()
-                .setAction(ACTION_STRING_SERVICE)
-                .putExtra(NAME_NOTIFICATION, "DEMAPAUSE");
+                .setAction(DIRECTION_SERVICE)
+                .putExtra(TYPE_NOTIFICATION, "DEMAPAUSE");
         PendingIntent musiquePenIntDemaPause = PendingIntent.getBroadcast(this, 3, musiqueIntentDemaPause, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentSuivant = new Intent()
-                .setAction(ACTION_STRING_SERVICE)
-                .putExtra(NAME_NOTIFICATION, "SUIVANT");
+                .setAction(DIRECTION_SERVICE)
+                .putExtra(TYPE_NOTIFICATION, "SUIVANT");
         PendingIntent musiquePenIntSuivant = PendingIntent.getBroadcast(this, 4, musiqueIntentSuivant, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentArret = new Intent()
-                .setAction(ACTION_STRING_SERVICE)
-                .putExtra(NAME_NOTIFICATION, "ARRET");
+                .setAction(DIRECTION_SERVICE)
+                .putExtra(TYPE_NOTIFICATION, "ARRET");
         PendingIntent musiquePenIntArret = PendingIntent.getBroadcast(this, 5, musiqueIntentArret, PendingIntent.FLAG_UPDATE_CURRENT);
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         //Ajout des boutons à la notification pour le contrôle musique
@@ -402,8 +399,11 @@ public class MusiqueService extends Service {
         notifBuilder.addAction(R.drawable.image_nettoyer, "Arret", musiquePenIntArret);//Ajout le bouton "musique arret" à la notification"
 
 
+
         notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
-                .setShowActionsInCompactView(1, 2, 3));//Ajoute les boutons à la notification en mode compacté
+                .setShowActionsInCompactView(1, 2, 3)
+                //.setMediaSession()
+                );//Ajoute les boutons à la notification en mode compacté
 
 
         notifManagerCompat = NotificationManagerCompat.from(MusiqueService.this);//Création d'une gestion de notification
@@ -418,7 +418,7 @@ public class MusiqueService extends Service {
         return notifBuilder.build();
     }
 
-    public Bitmap getImageMusique() {
+    public Bitmap recupImageMusique() {
         MediaMetadataRetriever mediaMetadataRechercheur = new MediaMetadataRetriever();
         mediaMetadataRechercheur.setDataSource(maMusique.get(positionMusique).getPath());
 
@@ -429,7 +429,10 @@ public class MusiqueService extends Service {
         if (image!=null)
             return BitmapFactory.decodeByteArray(image, 0, image.length);
         else
+        {
+            //Mettre image de base
             return null;
+        }
     }
 
 
@@ -451,6 +454,8 @@ public class MusiqueService extends Service {
     public boolean getMusiquePlayerIsSet() {
         return (musiquePlayer != null);
     }
+
+    public String getMusiqueTitre(){return maMusique.get(positionMusique).getName();}
 
 
     /*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
