@@ -60,6 +60,7 @@ public class MusiqueService extends Service {
     private static final String TYPE_NOTIFICATION = "TYPE_NOTIFICATION";
 
     private boolean enPauseParUtilisateur = false;
+    private boolean enPauseParDemandeLongue = false;
 
 
 
@@ -135,11 +136,13 @@ public class MusiqueService extends Service {
 
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_GAIN://Cas de regain du focus audio lorsqu'une application a demandé temporairement le focus audio
-                    if (!enPauseParUtilisateur) {
+                {
+                    if (!enPauseParDemandeLongue && !enPauseParUtilisateur)
                         musiqueDemaEtFocus();
-                    }
+                }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS://Cas de demande d'un focus permanent par une autre application
+                    enPauseParDemandeLongue=true;
                     musiquePause();
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT://Cas de demande d'un focus temporaire par une autre application
@@ -157,6 +160,7 @@ public class MusiqueService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+                enPauseParDemandeLongue=true;
                 musiquePause();
             }
         }
@@ -179,6 +183,7 @@ public class MusiqueService extends Service {
             musiquePause();
             enPauseParUtilisateur=true;
         }
+        enPauseParDemandeLongue=false;
     }
 
     public void musiqueInitialisation() {
@@ -247,6 +252,11 @@ public class MusiqueService extends Service {
 
         unregisterReceiver(broadcastReceiverNotifCmd);
         unregisterReceiver(broadcastReceiverJack);
+    }
+
+    public void arret()
+    {
+
     }
 
 
