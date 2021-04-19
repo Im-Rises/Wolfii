@@ -433,7 +433,7 @@ public class MusiqueService extends Service {
 
         notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
                 .setShowActionsInCompactView(1, 2, 3)//Ajoute les boutons à la notification en mode compacté
-                .setMediaSession(mediaSession.getSessionToken())//Ajout de la mediasession
+                //.setMediaSession(mediaSession.getSessionToken())//Ajout de la mediasession
                 );
 
 
