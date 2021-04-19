@@ -26,6 +26,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -33,6 +35,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.Integer.parseInt;
 
 public class MusiqueService extends Service {
 
@@ -67,8 +72,18 @@ public class MusiqueService extends Service {
     private boolean enPauseParUtilisateur = true;
     private boolean enPauseParDemandeLongue = true;
 
-    //private MediaSession
 
+
+    ////////////////////////////////////////////////TEST MEDIASESSION/////////////////////////////////////////////////
+    private MediaSession mediaSession;
+
+
+    public void mediaSessionInt()
+    {
+        PlaybackStateCompat playbackStateCompat;
+        MediaSessionCompat.Callback mediaSessionCompatCallBack;
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /*///////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE//////////////////////////////////////////
@@ -364,7 +379,8 @@ public class MusiqueService extends Service {
         notifBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);               //Défini la priorité de la notification
         notifBuilder.setOngoing(true);                                               //Empêche l'utilisateur de supprimer la notification
         notifBuilder.setNotificationSilent();                                        //Désactive le son de la notification
-        notifBuilder.setSubText(": "+(positionMusique+1)+"/"+maMusique.size());        //Donne le numéro de la musique sur la playlist en cours
+        //notifBuilder.setSubText(": "+(positionMusique+1)+"/"+maMusique.size()+" "+millisecondesEnMinutesSeconde(parseInt(maMusique.get(positionMusique).getDuration())));
+        notifBuilder.setSubText(": "+(positionMusique+1)+"/"+maMusique.size());//Donne le numéro de la musique sur la playlist en cours
         notifBuilder.setShowWhen(false);                                                //Enlève l'affichage de l'heure à laquelle la notification est apaprue
         //notifBuilder.setAutoCancel(true);                                            //Supprime la notification si on appuit dessus
         //notifBuilder.setLargeIcon(null);                                          //Ajoute aucune image à la notification
@@ -473,6 +489,12 @@ public class MusiqueService extends Service {
     }
 
 
+    public void notificationMaj()
+    {
+
+    }
+
+
 
     /*--------------------------------------------------------------FONCTIONS GETTER--------------------------------------------------------------*/
 
@@ -511,5 +533,15 @@ public class MusiqueService extends Service {
     public void setMusiquePlaylist(ArrayList<Musique> musique, int position) {
         maMusique = copyArrayList(musique);
         this.positionMusique = position;
+    }
+
+
+    /*--------------------------------------AUTRES FONCTIONS------------------------------------------------*/
+
+    @SuppressLint("DefaultLocale")
+    private String millisecondesEnMinutesSeconde(int tmpsMillisecondes) {
+        return String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes),
+                TimeUnit.MILLISECONDS.toSeconds(tmpsMillisecondes) - TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes) * 60);
     }
 }
