@@ -429,18 +429,12 @@ public class MusiqueService extends Service {
         notifBuilder.addAction(R.drawable.image_suivant, "Suivant", musiquePenIntSuivant);//Ajout le bouton "musique suivante à la notification"
         notifBuilder.addAction(R.drawable.image_nettoyer, "Arret", musiquePenIntArret);//Ajout le bouton "musique arret" à la notification"
 
-        if (Build.VERSION.SDK_INT < 30) {
-            mediaSessionInt();//Initialisation de MediaSession
+        mediaSessionInt();//Initialisation de MediaSession
 
-            notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
-                    .setShowActionsInCompactView(1, 2, 3)//Ajoute les boutons à la notification en mode compacté
-                    .setMediaSession(mediaSession.getSessionToken())//Ajout de la mediasession
-            );
-        } else {
-            notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
-                    .setShowActionsInCompactView(1, 2, 3)//Ajoute les boutons à la notification en mode compacté
-            );
-        }
+        notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
+                .setShowActionsInCompactView(1, 2, 3)//Ajoute les boutons à la notification en mode compacté
+                .setMediaSession(mediaSession.getSessionToken())//Ajout de la mediasession
+        );
 
         notifManagerCompat = NotificationManagerCompat.from(MusiqueService.this);//Création d'une gestion de notification
 
@@ -448,6 +442,7 @@ public class MusiqueService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notifChannel = new NotificationChannel(CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);//Création d'un Channel de notification pour les notifications d'Android 8.0 ou supérieur
             notifChannel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
+            notifChannel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);//Création d'un NotificationManager pour les notifications d'Android 8.0 ou supérieur
             notificationManager.createNotificationChannel(notifChannel);//Création du channel de notificatios
         }
@@ -507,7 +502,7 @@ public class MusiqueService extends Service {
         //Initialisation des boutons du MediaSession
         mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
                 .setState(PlaybackStateCompat.STATE_PAUSED, 0, 0)
-                .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PAUSE |PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
+                .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PAUSE |PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_SEEK_TO)
                 .build());
 
         //Intialisation des données de la musiques
@@ -516,23 +511,23 @@ public class MusiqueService extends Service {
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, maMusique.get(positionMusique).getName())
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, parseInt(maMusique.get(positionMusique).getDuration()))
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, recupImageMusique())
+                //.putString(MediaMetadataCompat.METADATA_KEY_)
                 //.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "Test Album")
                 //.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, "Test Artist")
                 .build());
-
 
         mediaSession.setCallback(new MediaSessionCompat.Callback() {
             @Override
             public void onPlay() {
                 super.onPlay();
-                Toast.makeText(getApplicationContext(),"Play",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Play",Toast.LENGTH_LONG).show();
                 musiqueDemaPause();
             }
 
             @Override
             public void onPause() {
                 super.onPause();
-                Toast.makeText(getApplicationContext(),"Pause",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Pause",Toast.LENGTH_LONG).show();
                 musiqueDemaPause();
             }
 
@@ -540,21 +535,29 @@ public class MusiqueService extends Service {
             @Override
             public void onStop() {
                 super.onStop();
-                Toast.makeText(getApplicationContext(),"Arret",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Arret",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onSkipToNext() {
                 super.onSkipToNext();
-                Toast.makeText(getApplicationContext(),"Suivant",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Suivant",Toast.LENGTH_LONG).show();
                 musiqueSuivante();
             }
 
             @Override
             public void onSkipToPrevious() {
                 super.onSkipToPrevious();
-                Toast.makeText(getApplicationContext(),"Precedent",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Precedent",Toast.LENGTH_LONG).show();
                 musiquePrecedente();
+            }
+
+            //Seekabr de MediaSession
+            @Override
+            public void onSeekTo(long pos) {
+                super.onSeekTo(pos);
+                musiquePlayer.seekTo((int) pos);
+                //Toast.makeText(getApplicationContext(),"Seekbar"+pos,Toast.LENGTH_LONG).show();
             }
         });
 
