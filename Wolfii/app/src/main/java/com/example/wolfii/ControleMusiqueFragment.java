@@ -28,6 +28,7 @@ import static com.example.wolfii.MainActivity.mService;
  *
  * Mettre en place, notification Maj et MediaSession Maj
  * Pour Android < 5.0 pour mediaStyle rajouter  setShowCancelButton(true) and setCancelButtonIntent() pour arrêter appli car dans ces versions on peut pas fermer notif qui ont ongoing
+ * Rajouter suppresion des notifChannel pour Android 8.0 ou sup
  *
  */
 
