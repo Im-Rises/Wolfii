@@ -251,6 +251,7 @@ public class MusiqueService extends Service {
             protocoleArret();
             arretMediaSession();
             stopForeground(true);
+
         }
     }
 
@@ -442,11 +443,10 @@ public class MusiqueService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notifChannel = new NotificationChannel(CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);//Création d'un Channel de notification pour les notifications d'Android 8.0 ou supérieur
             notifChannel.setImportance(NotificationManager.IMPORTANCE_DEFAULT);
-            notifChannel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
+            notifChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);//Création d'un NotificationManager pour les notifications d'Android 8.0 ou supérieur
             notificationManager.createNotificationChannel(notifChannel);//Création du channel de notificatios
         }
-
         return notifBuilder.build();
     }
 
