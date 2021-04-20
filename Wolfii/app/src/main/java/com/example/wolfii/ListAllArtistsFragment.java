@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -26,7 +29,9 @@ public class ListAllArtistsFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ArrayList<String> mesArtistes;
     private MyArtisteAdapter monAdapter;
-
+    private ArrayList<Musique> musiques;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
 
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +47,10 @@ public class ListAllArtistsFragment extends Fragment {
 
             @Override
             public void onArtisteItemClick (View view, String artiste, int position) {
-                ArrayList<Musique> musiques = recuperer_musique (artiste);
+
+                    musiques = recuperer_musique (artiste);
+                    mRecyclerView.setAdapter (new MyMusiqueAdapter (musiques, getActivity ()));
+
             }
 
             @Override

@@ -35,6 +35,7 @@ public class ListSearchFragment extends Fragment {
 
     @SuppressLint({"WrongConstant", "SetTextI18n"})
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View root = inflater.inflate(R.layout.fragment_liste_recherche, container, false);
 
         TextView textView = root.findViewById (R.id.search_artiste);
