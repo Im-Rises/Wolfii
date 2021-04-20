@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,12 +37,18 @@ public class MainActivity extends AppCompatActivity {
 
     public static MusiqueService mService;                            //Déclaration pointeur vers le service
     public static boolean mBound = false;                             //Variable qui témoigne de l'activation du service
-
+    public static RoomDB database;  // notre base de donnees
+    //public static ArrayList<MainData> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        try {   database = RoomDB.getInstance(this); }
+        catch (Exception e) {
+            Log.d("debug_db", e.getMessage ());
+        }
+        //database = RoomDB.getInstance(this);
+        //dataList = database.mainDao().getAll();
         estActif=true;
 
         //////////////////////////////////////////////////////////////

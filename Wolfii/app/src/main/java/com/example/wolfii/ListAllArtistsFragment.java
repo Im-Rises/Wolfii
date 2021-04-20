@@ -17,22 +17,41 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
 import static com.example.wolfii.MainActivity.maMusique;
 
 public class ListAllArtistsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerViewPlaylist;
     private ArrayList<String> mesArtistes;
     private MyArtisteAdapter monArtisteAdapter;
+    private MyArtisteAdapter monPlaylistAdapter;
     private MyMusiqueAdapter monMusiqueAdapter;
     private ArrayList<Musique> musiques;
+
+    //private ArrayList<MusiquesData> dataList = new ArrayList<> ();
+    //private RoomDB database;
 
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_mes_artistes, container, false);
+
+        // on recupere toutes les donnees de la base de donnees et on cree son adapter
+        List<MainData> dataList = database.mainDao ().getAll ();
+        ArrayList<String> playlists = new ArrayList<String> ();
+
+        // on recupere toutes les playlists
+        for(MainData m : dataList) if (!playlists.contains (m.getPlaylist ())) playlists.add(m.getPlaylist ());
+        mRecyclerViewPlaylist = (RecyclerView) root.findViewById (R.id.recyclerview_playlists);
+        monPlaylistAdapter = new MyArtisteAdapter (playlists);
+
+        mRecyclerViewPlaylist.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));
+        mRecyclerViewPlaylist.setAdapter(monPlaylistAdapter);
 
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
@@ -56,7 +75,6 @@ public class ListAllArtistsFragment extends Fragment {
                             mService.setMusiquePlaylist(musiques, position);
                             mService.arretSimpleMusique();
                             mService.musiqueDemaPause();
-
                         }
 
                         @Override

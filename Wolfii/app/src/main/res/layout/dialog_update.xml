@@ -9,8 +9,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bt_edit"
-        android:text="@string/edit"
+        android:id="@+id/bt_playlist"
+        android:text="@string/add_to_playlist"
         android:layout_marginTop="8dp"/>
 
     <Button

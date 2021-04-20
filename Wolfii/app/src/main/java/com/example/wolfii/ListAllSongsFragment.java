@@ -2,17 +2,14 @@ package com.example.wolfii;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -24,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
 
 public class ListAllSongsFragment extends Fragment {
@@ -38,7 +36,7 @@ public class ListAllSongsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_listallsongs, container, false);
-
+        //database.getInstance (getActivity ());
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
         maMusique = MainActivity.maMusique; // on recupere ici toutes les musiques sous forme d'un tableau
@@ -67,19 +65,33 @@ public class ListAllSongsFragment extends Fragment {
                 Dialog dialog = new Dialog(getActivity ());
 
                 // set content view
-                dialog.setContentView(R.layout.dialog_update);
+                dialog.setContentView(R.layout.ajouter_a_une_playlist);
 
                 // initialize width and height
                 int width = WindowManager.LayoutParams.MATCH_PARENT;
                 int height = WindowManager.LayoutParams.WRAP_CONTENT;
                 //set layout
                 dialog.getWindow().setLayout(width, height);
-                Button btn_delete = dialog.findViewById (R.id.bt_delete);
-                btn_delete.setOnClickListener(new View.OnClickListener() {
+
+                EditText editText = dialog.findViewById (R.id.nom_playlist);
+                Button addToPlaylist = dialog.findViewById (R.id.add);
+                addToPlaylist.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        rm(musique.getPath());
+                        MainData data = new MainData ();
+                        data.setNomMusique (musique.getName ());
+                        data.setPath (musique.getPath ());
+                        data.setPlaylist (editText.getText ().toString ());
+
+                        try {
+                        database.mainDao ().insert (data);}
+                        catch (Exception e){
+                            Log.d("debug_db", e.getMessage ());
+                        }
+
+                        dialog.dismiss ();
                     }
                 });
+
                 //show dialog
                 dialog.show();
 
