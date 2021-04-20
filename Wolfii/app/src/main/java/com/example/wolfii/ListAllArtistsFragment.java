@@ -1,37 +1,33 @@
 package com.example.wolfii;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.app.Dialog;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import static com.example.wolfii.MainActivity.mService;
+import static com.example.wolfii.MainActivity.maMusique;
+
 public class ListAllArtistsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private ArrayList<String> mesArtistes;
-    private MyArtisteAdapter monAdapter;
+    private MyArtisteAdapter monArtisteAdapter;
+    private MyMusiqueAdapter monMusiqueAdapter;
     private ArrayList<Musique> musiques;
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
 
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,15 +38,52 @@ public class ListAllArtistsFragment extends Fragment {
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
         mesArtistes = MainActivity.mesArtistes; // on recupere ici toutes les musiques sous forme d'un tableau
 
-        monAdapter = new MyArtisteAdapter (mesArtistes);
-        monAdapter.setmArtisteItemClickListener(new MyArtisteAdapter.ArtisteItemClickListener() {
+        monArtisteAdapter = new MyArtisteAdapter (mesArtistes);
+        monArtisteAdapter.setmArtisteItemClickListener(new MyArtisteAdapter.ArtisteItemClickListener() {
 
             @Override
             public void onArtisteItemClick (View view, String artiste, int position) {
 
                     musiques = recuperer_musique (artiste);
-                    mRecyclerView.setAdapter (new MyMusiqueAdapter (musiques, getActivity ()));
 
+                    monMusiqueAdapter = new MyMusiqueAdapter (musiques, getActivity ());
+                    monMusiqueAdapter.setmMusiqueItemClickListener(new MyMusiqueAdapter.MusiqueItemClickListener() {
+                        @Override
+                        public void onMusiqueItemClick(View view, Musique musique, int position) {
+
+                            Toast.makeText(getActivity(), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
+
+                            mService.setMusiquePlaylist(musiques, position);
+                            mService.arretSimpleMusique();
+                            mService.musiqueDemaPause();
+
+                        }
+
+                        @Override
+                        public void onMusiqueItemLongClick(View view, Musique musique, int position) {
+                            //Toast.makeText(MainActivity.this, "ah toi tu attends une suppression !", Toast.LENGTH_SHORT).show();
+                            Dialog dialog = new Dialog(getActivity ());
+
+                            // set content view
+                            dialog.setContentView(R.layout.dialog_update);
+
+                            // initialize width and height
+                            int width = WindowManager.LayoutParams.MATCH_PARENT;
+                            int height = WindowManager.LayoutParams.WRAP_CONTENT;
+                            //set layout
+                            dialog.getWindow().setLayout(width, height);
+                            Button btn_delete = dialog.findViewById (R.id.bt_delete);
+                            btn_delete.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    //rm(musique.getPath());
+                                }
+                            });
+                            //show dialog
+                            dialog.show();
+
+                        }
+                    });
+                mRecyclerView.setAdapter (monMusiqueAdapter);
             }
 
             @Override
@@ -59,16 +92,15 @@ public class ListAllArtistsFragment extends Fragment {
             }
 
         });
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));
-        mRecyclerView.setAdapter(monAdapter);
+        mRecyclerView.setAdapter(monArtisteAdapter);
 
         return root;
     }
     private ArrayList<Musique> recuperer_musique(String artiste) {
         // on recupere toutes les musiques selon l'artiste qui nous interesse
         ArrayList<Musique> musiques = new ArrayList<> ();
-        for(Musique m : MainActivity.maMusique) if (m.getAuthor().equals (artiste) ) musiques.add (m);
+        for(Musique m : maMusique) if (m.getAuthor().equals (artiste) ) musiques.add (m);
         return musiques;
     }
 }
