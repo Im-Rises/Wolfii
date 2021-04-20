@@ -23,13 +23,6 @@ public class SearchFragment extends Fragment {
 
         fragmentManager = getActivity ().getSupportFragmentManager ();
 
-        fragmentManager.addOnBackStackChangedListener (new FragmentManager.OnBackStackChangedListener () {
-            @Override
-            public void onBackStackChanged () {
-
-            }
-        });
-
         Button button = root.findViewById (R.id.bt_search);
         EditText editText = root.findViewById (R.id.musique);
         button.setOnClickListener(new View.OnClickListener() {
