@@ -37,5 +37,8 @@ public interface MainDao {
     @Query ("SELECT playlist FROM playlists")
     List<String> getAllPlaylists();
 
+    @Query ("SELECT * FROM playlists WHERE playlist= :sPlaylist")
+    List<MainData> getMusicFromPlaylist(String sPlaylist);
+
 
 }

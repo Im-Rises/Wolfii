@@ -3,6 +3,7 @@ package com.example.wolfii;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,18 +42,7 @@ public class ListAllArtistsFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_mes_artistes, container, false);
 
-        // on recupere toutes les donnees de la base de donnees et on cree son adapter
-        List<MainData> dataList = database.mainDao ().getAll ();
-        ArrayList<String> playlists = new ArrayList<String> ();
-
-        // on recupere toutes les playlists
-        for(MainData m : dataList) if (!playlists.contains (m.getPlaylist ())) playlists.add(m.getPlaylist ());
-        mRecyclerViewPlaylist = (RecyclerView) root.findViewById (R.id.recyclerview_playlists);
-        monPlaylistAdapter = new MyArtisteAdapter (playlists);
-
-        mRecyclerViewPlaylist.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));
-        mRecyclerViewPlaylist.setAdapter(monPlaylistAdapter);
-
+        ////////////////////////// ARTISTES /////////////////////////////
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
         mesArtistes = MainActivity.mesArtistes; // on recupere ici toutes les musiques sous forme d'un tableau
@@ -112,6 +102,33 @@ public class ListAllArtistsFragment extends Fragment {
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));
         mRecyclerView.setAdapter(monArtisteAdapter);
+
+        ////////////////////// PLAYLISTS ////////////////////////////
+        // on recupere toutes les donnees de la base de donnees et on cree son adapter
+        List<MainData> dataList = database.mainDao ().getAll ();
+        ArrayList<String> playlists = new ArrayList<String> ();
+
+        // on recupere toutes les playlists
+        for(MainData m : dataList) if (!playlists.contains (m.getPlaylist ())) playlists.add(m.getPlaylist ());
+        mRecyclerViewPlaylist = (RecyclerView) root.findViewById (R.id.recyclerview_playlists);
+        monPlaylistAdapter = new MyArtisteAdapter (playlists);
+
+        mRecyclerViewPlaylist.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));
+        monPlaylistAdapter.setmArtisteItemClickListener(new MyArtisteAdapter.ArtisteItemClickListener() {
+            @Override
+            public void onArtisteItemClick (View view, String playlist, int position) {
+                List<MainData> musiques = database.mainDao ().getMusicFromPlaylist (playlist);
+                for(MainData m : musiques)
+                    Log.d("debug_playlist", m.getNomMusique ());
+
+            }
+
+            @Override
+            public void onArtisteItemLongClick (View view, String playlist, int position) {
+
+            }
+        });
+        mRecyclerViewPlaylist.setAdapter(monPlaylistAdapter);
 
         return root;
     }
