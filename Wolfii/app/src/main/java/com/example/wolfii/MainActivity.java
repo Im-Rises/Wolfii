@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.ClickOnMusic clicker = new MainActivity.ClickOnMusic();
             clicker.setMesMusiques (musiques);
             monMusiqueAdapter.setmMusiqueItemClickListener (clicker);
-            mRecyclerView.setAdapter (monMusiqueAdapter);
+            // mRecyclerView.setAdapter (monMusiqueAdapter);
         }
 
         @Override
