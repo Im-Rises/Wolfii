@@ -13,4 +13,6 @@
     <string name="insert_playlist_name">Nom de la playlist</string>
     <string name="creer">créer</string>
     <string name="add_to_playlist">Ajouter à une playlist</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

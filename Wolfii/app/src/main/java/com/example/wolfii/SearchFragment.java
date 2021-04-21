@@ -3,6 +3,7 @@ package com.example.wolfii;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +25,7 @@ public class SearchFragment extends Fragment {
 
         Button button = root.findViewById (R.id.bt_search);
         EditText editText = root.findViewById (R.id.musique);
-        button.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 String search = editText.getText ().toString ();
                 ArrayList<Musique> musiques = rechercher (search);

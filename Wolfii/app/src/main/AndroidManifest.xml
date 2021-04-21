@@ -18,6 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name="com.example.Wolfii"
         android:theme="@style/Theme.Wolfii">
 
         <!--Déclaration du service de gestion de la musique en arrière-plan : -->

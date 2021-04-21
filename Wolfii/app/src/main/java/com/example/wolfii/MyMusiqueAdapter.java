@@ -1,6 +1,5 @@
 package com.example.wolfii;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
@@ -8,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +30,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
         this.mesMusiques = mesMusiques;
     }
 
-    public MyMusiqueAdapter(List<Musique> mesMusiques, Activity context) {
+    public MyMusiqueAdapter(List<Musique> mesMusiques, Context context) {
         this.mesMusiques = mesMusiques;
         this.context = context;
     }

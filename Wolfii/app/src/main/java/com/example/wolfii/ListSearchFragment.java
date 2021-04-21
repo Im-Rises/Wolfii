@@ -1,26 +1,19 @@
 package com.example.wolfii;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-
-import static com.example.wolfii.MainActivity.mService;
 
 public class ListSearchFragment extends Fragment {
     private RecyclerView mRecyclerView;
@@ -44,37 +37,9 @@ public class ListSearchFragment extends Fragment {
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
 
         monAdapter = new MyMusiqueAdapter (this.musiques, getActivity ());
-        monAdapter.setmMusiqueItemClickListener(new MyMusiqueAdapter.MusiqueItemClickListener() {
-
-            @Override
-            public void onMusiqueItemClick (View view, Musique musique, int position) {
-                mService.setMusiquePlaylist(musiques, position);
-                mService.arretSimpleMusique();
-                mService.musiqueDemaPause();
-            }
-
-            @Override
-            public void onMusiqueItemLongClick (View view, Musique musique, int position) {
-
-                    Dialog dialog = new Dialog(getActivity ());
-
-                    // set content view
-                    dialog.setContentView(R.layout.dialog_update);
-
-                    // initialize width and height
-                    int width = WindowManager.LayoutParams.MATCH_PARENT;
-                    int height = WindowManager.LayoutParams.WRAP_CONTENT;
-                    //set layout
-                    dialog.getWindow().setLayout(width, height);
-                    //show dialog
-                    dialog.show();
-
-
-
-            }
-
-
-        });
+        MainActivity.ClickOnMusic clickOnMusic = new MainActivity.ClickOnMusic ();
+        clickOnMusic.setMesMusiques (this.musiques);
+        monAdapter.setmMusiqueItemClickListener(clickOnMusic);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager (getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));
         mRecyclerView.setAdapter(monAdapter);

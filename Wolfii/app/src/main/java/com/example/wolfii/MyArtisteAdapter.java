@@ -32,8 +32,8 @@ public class MyArtisteAdapter extends RecyclerView.Adapter<MyArtisteAdapter.MyVi
     }
 
     public interface ArtisteItemClickListener {
-        void onArtisteItemClick(View view, String musique, int position);
-        void onArtisteItemLongClick(View view, String musique, int position);
+        void onArtisteItemClick(View view, String artiste, int position);
+        void onArtisteItemLongClick(View view, String artiste, int position);
     }
     private ArtisteItemClickListener mArtisteItemClickListener;
 
