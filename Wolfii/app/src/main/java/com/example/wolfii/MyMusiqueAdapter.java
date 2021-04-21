@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import static com.example.wolfii.MainActivity.database;
 
 public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyViewHolder> {
     // classe qui est responsable de chaque cellule
@@ -65,22 +69,43 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
         // affiche les viewholder en donnant la position
         holder.display(mesMusiques.get(position));
         Log.d("position", position + "");
-
+        Musique musique = mesMusiques.get(position);
         holder.bt_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Dialog dialog = new Dialog(context);
 
                 // set content view
-                dialog.setContentView(R.layout.dialog_update);
+                dialog.setContentView(R.layout.ajouter_a_une_playlist);
 
                 // initialize width and height
                 int width = WindowManager.LayoutParams.MATCH_PARENT;
                 int height = WindowManager.LayoutParams.WRAP_CONTENT;
                 //set layout
                 dialog.getWindow().setLayout(width, height);
-                //show dialog
-                dialog.show();
+                dialog.show ();
+
+                EditText editText = dialog.findViewById (R.id.nom_playlist);
+                Button addToPlaylist = dialog.findViewById (R.id.add);
+                addToPlaylist.setOnClickListener(new View.OnClickListener() {
+                    public void onClick (View v) {
+                        MainData data = new MainData ();
+                        data.setNomMusique (musique.getName ());
+                        data.setPath (musique.getPath ());
+                        data.setPlaylist (editText.getText ().toString ());
+                        data.setAuthor (musique.getAuthor ());
+                        data.setDuration (musique.getDuration ());
+                        data.setDateTaken (musique.getDateTaken ());
+
+                        try {
+                            database.mainDao ().insert (data);
+                        } catch (Exception e) {
+                            Log.d ("debug_db", e.getMessage ());
+                        }
+
+                        dialog.dismiss ();
+                    }
+                });
 
             }
         });
