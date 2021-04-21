@@ -7,28 +7,28 @@
     android:background="@drawable/fond"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mes_artistes"
+            android:text="@string/mesArtistes"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mes_playlists"
+            android:text="@string/mesPlaylists"/>
+
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="@string/mesArtistes"
-        android:gravity="center_horizontal" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/myRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="@string/mesPlaylists"
-        android:gravity="center_horizontal" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_playlists"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:id="@+id/listes"
+        android:orientation="vertical" />
 </LinearLayout>

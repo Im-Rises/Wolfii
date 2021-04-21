@@ -24,6 +24,7 @@ public class MainData implements Serializable {
     @ColumnInfo(name = "playlist")
     private String playlist;
 
+
     // GETTER
     public int getId() {
         return id;

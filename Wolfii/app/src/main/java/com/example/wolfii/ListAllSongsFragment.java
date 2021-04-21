@@ -34,8 +34,9 @@ public class ListAllSongsFragment extends Fragment {
         maMusique = MainActivity.maMusique; // on recupere ici toutes les musiques sous forme d'un tableau
 
         monAdapter = new MyMusiqueAdapter (maMusique, getActivity ());
-        MainActivity.ClickOnMusic clickOnMusic = new MainActivity.ClickOnMusic ();
+        ClickOnMusic clickOnMusic = new ClickOnMusic ();
         clickOnMusic.setMesMusiques (maMusique);
+        clickOnMusic.setContext (getActivity ());
         monAdapter.setmMusiqueItemClickListener(clickOnMusic);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));

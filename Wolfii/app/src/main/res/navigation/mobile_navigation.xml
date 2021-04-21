@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_artiste"
-        android:name="com.example.wolfii.ListAllArtistsFragment"
+        android:name="com.example.wolfii.ListAllArtistsOrPlaylistsFragment"
         android:label="@string/queue_artist"
         tools:layout="@layout/fragment_listallsongs" />
 
