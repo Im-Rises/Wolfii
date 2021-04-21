@@ -4,49 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fond"
     tools:context=".ControleMusiqueFragment">
+
 
     <ImageView
         android:id="@+id/imgViewLogo"
-        android:layout_width="354dp"
-        android:layout_height="338dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="204dp"
+        android:layout_height="183dp"
+        android:src="@drawable/loup"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_musique"
+        app:layout_constraintVertical_bias="0.224"
         tools:ignore="VectorDrawableCompat" />
+
+    <ImageView
+        android:layout_width="68dp"
+        android:layout_height="58dp"
+        android:src="@drawable/next2"
+        tools:layout_editor_absoluteX="282dp"
+        tools:layout_editor_absoluteY="496dp"
+        tools:ignore="MissingConstraints" />
+
+
+    <ImageView
+        android:layout_width="68dp"
+        android:layout_height="58dp"
+        android:src="@drawable/suivant"
+        tools:layout_editor_absoluteX="62dp"
+        tools:layout_editor_absoluteY="496dp"
+        tools:ignore="MissingConstraints" />
 
     <SeekBar
         android:id="@+id/seekBarMusique"
-        android:layout_width="316dp"
+        android:layout_width="310dp"
         android:layout_height="75dp"
-        android:layout_marginBottom="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnDemaPause"
+        android:progressTint="#fff"
+        app:layout_constraintBottom_toBottomOf="@+id/btnDemaPause"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgViewLogo" />
+        app:layout_constraintTop_toBottomOf="@+id/imgViewLogo"
+        app:layout_constraintVertical_bias="0.254" />
 
     <TextView
         android:id="@+id/txtViewMusiqueTemps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginBottom="179dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="280dp"
         android:text="00:00"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnDemaPause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="112dp"
-        android:layout_marginRight="112dp"
-        android:layout_marginBottom="60dp"
-        android:text="Demarrer/Pause"
+        android:layout_width="91dp"
+        android:layout_height="94dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginBottom="160dp"
+        android:background="@drawable/pauseblanc"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -72,11 +94,11 @@
         android:layout_height="19dp"
         android:layout_marginEnd="36dp"
         android:layout_marginRight="36dp"
-        android:layout_marginBottom="71dp"
+        android:layout_marginBottom="172dp"
         android:text="00:00"
         app:layout_constraintBottom_toTopOf="@+id/btnArret"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.992"
+        app:layout_constraintHorizontal_bias="0.984"
         app:layout_constraintStart_toEndOf="@+id/txtViewMusiqueTemps" />
 
     <Button
@@ -86,10 +108,10 @@
         android:text="Rejouer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnDemaPause"
-        app:layout_constraintHorizontal_bias="0.416"
+        app:layout_constraintHorizontal_bias="0.551"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtViewMusiqueTemps"
-        app:layout_constraintVertical_bias="0.541" />
+        app:layout_constraintVertical_bias="0.716" />
 
     <TextView
         android:id="@+id/txtViewTitreMusique"
