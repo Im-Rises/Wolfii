@@ -23,6 +23,8 @@ public interface MainDao {
     @Delete
     void reset(List<MainData> mainData);
 
+    @Query ("DELETE FROM playlists WHERE playlist = :sPlaylist")
+    void deletePlaylist(String sPlaylist);
     /*
     //update query
     @Query("UPDATE playlists SET text = :sText where ID = :sID")

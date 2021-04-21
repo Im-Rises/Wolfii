@@ -3,7 +3,6 @@ package com.example.wolfii;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,8 +117,15 @@ public class ListAllArtistsFragment extends Fragment {
             @Override
             public void onArtisteItemClick (View view, String playlist, int position) {
                 List<MainData> musiques = database.mainDao ().getMusicFromPlaylist (playlist);
-                for(MainData m : musiques)
-                    Log.d("debug_playlist", m.getNomMusique ());
+                //database.mainDao ().deletePlaylist (playlist);
+                //getActivity ().setContentView (R.layout.liste);
+
+                /*Button retour = getActivity ().findViewById (R.id.retour);
+                retour.setOnClickListener (new View.OnClickListener() {
+                    public void onClick(View v) {
+                        //getActivity ().setContentView (R.layout.fragment_mes_artistes);
+                    }
+                });*/
 
             }
 

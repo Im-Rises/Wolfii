@@ -1,7 +1,6 @@
 package com.example.wolfii;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +26,9 @@ public class SearchFragment extends Fragment {
         EditText editText = root.findViewById (R.id.musique);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String artiste = editText.getText ().toString ();
-                ArrayList<Musique> musiques = rechercher (artiste);
-                Fragment fragment = new ListSearchFragment (musiques, artiste);
+                String search = editText.getText ().toString ();
+                ArrayList<Musique> musiques = rechercher (search);
+                Fragment fragment = new ListSearchFragment (musiques, search);
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.result_search, fragment, "search");
                 fragmentTransaction.commit ();
@@ -38,9 +37,9 @@ public class SearchFragment extends Fragment {
         return root;
     }
 
-    public ArrayList<Musique> rechercher(String musique) {
+    public ArrayList<Musique> rechercher(String search) {
         ArrayList<Musique> musiques = new ArrayList<> ();
-        for(Musique m : MainActivity.maMusique) if(m.getName ().contains (musique)) musiques.add(m);
+        for(Musique m : MainActivity.maMusique) if(m.getName ().contains (search) || m.getAuthor ().contains (search)) musiques.add(m);
         return musiques;
     }
 }
