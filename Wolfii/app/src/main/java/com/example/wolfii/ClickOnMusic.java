@@ -48,6 +48,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         int height = WindowManager.LayoutParams.WRAP_CONTENT;
         //set layout
         dialog.getWindow().setLayout(width, height);
+        dialog.show ();
 
         EditText editText = dialog.findViewById (R.id.nom_playlist);
         Button addToPlaylist = dialog.findViewById (R.id.add);
@@ -57,6 +58,10 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
                 data.setNomMusique (musique.getName ());
                 data.setPath (musique.getPath ());
                 data.setPlaylist (editText.getText ().toString ());
+                /*
+                data.setAuthor (musique.getAuthor ());
+                data.setDuration (musique.getDuration ());
+                data.setDateTaken (musique.getDateTaken ());*/
 
                 try {
                     database.mainDao ().insert (data);

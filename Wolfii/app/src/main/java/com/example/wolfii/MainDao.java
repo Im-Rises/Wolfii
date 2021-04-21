@@ -23,7 +23,7 @@ public interface MainDao {
     @Delete
     void reset(List<MainData> mainData);
 
-    @Query ("DELETE FROM playlists WHERE playlist = :sPlaylist")
+    @Query ("DELETE FROM Wolfii WHERE playlist = :sPlaylist")
     void deletePlaylist(String sPlaylist);
     /*
     //update query
@@ -33,13 +33,13 @@ public interface MainDao {
 
 
     // get all data query
-    @Query("SELECT * FROM playlists")
+    @Query("SELECT * FROM Wolfii")
     List<MainData> getAll();
 
-    @Query ("SELECT playlist FROM playlists")
+    @Query ("SELECT playlist FROM Wolfii")
     List<String> getAllPlaylists();
 
-    @Query ("SELECT * FROM playlists WHERE playlist= :sPlaylist")
+    @Query ("SELECT * FROM Wolfii WHERE playlist= :sPlaylist")
     List<MainData> getMusicFromPlaylist(String sPlaylist);
 
 

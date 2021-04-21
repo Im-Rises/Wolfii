@@ -6,23 +6,19 @@
     android:orientation="vertical"
     android:layout_margin="8dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mes_playlists"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/nom_playlist"
             />
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/add"
