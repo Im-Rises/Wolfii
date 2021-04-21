@@ -43,7 +43,7 @@ public class PlaylistFragment extends Fragment {
 
         mRecyclerView.setLayoutManager (new LinearLayoutManager (getActivity ().getApplicationContext (), LinearLayout.VERTICAL, false));
         ClickOnPlaylist clickOnPlaylist = new ClickOnPlaylist ();
-        clickOnPlaylist.setPlaylists (playlists);
+        clickOnPlaylist.setRecyclerViewForMusic (mRecyclerView);
         monAdapter.setmArtisteItemClickListener (clickOnPlaylist);
         mRecyclerView.setAdapter (monAdapter);
 

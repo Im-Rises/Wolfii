@@ -1,6 +1,9 @@
 package com.example.wolfii;
 
+import android.content.Context;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,23 +12,26 @@ import static com.example.wolfii.MainActivity.database;
 
 public class ClickOnPlaylist implements MyArtisteAdapter.ArtisteItemClickListener {
 
-    ArrayList<String> playlists = new ArrayList<String> ();
+    private MyMusiqueAdapter monMusiqueAdapter;
+    private Context context;
+    private ArrayList<Musique> musiques = new ArrayList<> ();
+    private RecyclerView mRecyclerView;
 
-    public void setPlaylists(ArrayList<String> sPlaylists) {
-        playlists = sPlaylists;
-    }
+    public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
+
     @Override
     public void onArtisteItemClick (View view, String playlist, int position) {
-        List<MainData> musiques = database.mainDao ().getMusicFromPlaylist (playlist);
-        //database.mainDao ().deletePlaylist (playlist);
-        //getActivity ().setContentView (R.layout.liste);
+        List<MainData> musiquesMainData = database.mainDao ().getMusicFromPlaylist (playlist);
+        for(MainData data : musiquesMainData) {
+            musiques.add(new Musique(data.getNomMusique (), data.getAuthor (), data.getPath (), data.getDuration (), data.getDateTaken ()));
+        }
 
-                /*Button retour = getActivity ().findViewById (R.id.retour);
-                retour.setOnClickListener (new View.OnClickListener() {
-                    public void onClick(View v) {
-                        //getActivity ().setContentView (R.layout.fragment_mes_artistes);
-                    }
-                });*/
+        monMusiqueAdapter = new MyMusiqueAdapter (musiques, context);
+        ClickOnMusic clicker = new ClickOnMusic();
+        clicker.setMesMusiques (musiques);
+        clicker.setContext (context);
+        monMusiqueAdapter.setmMusiqueItemClickListener (clicker);
+        mRecyclerView.setAdapter (monMusiqueAdapter);
     }
 
     @Override
