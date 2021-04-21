@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:id="@+id/artistes_or_musiques"
     android:layout_height="match_parent"
+    android:background="@drawable/fond"
     android:orientation="vertical">
 
     <TextView

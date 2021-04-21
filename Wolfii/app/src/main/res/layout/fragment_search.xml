@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fond"
     tools:context=".SearchFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,28 +19,29 @@
             tools:ignore="MissingConstraints">
 
             <EditText
+                android:id="@+id/musique"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                tools:ignore="Suspicious0dp"
-                android:id="@+id/musique"
                 android:layout_weight="1"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:ignore="Suspicious0dp" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/bt_search"
                 android:layout_marginStart="8dp"
-                android:text="@string/search"
-                android:layout_marginLeft="8dp"  />
+                android:layout_marginLeft="8dp"
+                android:text="@string/search" />
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/result_search"
-            tools:ignore="MissingConstraints"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:orientation="horizontal" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints" />
     </LinearLayout>
 
 
