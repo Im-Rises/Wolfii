@@ -1,6 +1,7 @@
 package com.example.wolfii;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -11,6 +12,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,11 +26,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.Wolfii;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,12 +45,18 @@ public class MainActivity extends AppCompatActivity {
 
     public static MusiqueService mService;                            //Déclaration pointeur vers le service
     public static boolean mBound = false;                             //Variable qui témoigne de l'activation du service
-
+    public static RoomDB database;  // notre base de donnees
+    //public static ArrayList<MainData> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        try {   database = RoomDB.getInstance(this); }
+        catch (Exception e) {
+            Log.d("debug_db", e.getMessage ());
+        }
+        //database = RoomDB.getInstance(this);
+        //dataList = database.mainDao().getAll();
         estActif=true;
 
         //////////////////////////////////////////////////////////////
@@ -86,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
         maMusique = getMusic();
         mesArtistes = getArtistes(maMusique);
     }
@@ -175,4 +189,116 @@ public class MainActivity extends AppCompatActivity {
     }
     //////////////////////////////////////////////////////////////
 
+    // quand on click sur une musique
+    public static class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
+        private ArrayList<Musique> mesMusiques;
+
+        // SETTER
+        public void setMesMusiques(ArrayList<Musique> musiques) {
+            mesMusiques = musiques;
+        }
+
+        @Override
+        public void onMusiqueItemClick (View view, Musique musique, int position) {
+            Toast.makeText(Wolfii.getAppContext (), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
+
+            mService.setMusiquePlaylist(mesMusiques, position);
+            mService.arretSimpleMusique();
+            mService.musiqueDemaPause();
+        }
+
+        @Override
+        public void onMusiqueItemLongClick (View view, Musique musique, int position) {
+            Dialog dialog = new Dialog(Wolfii.getAppContext ());
+
+            // set content view
+            dialog.setContentView(R.layout.ajouter_a_une_playlist);
+
+            // initialize width and height
+            int width = WindowManager.LayoutParams.MATCH_PARENT;
+            int height = WindowManager.LayoutParams.WRAP_CONTENT;
+            //set layout
+            dialog.getWindow().setLayout(width, height);
+
+            EditText editText = dialog.findViewById (R.id.nom_playlist);
+            Button addToPlaylist = dialog.findViewById (R.id.add);
+            addToPlaylist.setOnClickListener(new View.OnClickListener() {
+                public void onClick (View v) {
+                    MainData data = new MainData ();
+                    data.setNomMusique (musique.getName ());
+                    data.setPath (musique.getPath ());
+                    data.setPlaylist (editText.getText ().toString ());
+
+                    try {
+                        database.mainDao ().insert (data);
+                    } catch (Exception e) {
+                        Log.d ("debug_db", e.getMessage ());
+                    }
+
+                    dialog.dismiss ();
+                }
+            });
+        }
+    }
+
+    // quand on click sur un artiste
+    public static class ClickOnArtist implements MyArtisteAdapter.ArtisteItemClickListener {
+
+        MyMusiqueAdapter monMusiqueAdapter;
+        ArrayList<Musique> musiques;
+        RecyclerView mRecyclerView;
+
+        public void setRecyclerViewForMusic(RecyclerView rv) {
+            mRecyclerView = rv;
+        }
+
+        @Override
+        public void onArtisteItemClick (View view, String artiste, int position) {
+            musiques = recuperer_musique (artiste);
+
+            monMusiqueAdapter = new MyMusiqueAdapter (musiques, Wolfii.getAppContext ());
+            MainActivity.ClickOnMusic clicker = new MainActivity.ClickOnMusic();
+            clicker.setMesMusiques (musiques);
+            monMusiqueAdapter.setmMusiqueItemClickListener (clicker);
+            mRecyclerView.setAdapter (monMusiqueAdapter);
+        }
+
+        @Override
+        public void onArtisteItemLongClick (View view, String musique, int position) {
+
+        }
+        private ArrayList<Musique> recuperer_musique (String artiste) {
+            // on recupere toutes les musiques selon l'artiste qui nous interesse
+            ArrayList<Musique> musiques = new ArrayList<> ();
+            for (Musique m : maMusique) if (m.getAuthor ().equals (artiste)) musiques.add (m);
+            return musiques;
+        }
+    }
+    // quand on click sur une playlist
+    public static class ClickOnPlaylist implements MyArtisteAdapter.ArtisteItemClickListener {
+
+        ArrayList<String> playlists = new ArrayList<String> ();
+
+        public void setPlaylists(ArrayList<String> sPlaylists) {
+            playlists = sPlaylists;
+        }
+        @Override
+        public void onArtisteItemClick (View view, String playlist, int position) {
+            List<MainData> musiques = database.mainDao ().getMusicFromPlaylist (playlist);
+            //database.mainDao ().deletePlaylist (playlist);
+            //getActivity ().setContentView (R.layout.liste);
+
+                /*Button retour = getActivity ().findViewById (R.id.retour);
+                retour.setOnClickListener (new View.OnClickListener() {
+                    public void onClick(View v) {
+                        //getActivity ().setContentView (R.layout.fragment_mes_artistes);
+                    }
+                });*/
+        }
+
+        @Override
+        public void onArtisteItemLongClick (View view, String artiste, int position) {
+
+        }
+    }
 }

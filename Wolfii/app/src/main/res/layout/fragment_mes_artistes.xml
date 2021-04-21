@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/artistes_or_musiques"
     android:layout_height="match_parent"
     android:background="@drawable/fond"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/mesArtistes"
+        android:gravity="center_horizontal" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/mesPlaylists"
+        android:gravity="center_horizontal" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_playlists"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -26,8 +26,8 @@ import static com.example.wolfii.MainActivity.mService;
 
 /*A FAIRE :
  *
- * Ajouter MediaSession pour permettre le contrôle de la musique en lock screen (avec un bel écran).
- * Ajouter la maj de la notification sur appui du bouton DemaPause ainsi que BoucleDeboucle
+ * Mettre en place, notification Maj et MediaSession Maj
+ * Pour Android < 5.0 pour mediaStyle rajouter  setShowCancelButton(true) and setCancelButtonIntent() pour arrêter appli car dans ces versions on peut pas fermer notif qui ont ongoing
  *
  */
 

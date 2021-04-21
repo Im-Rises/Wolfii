@@ -2,22 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    android:background="@drawable/fond"
     android:orientation="vertical">
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bt_playlist"
-        android:text="@string/add_to_playlist"
-        android:layout_marginTop="8dp"/>
+        android:id="@+id/retour"
+        android:text="retour" />
 
-
-    <Button
-        android:id="@+id/bt_delete"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/delete" />
+        android:layout_height="match_parent" />
+
 </LinearLayout>
