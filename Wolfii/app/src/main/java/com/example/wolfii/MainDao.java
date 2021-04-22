@@ -25,6 +25,9 @@ public interface MainDao {
 
     @Query ("DELETE FROM Wolfii WHERE playlist = :sPlaylist")
     void deletePlaylist(String sPlaylist);
+
+    @Query ("UPDATE Wolfii SET playlist = :newName WHERE playlist = :sPlaylist")
+    void rename(String sPlaylist, String newName);
     /*
     //update query
     @Query("UPDATE playlists SET text = :sText where ID = :sID")

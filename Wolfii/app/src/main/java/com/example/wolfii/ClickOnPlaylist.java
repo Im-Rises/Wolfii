@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,6 +62,30 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
             public void onClick (View v) {
                 database.mainDao ().deletePlaylist (playlist);
                 Toast.makeText(context, "playlist " +playlist +" supprimée", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        rename.setOnClickListener (new View.OnClickListener () {
+            public void onClick (View v) {
+                Dialog dRename = new Dialog (context);
+                dRename.setContentView (R.layout.dialog_rename_playlist);
+
+                // initialize width and height
+                int width = WindowManager.LayoutParams.MATCH_PARENT;
+                int height = WindowManager.LayoutParams.WRAP_CONTENT;
+                //set layout
+                dRename.getWindow ().setLayout (width, height);
+                dRename.show ();
+                Button confirmRename = dRename.findViewById (R.id.confirmRename);
+                EditText name = dRename.findViewById (R.id.name);
+                confirmRename.setOnClickListener (new View.OnClickListener () {
+                    @Override
+                    public void onClick (View v) {
+                        String newName = name.getText ().toString ();
+                        database.mainDao ().rename (playlist, newName);
+                        Toast.makeText(context, "playlist " +playlist +" s'appellera maintenant " + newName, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
