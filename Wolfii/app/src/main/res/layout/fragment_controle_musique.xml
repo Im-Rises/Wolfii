@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/listes"
     android:layout_height="match_parent"
     android:background="@drawable/fond"
     tools:context=".ControleMusiqueFragment"
@@ -14,15 +13,16 @@
 
     <ImageView
         android:id="@+id/imgViewLogo"
-        android:paddingTop="50dp"
+        android:paddingTop="40dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:src="@drawable/loup"
         tools:ignore="VectorDrawableCompat" />
     <TextView
         android:id="@+id/txtViewTitreMusique"
-        android:padding="10dp"
+        android:padding="5dp"
         android:layout_width="match_parent"
+        android:height="5dp"
         android:textAlignment="center"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/seekBarMusique"
@@ -68,59 +68,70 @@
             android:gravity="end" />
     </LinearLayout>
     <!-- ********************************************* -->
-    <!-- LES CONTROLES -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:textAlignment="center"
+        android:id="@+id/listes"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
-
-
-        <ImageView
-            android:layout_width="68dp"
-            android:layout_height="58dp"
-            android:src="@drawable/suivant"
-            tools:ignore="MissingConstraints" />
-        <Button
-            android:id="@+id/btnDemaPause"
-            android:layout_width="91dp"
-            android:layout_height="94dp"
-            android:background="@drawable/pauseblanc" />
-        <ImageView
-            android:layout_width="68dp"
-            android:layout_height="58dp"
-            android:src="@drawable/next2"
-            tools:ignore="MissingConstraints" />
-    </LinearLayout>
-
-    <!-- ***********************************************-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
-
-        <Button
-            android:id="@+id/btnRejouer"
-            android:layout_width="wrap_content"
+        android:orientation="vertical">
+        <!-- LES CONTROLES -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:textAlignment="center"
             android:layout_height="wrap_content"
-            android:text="Rejouer"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnDemaPause"
-            app:layout_constraintHorizontal_bias="0.551"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtViewMusiqueTemps"
-            app:layout_constraintVertical_bias="0.716" />
+            android:gravity="center_horizontal">
 
-        <Button
-            android:layout_width="wrap_content"
+
+            <ImageView
+                android:id="@+id/btnMusiquePrecedente"
+                android:layout_width="68dp"
+                android:layout_height="58dp"
+                android:src="@drawable/suivant"
+                tools:ignore="MissingConstraints" />
+            <Button
+                android:id="@+id/btnDemaPause"
+                android:layout_width="91dp"
+                android:layout_height="94dp"
+                android:background="@drawable/pauseblanc" />
+
+            <ImageView
+                android:id="@+id/btnMusiqueSuivante"
+                android:layout_width="68dp"
+                android:layout_height="58dp"
+                android:src="@drawable/next2"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+        <!-- ***********************************************-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/showCurrentPlaylist"
-            android:id="@+id/showCurrentPlaylist"
-            tools:ignore="MissingConstraints" />
+            android:textAlignment="center"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btnRejouer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rejouer"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnDemaPause"
+                app:layout_constraintHorizontal_bias="0.551"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtViewMusiqueTemps"
+                app:layout_constraintVertical_bias="0.716" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/showCurrentPlaylist"
+                android:id="@+id/showCurrentPlaylist"
+                tools:ignore="MissingConstraints" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
