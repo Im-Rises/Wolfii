@@ -69,8 +69,6 @@ public class ControleMusiqueFragment extends Fragment {
 
         this.txtViewTitreMusique = (TextView) root.findViewById(R.id.txtViewTitreMusique);
 
-
-
         this.cmdDemaPause = (Button) root.findViewById(R.id.btnDemaPause);
         this.cmdDemaPause.setSoundEffectsEnabled(false);
         this.cmdDemaPause.setOnClickListener(new EcouteurBtnDemaPause());

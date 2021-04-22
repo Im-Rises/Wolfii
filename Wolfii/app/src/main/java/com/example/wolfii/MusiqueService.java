@@ -79,7 +79,7 @@ public class MusiqueService extends Service {
 
     private boolean musiqueBoucle=false;
 
-    private  MediaSessionCompat mediaSession;
+    private MediaSessionCompat mediaSession;
     private NotificationCompat.Builder notifBuilder;
     private boolean mediaSessionInitBool= false;
 

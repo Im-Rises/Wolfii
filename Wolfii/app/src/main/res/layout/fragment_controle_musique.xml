@@ -20,8 +20,9 @@
         tools:ignore="VectorDrawableCompat" />
     <TextView
         android:id="@+id/txtViewTitreMusique"
-        android:padding="10dp"
+        android:padding="5dp"
         android:layout_width="match_parent"
+        android:height="5dp"
         android:textAlignment="center"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/seekBarMusique"
