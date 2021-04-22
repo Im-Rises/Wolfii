@@ -10,26 +10,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.MediaSession2;
-import android.media.session.MediaSession;
 import android.os.Binder;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.os.ResultReceiver;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -38,7 +32,6 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -915,6 +908,10 @@ public class MusiqueService extends Service {
     }
 
     public String getMusiqueTitre(){return maMusique.get(positionMusique).getName();}
+
+    public ArrayList<Musique> getCurrentPlaylist() {return maMusique;}
+
+    public int getPositionMusique() {return this.positionMusique;}
 
 
     /*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
