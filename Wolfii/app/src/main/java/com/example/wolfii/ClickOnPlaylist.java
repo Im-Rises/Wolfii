@@ -1,7 +1,11 @@
 package com.example.wolfii;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +21,9 @@ public class ClickOnPlaylist implements MyArtisteAdapter.ArtisteItemClickListene
     private ArrayList<Musique> musiques = new ArrayList<> ();
     private RecyclerView mRecyclerView;
 
+    // SETTER
     public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
+    public void setContext(Context sContext) {context = sContext;}
 
     @Override
     public void onArtisteItemClick (View view, String playlist, int position) {
@@ -35,7 +41,29 @@ public class ClickOnPlaylist implements MyArtisteAdapter.ArtisteItemClickListene
     }
 
     @Override
-    public void onArtisteItemLongClick (View view, String artiste, int position) {
+    public void onArtisteItemLongClick (View view, String playlist, int position) {
+        Dialog dialog = new Dialog (context);
 
+        // set content view
+        dialog.setContentView (R.layout.dialog_playlist);
+
+        // initialize width and height
+        int width = WindowManager.LayoutParams.MATCH_PARENT;
+        int height = WindowManager.LayoutParams.WRAP_CONTENT;
+        //set layout
+        dialog.getWindow ().setLayout (width, height);
+        dialog.show ();
+
+        Button delete = dialog.findViewById (R.id.delete);
+        Button rename = dialog.findViewById (R.id.rename);
+
+        delete.setOnClickListener (new View.OnClickListener () {
+            public void onClick (View v) {
+                database.mainDao ().deletePlaylist (playlist);
+                Toast.makeText(context, "playlist " +playlist +" supprimée", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 }
+
