@@ -28,7 +28,7 @@ import static com.example.wolfii.MainActivity.mService;
 
 /*A FAIRE :
  *
- * Faire maj des boutons des notifications et c'est tout
+ * Faire fonction procedure maj notif
  *
  */
 
