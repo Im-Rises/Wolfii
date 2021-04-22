@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -35,7 +38,7 @@ import static com.example.wolfii.MainActivity.mService;
 
 /*A FAIRE :
  *
- * Faire fonction procedure maj notif
+ * Faire maj du bouton dema pause du contrôle musique
  *
  */
 
@@ -60,6 +63,7 @@ public class ControleMusiqueFragment extends Fragment {
     private static final String TYPE_MAJ = "TYPE_MAJ";
     private static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
     private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
+    private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";
 
 
     /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
@@ -79,6 +83,11 @@ public class ControleMusiqueFragment extends Fragment {
         this.cmdDemaPause = (Button) root.findViewById(R.id.btnDemaPause);
         this.cmdDemaPause.setSoundEffectsEnabled(false);
         this.cmdDemaPause.setOnClickListener(new EcouteurBtnDemaPause());
+
+/*        if (mService.getMusiquePlayerIsPlaying())
+            cmdDemaPause.setBackground(R.drawable.pauseblanc);
+        else
+            cmdDemaPause.setBackground(R.drawable.);*/
 
         this.cmdPrecedent = (ImageView) root.findViewById(R.id.btnMusiquePrecedente);
         this.cmdPrecedent.setSoundEffectsEnabled(false);
@@ -101,7 +110,6 @@ public class ControleMusiqueFragment extends Fragment {
         this.seekBarMusique.setOnSeekBarChangeListener(new EcouteurSeekBar());
 
         this.imgViewMusique = (ImageView) root.findViewById(R.id.imgViewLogo);
-
 
         //Enregistrement du receiver pour la mise à jour de l'interface
         IntentFilter intentFilter = new IntentFilter(DIRECTION_ACTIVITY);
@@ -157,7 +165,12 @@ public class ControleMusiqueFragment extends Fragment {
         public void onStartTrackingTouch(SeekBar seekBar) {}
 
         //Evenement qui s'enclenche sur la fin du déplacement du seekbar
-        public void onStopTrackingTouch(SeekBar seekBar) {}
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            // On place la mise à jour une fois qu'on a finis de déplacer le seekbar (évite un
+            // rechargement du mediasession nombreux et inutile, car en plus qu'il n'est pas visible lorsqu'on
+            // déplace le seekbar de cette page)
+            mService.mediaSessionBoutonsMaj();
+        }
     }
 
 
@@ -228,7 +241,7 @@ public class ControleMusiqueFragment extends Fragment {
     private BroadcastReceiver broadcastReceiverMajInterface = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mService.getMusiquePlayerIsSet()) {
+            //if (mService.getMusiquePlayerIsSet()) {
                 switch (intent.getStringExtra(TYPE_MAJ)) {
                     case EXTRA_MAJ_INIT:
                         majInterfaceInit();//Mise à jour de l'interface
@@ -236,8 +249,11 @@ public class ControleMusiqueFragment extends Fragment {
                     case EXTRA_MAJ_SIMPLE:
                         majInterface();//Mise à jour de l'interface
                         break;
+                    case EXTRA_MAJ_FIN:
+                        majInterfaceFin();
+                        break;
                 }
-            }
+            //}
         }
     };
 
@@ -257,6 +273,16 @@ public class ControleMusiqueFragment extends Fragment {
         txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
     }
 
+    @SuppressLint("SetTextI18n")
+    public void majInterfaceFin()
+    {
+        txtViewTitreMusique.setText("");
+        txtViewMusiqueDuree.setText("00:00");
+        txtViewMusiqueTemps.setText("00:00");
+        imgViewMusique.setImageBitmap(mService.drawableEnBitmap(R.drawable.loup));
+        //imgViewMusique.setImageBitmap();
+    }
+
 
     /*--------------------------------------AUTRES FONCTIONS------------------------------------------------*/
 
@@ -266,6 +292,7 @@ public class ControleMusiqueFragment extends Fragment {
                 TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes),
                 TimeUnit.MILLISECONDS.toSeconds(tmpsMillisecondes) - TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes) * 60);
     }
+
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
                 .getHeight(), Bitmap.Config.ARGB_8888);

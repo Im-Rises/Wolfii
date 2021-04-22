@@ -28,6 +28,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -63,6 +64,7 @@ public class MusiqueService extends Service {
     private static final String TYPE_MAJ = "TYPE_MAJ";
     private static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
     private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
+    private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";
 
     //Variables de redirection vers le service (ici) pour la réception des commandes des boutons notification
     private static final String DIRECTION_SERVICE = "TO_SERVICE";
@@ -311,6 +313,7 @@ public class MusiqueService extends Service {
             stopForeground(true);
             arretMediaSession();
             mediaSessionNotifInitBool =false;
+            envoieBroadcast(EXTRA_MAJ_FIN);
         }
     }
 
@@ -641,7 +644,7 @@ public class MusiqueService extends Service {
         }
     }
 
-    private Bitmap drawableEnBitmap(int drawableRes) {
+    public Bitmap drawableEnBitmap(int drawableRes) {
         @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = getResources().getDrawable(drawableRes);
         Canvas canvas = new Canvas();
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
