@@ -39,7 +39,9 @@ public class ControleMusiqueFragment extends Fragment {
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree, txtViewTitreMusique;   //TextView du temps de lecture de la musique
 
-    private Button cmdDemaPause, cmdArret,cmdPrecedent,cmdSuivant,cmdRejouer, showCurrentPlaylist;  //boutons de la page
+    private Button cmdDemaPause,cmdRejouer, showCurrentPlaylist;  //boutons de la page
+
+    private ImageView cmdSuivant,cmdPrecedent;
 
     private ImageView imgViewMusique;
 
@@ -73,13 +75,13 @@ public class ControleMusiqueFragment extends Fragment {
         this.cmdDemaPause.setSoundEffectsEnabled(false);
         this.cmdDemaPause.setOnClickListener(new EcouteurBtnDemaPause());
 
-/*        this.cmdPrecedent = (Button) root.findViewById(R.id.btnPrecedent);
+        this.cmdPrecedent = (ImageView) root.findViewById(R.id.btnMusiquePrecedente);
         this.cmdPrecedent.setSoundEffectsEnabled(false);
-        this.cmdPrecedent.setOnClickListener(new cmdBtnPrecedentEcouteur());
+        this.cmdPrecedent.setOnClickListener(new EcouteurMusiquePrecedente());
 
-        this.cmdSuivant = (Button) root.findViewById(R.id.btnSuivant);
+        this.cmdSuivant = (ImageView) root.findViewById(R.id.btnMusiqueSuivante);
         this.cmdSuivant.setSoundEffectsEnabled(false);
-        this.cmdSuivant.setOnClickListener(new cmdBtnSuivantEcouteur());*/
+        this.cmdSuivant.setOnClickListener(new EcouteurMusiqueSuivante());
 
         this.cmdRejouer = (Button) root.findViewById(R.id.btnRejouer);
         this.cmdRejouer.setSoundEffectsEnabled(false);
@@ -191,21 +193,26 @@ public class ControleMusiqueFragment extends Fragment {
         }
     }
 
-    public void cmdMusiqueStuivante(View view)
-    {
-        if (mService.getMusiquePlayerIsSet())
-        {
-            mService.musiqueSuivante();
+    private class EcouteurMusiqueSuivante implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            if (mService.getMusiquePlayerIsSet())
+            {
+                mService.musiqueSuivante();
+            }
         }
     }
 
-    public void cmdMusiquePrecedente(View view)
-    {
-        if (mService.getMusiquePlayerIsSet())
-        {
-            mService.musiquePrecedente();
+    private  class EcouteurMusiquePrecedente implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            if (mService.getMusiquePlayerIsSet())
+            {
+                mService.musiquePrecedente();
+            }
         }
     }
+
 
 
 
