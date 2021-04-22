@@ -346,6 +346,7 @@ public class MusiqueService extends Service {
         musiqueDemaPause();
         envoieBroadcast(EXTRA_MAJ_INIT);
         //notificationMaj();
+        mediaSessionBoutonsMaj();
     }
 
     public void musiquePrecedente() {
@@ -359,11 +360,12 @@ public class MusiqueService extends Service {
         musiqueDemaPause();
         envoieBroadcast(EXTRA_MAJ_INIT);
         //notificationMaj();
+        mediaSessionBoutonsMaj();
     }
 
     public void musiqueBoucleDeboucle() {
         if (musiquePlayer != null) {
-            musiquePlayer.setLooping(!musiquePlayer.isLooping());
+            //musiquePlayer.setLooping(!musiquePlayer.isLooping());
             musiqueBoucle= !musiqueBoucle;
         }
 
@@ -379,7 +381,14 @@ public class MusiqueService extends Service {
         public void onCompletion(MediaPlayer mp) {
             //Si on arrive au bout de la musique et qu'elle n'est pas en mode boucle
             //on passe à la musique suivante (pas de besoin de véirifer si la musique boucle)
+            if (musiqueBoucle)
+            {
+                musiqueDemaEtFocusEtMaj();
+            }
+            else
+            {
                 musiqueSuivante();
+            }
         }
     }
 
@@ -459,9 +468,11 @@ public class MusiqueService extends Service {
         if (musiqueBoucle) {
             notifBuilder.addAction(R.drawable.image_rejoue, "Rejouer", musiquePenIntRejouer);//Ajout le bouton "musique rejouer" à la notification"
             musiquePlayer.setLooping(true);
+            musiqueBoucle=true;
         } else {
             notifBuilder.addAction(R.drawable.image_rejouer, "Rejouer", musiquePenIntRejouer);//Ajout le bouton "musique rejouer" à la notification"
             musiquePlayer.setLooping(false);
+            musiqueBoucle=false;
         }
 
         notifBuilder.addAction(R.drawable.image_precedent, "Précédent", musiquePenIntPrecedent);//Ajout le bouton "musique précédente à la notification"
@@ -580,6 +591,7 @@ public class MusiqueService extends Service {
             super.onSeekTo(pos);
             musiquePlayer.seekTo((int) pos);
             Toast.makeText(getApplicationContext(), "Seekbar" + pos, Toast.LENGTH_SHORT).show();
+            mediaSessionBoutonsMaj();
         }
     }
 
