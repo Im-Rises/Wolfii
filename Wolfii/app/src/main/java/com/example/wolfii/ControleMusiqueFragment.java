@@ -28,8 +28,8 @@ import static com.example.wolfii.MainActivity.mService;
 
 /*A FAIRE :
  *
- * Pour Android < 5.0 pour mediaStyle rajouter  setShowCancelButton(true) and setCancelButtonIntent() pour arrêter appli car dans ces versions on peut pas fermer notif qui ont ongoing
  * Faire maj des boutons des notifications et c'est tout
+ *
  */
 
 
@@ -73,11 +73,6 @@ public class ControleMusiqueFragment extends Fragment {
         this.cmdDemaPause.setSoundEffectsEnabled(false);
         this.cmdDemaPause.setOnClickListener(new EcouteurBtnDemaPause());
 
-/*        this.cmdArret = (Button) root.findViewById(R.id.btnArret);
-        this.cmdArret.setSoundEffectsEnabled(false);
-        this.cmdArret.setOnClickListener(new EcouteurBtnArret());*/
-
-
 /*        this.cmdPrecedent = (Button) root.findViewById(R.id.btnPrecedent);
         this.cmdPrecedent.setSoundEffectsEnabled(false);
         this.cmdPrecedent.setOnClickListener(new cmdBtnPrecedentEcouteur());
@@ -85,7 +80,6 @@ public class ControleMusiqueFragment extends Fragment {
         this.cmdSuivant = (Button) root.findViewById(R.id.btnSuivant);
         this.cmdSuivant.setSoundEffectsEnabled(false);
         this.cmdSuivant.setOnClickListener(new cmdBtnSuivantEcouteur());*/
-
 
         this.cmdRejouer = (Button) root.findViewById(R.id.btnRejouer);
         this.cmdRejouer.setSoundEffectsEnabled(false);
@@ -99,6 +93,7 @@ public class ControleMusiqueFragment extends Fragment {
         this.seekBarMusique.setOnSeekBarChangeListener(new EcouteurSeekBar());
 
         this.imgViewMusique = (ImageView) root.findViewById(R.id.imgViewLogo);
+
 
         //Enregistrement du receiver pour la mise à jour de l'interface
         IntentFilter intentFilter = new IntentFilter(DIRECTION_ACTIVITY);
@@ -171,15 +166,6 @@ public class ControleMusiqueFragment extends Fragment {
         }
     }
 
-/*    private class EcouteurBtnArret implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            mService.arretTotal();
-            seekBarMusique.setProgress(0);
-            txtViewMusiqueTemps.setText("00:00");
-        }
-    }*/
-
     private class EcouteurBtnRejouer implements View.OnClickListener{
         @Override
         public void onClick(View v) {
@@ -202,20 +188,24 @@ public class ControleMusiqueFragment extends Fragment {
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.listes, showCurrentPlaylistFragment, null);
             fragmentTransaction.commit ();
-
-
         }
     }
 
-/*    public void cmdMusiqueStuivante(View view)
+    public void cmdMusiqueStuivante(View view)
     {
-
+        if (mService.getMusiquePlayerIsSet())
+        {
+            mService.musiqueSuivante();
+        }
     }
 
     public void cmdMusiquePrecedente(View view)
     {
-
-    }*/
+        if (mService.getMusiquePlayerIsSet())
+        {
+            mService.musiquePrecedente();
+        }
+    }
 
 
 
