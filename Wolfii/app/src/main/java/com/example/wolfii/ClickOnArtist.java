@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import static com.example.wolfii.MainActivity.maMusique;
 
-public class ClickOnArtist implements MyArtisteAdapter.ArtisteItemClickListener {
+public class ClickOnArtist implements MyStringAdapter.ArtisteItemClickListener {
 
     private MyMusiqueAdapter monMusiqueAdapter;
     private ArrayList<Musique> musiques;

@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.example.wolfii.MainActivity.database;
 
-public class ClickOnPlaylist implements MyArtisteAdapter.ArtisteItemClickListener {
+public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener {
 
     private MyMusiqueAdapter monMusiqueAdapter;
     private Context context;

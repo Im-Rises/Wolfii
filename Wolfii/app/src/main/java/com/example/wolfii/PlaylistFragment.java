@@ -19,7 +19,7 @@ import static com.example.wolfii.MainActivity.database;
 
 public class PlaylistFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private MyArtisteAdapter monAdapter;
+    private MyStringAdapter monAdapter;
     private String artiste;
     private static ArrayList<Musique> musiques = new ArrayList<> ();
 
@@ -39,7 +39,7 @@ public class PlaylistFragment extends Fragment {
         for (MainData m : dataList)
             if (! playlists.contains (m.getPlaylist ())) playlists.add (m.getPlaylist ());
         mRecyclerView= (RecyclerView) root.findViewById (R.id.myRecyclerView);
-        monAdapter = new MyArtisteAdapter (playlists);
+        monAdapter = new MyStringAdapter (playlists, getActivity (), true);
 
         mRecyclerView.setLayoutManager (new LinearLayoutManager (getActivity ().getApplicationContext (), LinearLayout.VERTICAL, false));
         ClickOnPlaylist clickOnPlaylist = new ClickOnPlaylist ();

@@ -1,10 +1,16 @@
 package com.example.wolfii;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,19 +18,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyArtisteAdapter extends RecyclerView.Adapter<MyArtisteAdapter.MyViewHolder> {
+import static com.example.wolfii.MainActivity.database;
+
+public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyViewHolder> {
     // classe qui est responsable de chaque cellule
     // responsable du recyclage des view
     // view holder = accelerer le rendu de la liste, il sera déclaré au sein de l'adapter
     List<String> mesArtistes;
+    public static Context context;
+    Boolean isPlaylist;
 
 
-    public void setMesArtistes(List<String> mesArtistes) {
+
+    public MyStringAdapter (ArrayList<String> mesArtistes, Context sContext, Boolean isPlaylist) {
         this.mesArtistes = mesArtistes;
-    }
-
-    public MyArtisteAdapter(ArrayList<String> mesArtistes) {
-        this.mesArtistes = mesArtistes;
+        this.isPlaylist = isPlaylist;
     }
 
     public Object getItem(int position) {
@@ -56,6 +64,35 @@ public class MyArtisteAdapter extends RecyclerView.Adapter<MyArtisteAdapter.MyVi
         // affiche les viewholder en donnant la position
         holder.display(mesArtistes.get(position));
         Log.d("position", position + "");
+        if(isPlaylist) {
+            String playlist = mesArtistes.get (position);
+            holder.bt_settings.setOnClickListener (new View.OnClickListener () {
+                @Override
+                public void onClick (View v) {
+                    Dialog dialog = new Dialog (context);
+                    // set content view
+                    dialog.setContentView (R.layout.dialog_playlist);
+
+                    // initialize width and height
+                    int width = WindowManager.LayoutParams.MATCH_PARENT;
+                    int height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    //set layout
+                    dialog.getWindow ().setLayout (width, height);
+                    dialog.show ();
+
+                    Button delete = dialog.findViewById (R.id.delete);
+                    Button rename = dialog.findViewById (R.id.rename);
+
+                    delete.setOnClickListener (new View.OnClickListener () {
+                        public void onClick (View v) {
+                            database.mainDao ().deletePlaylist (playlist);
+                            Toast.makeText (context, "playlist " + playlist + " supprimée", Toast.LENGTH_SHORT).show ();
+                        }
+                    });
+
+                }
+            });
+        }
     }
 
     @Override
@@ -65,6 +102,7 @@ public class MyArtisteAdapter extends RecyclerView.Adapter<MyArtisteAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView mName;
+        private ImageView bt_settings;
 
         public MyViewHolder(@NonNull View itemView) {
             // itemview = vue de chaque cellule
@@ -95,6 +133,7 @@ public class MyArtisteAdapter extends RecyclerView.Adapter<MyArtisteAdapter.MyVi
                     return false;
                 }
             });
+            bt_settings = itemView.findViewById(R.id.bt_settings);
         }
         void display(String artiste) {
             // ne jamais le mettre dans le constructeur

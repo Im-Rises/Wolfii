@@ -22,8 +22,8 @@ public class ListAllArtistsOrPlaylistsFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView mRecyclerViewPlaylist;
     private ArrayList<String> mesArtistes;
-    private MyArtisteAdapter monArtisteAdapter;
-    private MyArtisteAdapter monPlaylistAdapter;
+    private MyStringAdapter monArtisteAdapter;
+    private MyStringAdapter monPlaylistAdapter;
     private MyMusiqueAdapter monMusiqueAdapter;
     private ArrayList<Musique> musiques;
     private FragmentTransaction fragmentTransaction;
