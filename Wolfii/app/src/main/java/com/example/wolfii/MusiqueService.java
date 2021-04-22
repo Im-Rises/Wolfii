@@ -28,7 +28,6 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -85,7 +84,7 @@ public class MusiqueService extends Service {
     IntentFilter intentFilterDirecService = new IntentFilter(DIRECTION_SERVICE);//Intent Filter pour la mise ne écoute sous le filtre DIRECTION_SERVICE
 
     private MediaSessionCompat mediaSession;//déclaration d'une média session de contrôle musique
-    private boolean mediaSessionInitBool= false;//Valeur booléenne pour informer si l'utilisateur a déjà inititalisé la mediaSession et la notif
+    private boolean mediaSessionNotifInitBool = false;//Valeur booléenne pour informer si l'utilisateur a déjà inititalisé la mediaSession et la notif
 
 
 
@@ -100,7 +99,7 @@ public class MusiqueService extends Service {
         //Gestion du focus de la musique
         musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));//initialise l'AudioManager
 
-        
+
         //Déclaration et des Intents et PenIntents pour le retour sur l'appli sur le clic de la notification
         Intent musiquePlayerIntent = new Intent(this, MainActivity.class);//Déclaration Intent pour retourner sur la page de la musique
         musiquePenIntRetourAppli = PendingIntent.getActivity(this, 0, musiquePlayerIntent, 0); //Déclaration d'un pendingIntent pour utiliser l'intent précédent dans une notification
@@ -311,7 +310,7 @@ public class MusiqueService extends Service {
             protocoleArret();
             stopForeground(true);
             arretMediaSession();
-            mediaSessionInitBool=false;
+            mediaSessionNotifInitBool =false;
         }
     }
 
@@ -460,7 +459,7 @@ public class MusiqueService extends Service {
         notifBuilder.setNotificationSilent();                                           //Désactive le son de la notification
         notifBuilder.setSubText(":  " + (positionMusique + 1) + "/" + maMusique.size());//Donne le numéro de la musique sur la playlist en cours
         notifBuilder.setShowWhen(false);                                                //Enlève l'affichage de l'heure à laquelle la notification est apaprue
-
+        
         notifBuilder.setContentIntent(musiquePenIntRetourAppli);                        //Ajoute l'intent à l'appui sur la notification (retour application)
 
         //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_SERVICE (pour recevoir les commandes boutons)
@@ -489,7 +488,7 @@ public class MusiqueService extends Service {
         notifBuilder.addAction(R.drawable.image_nettoyer, "Arret", musiquePenIntArret);         //Ajout le bouton "musique arret" à la notification"
 
         //Si déjà initialisé une fois alors on fait une mise à jour de la mediaSession
-        if (!mediaSessionInitBool)
+        if (!mediaSessionNotifInitBool)
         {
             mediaSessionInit();
         }
@@ -504,7 +503,7 @@ public class MusiqueService extends Service {
         );
 
         //Si une notification a déjà été mise au premier plan alors on la met juste à jour avec la fonction notify()
-        if (!mediaSessionInitBool)
+        if (!mediaSessionNotifInitBool)
         {
             notifManagerCompat = NotificationManagerCompat.from(MusiqueService.this);//Création d'une gestion de notification
 
@@ -523,7 +522,7 @@ public class MusiqueService extends Service {
             notifManagerCompat.notify(NOTIFICATION_ID,notifBuilder.build());
         }
 
-        mediaSessionInitBool=true;//Attribue la valeur déjà initialisé une fois à notre variable booléenne
+        mediaSessionNotifInitBool =true;//Attribue la valeur déjà initialisé une fois à notre variable booléenne
     }
 
 
