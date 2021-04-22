@@ -286,6 +286,7 @@ public class MusiqueService extends Service {
     public void musiqueDemaEtFocusEtMaj()
     {
         musiqueDemaEtFocus();
+        notificationMaj();
         mediaSessionBoutonsMaj();
     }
 
@@ -293,7 +294,7 @@ public class MusiqueService extends Service {
         musiquePlayer.pause();
         handlerTemps.removeCallbacks(runnableTemps);
         envoieBroadcast(EXTRA_MAJ_SIMPLE);
-        //notificationMaj();
+        notificationMaj();
         mediaSessionBoutonsMaj();
     }
 
@@ -341,6 +342,7 @@ public class MusiqueService extends Service {
         musiqueDemaPause();
         envoieBroadcast(EXTRA_MAJ_INIT);
         //notificationMaj();
+        notificationMaj();
         mediaSessionBoutonsMaj();
     }
 
@@ -355,6 +357,7 @@ public class MusiqueService extends Service {
         musiqueDemaPause();
         envoieBroadcast(EXTRA_MAJ_INIT);
         //notificationMaj();
+        notificationMaj();
         mediaSessionBoutonsMaj();
     }
 
@@ -365,6 +368,7 @@ public class MusiqueService extends Service {
         }
 
         //notificationMaj();
+        notificationMaj();
     }
 
 
@@ -462,11 +466,9 @@ public class MusiqueService extends Service {
         //Attribut le bouclage de musique sur les icones des notifications et sur
         if (musiqueBoucle) {
             notifBuilder.addAction(R.drawable.image_rejoue, "Rejouer", musiquePenIntRejouer);//Ajout le bouton "musique rejouer" à la notification"
-            musiquePlayer.setLooping(true);
             musiqueBoucle=true;
         } else {
             notifBuilder.addAction(R.drawable.image_rejouer, "Rejouer", musiquePenIntRejouer);//Ajout le bouton "musique rejouer" à la notification"
-            musiquePlayer.setLooping(false);
             musiqueBoucle=false;
         }
 
@@ -503,10 +505,77 @@ public class MusiqueService extends Service {
         startForeground(NOTIFICATION_ID, notifBuilder.build());//Démarre le service au premier-plan afin de permettre de continuer la musique après l'avoir fermé
     }
 
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////TEST ICI/////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void notificationMaj()
     {
+        //Ici faire la mise à jour des notifications
+        NotificationCompat.Builder notifBuilderTempo = new NotificationCompat.Builder(MusiqueService.this, CHANNEL_ID);//Inititalisation notification
+
+        notifBuilderTempo.setVisibility(NotificationCompat.VISIBILITY_SECRET);            //Rend invisible la notification quand le téléphone est vérouillé et permet le controle de la musique
+        notifBuilderTempo.setLargeIcon(recupImageMusique());                               //Ajoute l'image de la musique lu à la notification
+        notifBuilderTempo.setSmallIcon(R.drawable.loup);                   //Icone de la notification
+        notifBuilderTempo.setContentTitle(maMusique.get(positionMusique).getName());     //Titre de la notification
+        notifBuilderTempo.setContentText(maMusique.get(positionMusique).getAuthor());        //Text de la notification
+        notifBuilderTempo.setPriority(NotificationCompat.PRIORITY_DEFAULT);               //Défini la priorité de la notification
+        notifBuilderTempo.setOngoing(true);                                               //Empêche l'utilisateur de supprimer la notification
+        notifBuilderTempo.setNotificationSilent();                                        //Désactive le son de la notification
+        notifBuilderTempo.setSubText(":  " + (positionMusique + 1) + "/" + maMusique.size());//Donne le numéro de la musique sur la playlist en cours
+        notifBuilderTempo.setShowWhen(false);                                                //Enlève l'affichage de l'heure à laquelle la notification est apaprue
+
+        notifBuilderTempo.setContentIntent(musiquePenIntRetourAppli);                          //Ajoute l'intent à l'appui sur la notification (retour application)
+
+        //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_SERVICE (pour recevoir les commandes boutons)
+        IntentFilter intentFilter = new IntentFilter(DIRECTION_SERVICE);
+        registerReceiver(broadcastReceiverNotifCmd, intentFilter);
+
+
+        //Ajout des boutons à la notification pour le contrôle musique
+
+        //Attribut le bouclage de musique sur les icones des notifications et sur
+        if (musiqueBoucle) {
+            notifBuilderTempo.addAction(R.drawable.image_rejoue, "Rejouer", musiquePenIntRejouer);//Ajout le bouton "musique rejouer" à la notification"
+            musiqueBoucle=true;
+        } else {
+            notifBuilderTempo.addAction(R.drawable.image_rejouer, "Rejouer", musiquePenIntRejouer);//Ajout le bouton "musique rejouer" à la notification"
+            musiqueBoucle=false;
+        }
+
+        notifBuilderTempo.addAction(R.drawable.image_precedent, "Précédent", musiquePenIntPrecedent);//Ajout le bouton "musique précédente à la notification"
+
+        if (musiquePlayer.isPlaying())
+        {
+            notifBuilderTempo.addAction(R.drawable.image_pause, "Pause", musiquePenIntDemaPause);//Ajout le bouton "musique Demarrer/Pause à la notification"
+        }
+        else
+        {
+            notifBuilderTempo.addAction(R.drawable.image_lecture, "Dema", musiquePenIntDemaPause);//Ajout le bouton "musique Demarrer/Pause à la notification"
+        }
+
+        notifBuilderTempo.addAction(R.drawable.image_suivant, "Suivant", musiquePenIntSuivant);//Ajout le bouton "musique suivante à la notification"
+        notifBuilderTempo.addAction(R.drawable.image_nettoyer, "Arret", musiquePenIntArret);//Ajout le bouton "musique arret" à la notification"
+
+        mediaSessionDonneesMaj();
+
+        notifBuilderTempo.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
+                .setShowActionsInCompactView(1, 2, 3)//Ajoute les boutons à la notification en mode compacté
+                .setMediaSession(mediaSession.getSessionToken())//Ajout de la MediaSession au MediaStyle permet à Android 11 ou supérieur d'analyser la notification comme une gestion de musique
+        );
+
+        //notifManagerCompat = NotificationManagerCompat.from(MusiqueService.this);//Création d'une gestion de notification
+
+
+        notifManagerCompat.notify(NOTIFICATION_ID,notifBuilderTempo.build());
+        //startForeground(NOTIFICATION_ID, notifBuilder.build());//Démarre le service au premier-plan afin de permettre de continuer la musique après l'avoir fermé
 
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
