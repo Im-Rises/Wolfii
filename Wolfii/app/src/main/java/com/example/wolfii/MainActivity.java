@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             int songLocation = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
             int songDuration = songCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
             int songDateTaken = songCursor.getColumnIndex(MediaStore.Audio.Media.DATE_TAKEN);
+            int songGenre = songCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_MUSIC);
             do {
                 // on recupere une par une certaines metadonnees des nos musiques
                 String currentTitle = songCursor.getString(songTitle);
@@ -128,8 +129,21 @@ public class MainActivity extends AppCompatActivity {
                 String currentPath = songCursor.getString(songLocation);
                 String currentDuration = songCursor.getString(songDuration);
                 String currentDateTaken = songCursor.getString(songDateTaken);
-                // on ajoute cette musique a notre array
-                maMusique.add(new Musique(currentTitle, currentArtist, currentPath, currentDuration, currentDateTaken));
+                //try{
+                    String currentIsMusic = songCursor.getString(songGenre);
+                    Log.d("debug_genre", String.valueOf (currentTitle + " " + currentIsMusic));
+
+                /*}
+                catch (Exception e) {
+                    Log.d("debug_genre", e.getMessage ());
+                }
+                 */
+                // on ajoute cette musique a notre array si c'est bien une musique
+                /*if(currentIsMusic !=null) {
+                    if(currentIsMusic.equals ("1")) {*/
+                        maMusique.add(new Musique(currentTitle, currentArtist, currentPath, currentDuration, currentDateTaken));
+                    //}
+                //}
             } while (songCursor.moveToNext()); // on arrete quand on est arrive a la fin du curseur
         }
         // on reverse le tableau pour avoir les titres telecharges recement en premier

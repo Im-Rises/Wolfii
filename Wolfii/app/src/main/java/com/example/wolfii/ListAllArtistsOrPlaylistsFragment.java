@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import static com.example.wolfii.MainActivity.database;
+
 public class ListAllArtistsOrPlaylistsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
@@ -36,8 +38,8 @@ public class ListAllArtistsOrPlaylistsFragment extends Fragment {
         View root = inflater.inflate (R.layout.fragment_mes_artistes, container, false);
         fragmentManager = getActivity ().getSupportFragmentManager ();
 
-        PlaylistFragment playlistFragment = new PlaylistFragment ();
         ArtistFragment artistFragment = new ArtistFragment ();
+        Fragment playlistFragment = database.mainDao ().getAll ().isEmpty () ? new NoPlaylistsFragment () : new PlaylistFragment ();
 
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.listes, artistFragment, null);

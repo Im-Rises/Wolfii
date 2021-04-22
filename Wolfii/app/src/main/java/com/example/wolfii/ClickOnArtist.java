@@ -26,7 +26,7 @@ public class ClickOnArtist implements MyArtisteAdapter.ArtisteItemClickListener 
         ClickOnMusic clicker = new ClickOnMusic();
         clicker.setMesMusiques (musiques);
         monMusiqueAdapter.setmMusiqueItemClickListener (clicker);
-        // mRecyclerView.setAdapter (monMusiqueAdapter);
+        mRecyclerView.setAdapter (monMusiqueAdapter);
     }
 
     @Override
