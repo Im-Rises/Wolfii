@@ -27,8 +27,7 @@ import static com.example.wolfii.MainActivity.mService;
 /*A FAIRE :
  *
  * Pour Android < 5.0 pour mediaStyle rajouter  setShowCancelButton(true) and setCancelButtonIntent() pour arrêter appli car dans ces versions on peut pas fermer notif qui ont ongoing
- * Vérifier bon fonctionneemnt de la gestion des prises jack
- * Faire maj notif et maj du seekbar du MediaSession Pour les Android > 11
+ * Faire maj des boutons des notifications et c'est tout
  */
 
 
