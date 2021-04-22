@@ -28,7 +28,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_listallsongs, container, false);
+        View root = inflater.inflate(R.layout.fragment_show_current_playlist, container, false);
         //database.getInstance (getActivity ());
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);

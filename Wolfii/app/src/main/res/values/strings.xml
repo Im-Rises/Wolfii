@@ -20,4 +20,5 @@
     <string name="supprimerPlaylist">supprimer la playlist</string>
     <string name="renamePlaylist">Renommer la playlist</string>
     <string name="showCurrentPlaylist">Playlist en cours</string>
+    <string name="retournerAuLecteur">Revenir au Lecteur</string>
 </resources>
