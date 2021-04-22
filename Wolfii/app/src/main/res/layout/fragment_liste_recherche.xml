@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/fond"
     android:orientation="vertical">
 
@@ -15,6 +16,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myRecyclerView"
+        tools:listitem="@layout/musique_item"
+        android:paddingBottom="60dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
