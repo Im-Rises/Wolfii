@@ -20,8 +20,6 @@ import static com.example.wolfii.MainActivity.database;
 public class PlaylistFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MyStringAdapter monAdapter;
-    private String artiste;
-    private static ArrayList<Musique> musiques = new ArrayList<> ();
 
     PlaylistFragment(){}
 

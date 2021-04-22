@@ -19,7 +19,7 @@ import static com.example.wolfii.MusiqueService.maMusique;
 
 public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
     private ArrayList<Musique> mesMusiques;
-    private Context context;
+    private static Context context;
 
     public ClickOnMusic () {
     }
@@ -36,9 +36,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         mService.arretSimpleMusique();
         mService.musiqueDemaPause();
     }
-
-    @Override
-    public void onMusiqueItemLongClick (View view, Musique musique, int position) {
+    public static void longClickMusic(Musique musique) {
         Dialog dialog = new Dialog(context);
 
         // set content view
@@ -93,5 +91,10 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
             }
         });
 
+    }
+
+    @Override
+    public void onMusiqueItemLongClick (View view, Musique musique, int position) {
+        longClickMusic (musique);
     }
 }

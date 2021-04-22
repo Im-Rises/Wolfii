@@ -25,17 +25,25 @@ public class SearchFragment extends Fragment {
 
         Button button = root.findViewById (R.id.bt_search);
         EditText editText = root.findViewById (R.id.musique);
-        button.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                String search = editText.getText ().toString ();
-                ArrayList<Musique> musiques = rechercher (search);
-                Fragment fragment = new ListSearchFragment (musiques, search);
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.result_search, fragment, "search");
-                fragmentTransaction.commit ();
-            }
-        });
+        ClickOnSearch clickOnSearch = new ClickOnSearch ();
+        clickOnSearch.setSearch (editText.getText ().toString ());
+        button.setOnClickListener(clickOnSearch);
         return root;
+    }
+    private class ClickOnSearch implements OnClickListener {
+
+        private String search;
+
+        private void setSearch(String search){this.search = search;}
+
+        @Override
+        public void onClick (View v) {
+            ArrayList<Musique> musiques = rechercher (search);
+            Fragment fragment = new ListSearchFragment (musiques, search);
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.result_search, fragment, "search");
+            fragmentTransaction.commit ();
+        }
     }
 
     public ArrayList<Musique> rechercher(String search) {

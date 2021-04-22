@@ -18,7 +18,7 @@ import static com.example.wolfii.MainActivity.database;
 public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener {
 
     private MyMusiqueAdapter monMusiqueAdapter;
-    private Context context;
+    private static Context context;
     private ArrayList<Musique> musiques = new ArrayList<> ();
     private RecyclerView mRecyclerView;
 
@@ -41,8 +41,7 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
         mRecyclerView.setAdapter (monMusiqueAdapter);
     }
 
-    @Override
-    public void onArtisteItemLongClick (View view, String playlist, int position) {
+    public static void longClickPlaylist(String playlist) {
         Dialog dialog = new Dialog (context);
 
         // set content view
@@ -88,6 +87,12 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
                 });
             }
         });
+
+    }
+
+    @Override
+    public void onArtisteItemLongClick (View view, String playlist, int position) {
+        longClickPlaylist (playlist);
     }
 
 }

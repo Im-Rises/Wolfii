@@ -1,40 +1,35 @@
 package com.example.wolfii;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.wolfii.MainActivity.database;
 
 public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyViewHolder> {
     // classe qui est responsable de chaque cellule
     // responsable du recyclage des view
     // view holder = accelerer le rendu de la liste, il sera déclaré au sein de l'adapter
-    List<Musique> mesMusiques;
+    ArrayList<Musique> mesMusiques;
     public static Context context;
 
     public List<Musique> getMesMusiques() {
         return mesMusiques;
     }
 
-    public void setMesMusiques(List<Musique> mesMusiques) {
+    public void setMesMusiques(ArrayList<Musique> mesMusiques) {
         this.mesMusiques = mesMusiques;
     }
 
-    public MyMusiqueAdapter(List<Musique> mesMusiques, Context context) {
+    public MyMusiqueAdapter(ArrayList<Musique> mesMusiques, Context context) {
         this.mesMusiques = mesMusiques;
         this.context = context;
     }
@@ -70,47 +65,21 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
         holder.display(mesMusiques.get(position));
         Log.d("position", position + "");
         Musique musique = mesMusiques.get(position);
-        holder.bt_settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog dialog = new Dialog(context);
-
-                // set content view
-                dialog.setContentView(R.layout.ajouter_a_une_playlist);
-
-                // initialize width and height
-                int width = WindowManager.LayoutParams.MATCH_PARENT;
-                int height = WindowManager.LayoutParams.WRAP_CONTENT;
-                //set layout
-                dialog.getWindow().setLayout(width, height);
-                dialog.show ();
-
-                EditText editText = dialog.findViewById (R.id.nom_playlist);
-                Button addToPlaylist = dialog.findViewById (R.id.add);
-                addToPlaylist.setOnClickListener(new View.OnClickListener() {
-                    public void onClick (View v) {
-                        MainData data = new MainData ();
-                        data.setNomMusique (musique.getName ());
-                        data.setPath (musique.getPath ());
-                        data.setPlaylist (editText.getText ().toString ());
-                        data.setAuthor (musique.getAuthor ());
-                        data.setDuration (musique.getDuration ());
-                        data.setDateTaken (musique.getDateTaken ());
-
-                        try {
-                            database.mainDao ().insert (data);
-                        } catch (Exception e) {
-                            Log.d ("debug_db", e.getMessage ());
-                        }
-
-                        dialog.dismiss ();
-                    }
-                });
-
-            }
-        });
+        ClickOnHolder clickOnHolder = new ClickOnHolder ();
+        clickOnHolder.setMusique (musique);
+        holder.bt_settings.setOnClickListener(clickOnHolder);
     }
 
+    private class ClickOnHolder implements View.OnClickListener {
+        private Musique musique;
+
+        private void setMusique(Musique musique) {this.musique = musique;}
+
+        @Override
+        public void onClick (View v) {
+            ClickOnMusic.longClickMusic (musique);
+        }
+    }
     @Override
     public int getItemCount() {
         return mesMusiques.size(); // pour ne pas être embete avec les tailles de liste

@@ -1,24 +1,18 @@
 package com.example.wolfii;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.wolfii.MainActivity.database;
 
 public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyViewHolder> {
     // classe qui est responsable de chaque cellule
@@ -27,8 +21,6 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
     List<String> mesArtistes;
     public static Context context;
     Boolean isPlaylist;
-
-
 
     public MyStringAdapter (ArrayList<String> mesArtistes, Context sContext, Boolean isPlaylist) {
         this.mesArtistes = mesArtistes;
@@ -66,32 +58,21 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
         Log.d("position", position + "");
         if(isPlaylist) {
             String playlist = mesArtistes.get (position);
-            holder.bt_settings.setOnClickListener (new View.OnClickListener () {
-                @Override
-                public void onClick (View v) {
-                    Dialog dialog = new Dialog (context);
-                    // set content view
-                    dialog.setContentView (R.layout.dialog_playlist);
+            ClickOnHolder clickOnHolder = new ClickOnHolder ();
+            clickOnHolder.setPlaylist (playlist);
+            holder.bt_settings.setOnClickListener (clickOnHolder);
+        }
+    }
+    private class ClickOnHolder implements View.OnClickListener {
 
-                    // initialize width and height
-                    int width = WindowManager.LayoutParams.MATCH_PARENT;
-                    int height = WindowManager.LayoutParams.WRAP_CONTENT;
-                    //set layout
-                    dialog.getWindow ().setLayout (width, height);
-                    dialog.show ();
+        private String playlist;
 
-                    Button delete = dialog.findViewById (R.id.delete);
-                    Button rename = dialog.findViewById (R.id.rename);
+        private void setPlaylist(String playlist) {this.playlist = playlist;}
 
-                    delete.setOnClickListener (new View.OnClickListener () {
-                        public void onClick (View v) {
-                            database.mainDao ().deletePlaylist (playlist);
-                            Toast.makeText (context, "playlist " + playlist + " supprimée", Toast.LENGTH_SHORT).show ();
-                        }
-                    });
+        @Override
+        public void onClick (View v) {
+            ClickOnPlaylist.longClickPlaylist (playlist);
 
-                }
-            });
         }
     }
 
