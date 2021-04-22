@@ -88,6 +88,7 @@ public class ControleMusiqueFragment extends Fragment {
         this.showCurrentPlaylist = root.findViewById (R.id.showCurrentPlaylist);
         this.showCurrentPlaylist.setOnClickListener (new ShowCurrentPlaylist());
 
+
         this.seekBarMusique=(SeekBar) root.findViewById(R.id.seekBarMusique);
         this.seekBarMusique.setSoundEffectsEnabled(false);
         this.seekBarMusique.setOnSeekBarChangeListener(new EcouteurSeekBar());
@@ -190,6 +191,7 @@ public class ControleMusiqueFragment extends Fragment {
             fragmentTransaction.commit ();
         }
     }
+
 
     private class EcouteurMusiqueSuivante implements View.OnClickListener{
         @Override

@@ -56,7 +56,7 @@ public class MusiqueService extends Service {
 
     private final IBinder binder = new LocalBinder();    // Binder given to clients
 
-    private ArrayList<Musique> maMusique = new ArrayList<Musique>();
+    public static ArrayList<Musique> maMusique = new ArrayList<Musique>();
     private int positionMusique;
 
     private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";

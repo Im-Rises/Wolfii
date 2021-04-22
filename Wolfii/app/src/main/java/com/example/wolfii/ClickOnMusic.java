@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
+import static com.example.wolfii.MusiqueService.maMusique;
 
 public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
     private ArrayList<Musique> mesMusiques;
@@ -52,6 +53,8 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
 
         EditText editText = dialog.findViewById (R.id.nom_playlist);
         Button addToPlaylist = dialog.findViewById (R.id.add);
+        Button addToCurrentPlaylist = dialog.findViewById (R.id.addToCurrentPlaylist);
+
         addToPlaylist.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v) {
                 MainData data = new MainData ();
@@ -71,5 +74,24 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
                 dialog.dismiss ();
             }
         });
+
+        addToCurrentPlaylist.setOnClickListener(new View.OnClickListener() {
+            public void onClick (View v) {
+                if(!maMusique.isEmpty ()) {
+                    maMusique.add (musique);
+                }
+                else {
+                    Toast.makeText(Wolfii.getAppContext (), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
+
+                    ArrayList<Musique> musiqueArray = new ArrayList<> ();
+                    musiqueArray.add(musique);
+                    mService.setMusiquePlaylist(musiqueArray, 0);
+                    mService.arretSimpleMusique();
+                    mService.musiqueDemaPause();
+                }
+
+            }
+        });
+
     }
 }
