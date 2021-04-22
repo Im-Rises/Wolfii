@@ -56,20 +56,25 @@ public class MusiqueService extends Service {
 
     private final IBinder binder = new LocalBinder();    // Binder given to clients
 
-    public static ArrayList<Musique> maMusique = new ArrayList<Musique>();
-    private int positionMusique;
+    public static ArrayList<Musique> maMusique = new ArrayList<Musique>();//Liste des musiques en cours à lire
+    private int positionMusique;//Position de la musique en cours de lecture
 
+    //Variables de redirection vers le BoradcastReceiver de l'activité pour la mise  à jour de la page ControleMusiqueFragment.java
     private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
     private static final String TYPE_MAJ = "TYPE_MAJ";
     private static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
     private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
 
+    //Variables de redirection vers le service (ici) pour la réception des commandes des boutons notification
     private static final String DIRECTION_SERVICE = "TO_SERVICE";
     private static final String TYPE_NOTIFICATION = "TYPE_NOTIFICATION";
 
-    private boolean enPauseParUtilisateur = true;
-    private boolean enPauseParDemandeLongue = true;
+    private boolean enPauseParUtilisateur = true;//Variable booléenne qui informe si la mise en pause de l'application est par l'utilisateur
+    private boolean enPauseParDemandeLongue = true;//Variable booléenne qui informe si la mise en pause de l'application est par une application du système autre pour un temps indéterminé
 
+    private boolean musiqueBoucle=false;//Variable booléenne qui informe si la musique est en train de bouclé ou non
+
+    //Pending Intent de redirection des commandes boutons de la notification
     private PendingIntent musiquePenIntRetourAppli;
     private PendingIntent musiquePenIntRejouer;
     private PendingIntent musiquePenIntPrecedent;
@@ -77,10 +82,8 @@ public class MusiqueService extends Service {
     private PendingIntent musiquePenIntSuivant;
     private PendingIntent musiquePenIntArret;
 
-    private boolean musiqueBoucle=false;
-
-    private MediaSessionCompat mediaSession;
-    private boolean mediaSessionInitBool= false;
+    private MediaSessionCompat mediaSession;//déclaration d'une média session de contrôle musique
+    private boolean mediaSessionInitBool= false;//Valeur booléenne pour informer si l'utilisateur a déjà inititalisé la mediaSession
 
 
 
@@ -90,6 +93,7 @@ public class MusiqueService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
         estActif=true;
         //Gestion du focus de la musique
         musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));//initialise l'AudioManager
@@ -139,7 +143,7 @@ public class MusiqueService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_LONG).show();
         estActif=false;
         super.onDestroy();
     }
@@ -279,6 +283,7 @@ public class MusiqueService extends Service {
             //déclaration de l'enregistrement d'un BoradcastReceiver pour la gestion quand une prise jack est débranchée
             IntentFilter intentFilterJack = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
             registerReceiver(broadcastReceiverJack, intentFilterJack);
+            envoieBroadcast(EXTRA_MAJ_INIT);
         }
     }
 
@@ -751,6 +756,8 @@ public class MusiqueService extends Service {
     public ArrayList<Musique> getCurrentPlaylist() {return maMusique;}
 
     public int getPositionMusique() {return this.positionMusique;}
+
+    public boolean getMusiqueBoucle(){ return musiqueBoucle;}
 
 
     /*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
