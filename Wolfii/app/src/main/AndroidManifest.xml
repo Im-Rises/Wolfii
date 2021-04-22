@@ -14,9 +14,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/logoloupbleu"
+        android:icon="@drawable/logostyle"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/logoloupbleu"
+        android:roundIcon="@drawable/logostyle"
         android:supportsRtl="true"
         android:name="com.example.Wolfii"
         android:theme="@style/Theme.Wolfii">
