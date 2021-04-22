@@ -19,4 +19,5 @@
     <string name="no_playlist_conseil">pour créer des playlists, veuillez cliquer longtemps sur une musique ou alors cliquer sur les options de celles-ci, insérer le nom de la playlist désiré et valider</string>
     <string name="supprimerPlaylist">supprimer la playlist</string>
     <string name="renamePlaylist">Renommer la playlist</string>
+    <string name="showCurrentPlaylist">Playlist en cours</string>
 </resources>

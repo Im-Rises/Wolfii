@@ -16,10 +16,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.wolfii.MainActivity.mBound;
 import static com.example.wolfii.MainActivity.mService;
 
 
@@ -37,9 +39,13 @@ public class ControleMusiqueFragment extends Fragment {
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree, txtViewTitreMusique;   //TextView du temps de lecture de la musique
 
-    private Button cmdDemaPause, cmdArret,cmdPrecedent,cmdSuivant,cmdRejouer;  //boutons de la page
+    private Button cmdDemaPause, cmdArret,cmdPrecedent,cmdSuivant,cmdRejouer, showCurrentPlaylist;  //boutons de la page
 
     private ImageView imgViewMusique;
+
+    private FragmentManager fragmentManager;
+
+    private FragmentTransaction fragmentTransaction;
 
     private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
     private static final String TYPE_MAJ = "TYPE_MAJ";
@@ -50,6 +56,9 @@ public class ControleMusiqueFragment extends Fragment {
     /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_controle_musique, container, false);
+
+        // on initialise le fragment manager
+        fragmentManager = getActivity ().getSupportFragmentManager ();
 
         //Liaisons des Boutons, des TextViews et du SeekBar de l'interface dans la code.
         this.txtViewMusiqueTemps = (TextView) root.findViewById(R.id.txtViewMusiqueTemps);
@@ -81,6 +90,9 @@ public class ControleMusiqueFragment extends Fragment {
         this.cmdRejouer = (Button) root.findViewById(R.id.btnRejouer);
         this.cmdRejouer.setSoundEffectsEnabled(false);
         this.cmdRejouer.setOnClickListener(new EcouteurBtnRejouer());
+
+        this.showCurrentPlaylist = root.findViewById (R.id.showCurrentPlaylist);
+        this.showCurrentPlaylist.setOnClickListener (new ShowCurrentPlaylist());
 
         this.seekBarMusique=(SeekBar) root.findViewById(R.id.seekBarMusique);
         this.seekBarMusique.setSoundEffectsEnabled(false);
@@ -177,6 +189,23 @@ public class ControleMusiqueFragment extends Fragment {
         }
     }
 
+    private class ShowCurrentPlaylist implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            // show current playlist
+            ArrayList<Musique> currentPlaylist = mService.getCurrentPlaylist ();
+            int positionMusique = mService.getPositionMusique ();
+
+            ShowCurrentPlaylistFragment showCurrentPlaylistFragment = new ShowCurrentPlaylistFragment ();
+            showCurrentPlaylistFragment.setMaMusique(currentPlaylist);
+
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.listes, showCurrentPlaylistFragment, null);
+            fragmentTransaction.commit ();
+
+
+        }
+    }
 
 /*    public void cmdMusiqueStuivante(View view)
     {
