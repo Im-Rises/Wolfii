@@ -39,6 +39,7 @@ public class ListSearchFragment extends Fragment {
         monAdapter = new MyMusiqueAdapter (this.musiques, getActivity ());
         ClickOnMusic clickOnMusic = new ClickOnMusic ();
         clickOnMusic.setMesMusiques (this.musiques);
+        clickOnMusic.setContext (getActivity ());
         monAdapter.setmMusiqueItemClickListener(clickOnMusic);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager (getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));
