@@ -916,10 +916,6 @@ public class MusiqueService extends Service {
 
     public String getMusiqueTitre(){return maMusique.get(positionMusique).getName();}
 
-/*    public boolean getMusiqueBoucle(){
-        return musiqueBoucle;
-    }*/
-
 
     /*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
 
