@@ -441,7 +441,7 @@ public class MusiqueService extends Service {
 
         notifBuilder.setVisibility(NotificationCompat.VISIBILITY_SECRET);            //Rend invisible la notification quand le téléphone est vérouillé et permet le controle de la musique
         notifBuilder.setLargeIcon(recupImageMusique());                               //Ajoute l'image de la musique lu à la notification
-        notifBuilder.setSmallIcon(R.drawable.image_notif_musique);                   //Icone de la notification
+        notifBuilder.setSmallIcon(R.drawable.loup);                   //Icone de la notification
         notifBuilder.setContentTitle(maMusique.get(positionMusique).getName());     //Titre de la notification
         notifBuilder.setContentText(maMusique.get(positionMusique).getAuthor());        //Text de la notification
         notifBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);               //Défini la priorité de la notification
