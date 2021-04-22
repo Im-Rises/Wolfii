@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/fond"
+    android:background="@color/trans"
     android:textAlignment="center"
     android:orientation="vertical"
     android:gravity="center_horizontal">
@@ -14,6 +14,5 @@
         android:paddingBottom="60dp"
         tools:listitem="@layout/musique_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/fond" />
+        android:layout_height="match_parent" />
 </LinearLayout>

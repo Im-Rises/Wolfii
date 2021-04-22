@@ -18,11 +18,12 @@
         android:layout_height="300dp"
         android:src="@drawable/loup"
         tools:ignore="VectorDrawableCompat" />
+
     <TextView
         android:id="@+id/txtViewTitreMusique"
         android:padding="5dp"
         android:layout_width="match_parent"
-        android:height="5dp"
+        android:height="10dp"
         android:textAlignment="center"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/seekBarMusique"
@@ -70,9 +71,13 @@
     <!-- ********************************************* -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/listes"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/listes"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
         <!-- LES CONTROLES -->
         <LinearLayout
             android:layout_width="match_parent"

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/fond"
+    android:background="@color/trans"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -11,7 +11,6 @@
         android:paddingBottom="60dp"
         tools:listitem="@layout/musique_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/fond" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
