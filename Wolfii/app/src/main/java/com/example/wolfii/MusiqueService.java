@@ -14,6 +14,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -876,12 +878,12 @@ public class MusiqueService extends Service {
             return BitmapFactory.decodeByteArray(image, 0, image.length);
         else
         {
-            //Si aucune image n'est trouvé dans le fichier audio R.drawable.image_notif_musique
-            return xmlEnBitmap(R.drawable.image_notif_musique);
+            //Si aucune image n'est trouvé dans le fichier mp3 alors on met le logo loup.png
+            return drawableEnBitmap(R.drawable.loup);
         }
     }
 
-    private Bitmap xmlEnBitmap(int drawableRes) {
+    private Bitmap drawableEnBitmap(int drawableRes) {
         @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = getResources().getDrawable(drawableRes);
         Canvas canvas = new Canvas();
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
