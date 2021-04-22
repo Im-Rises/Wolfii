@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide(); // on cache la barre d'action
         try {   database = RoomDB.getInstance(this); }
         catch (Exception e) {
             Log.d("debug_db", e.getMessage ());
