@@ -195,7 +195,7 @@ public class MusiqueService extends Service {
                 case AudioManager.AUDIOFOCUS_GAIN://Cas de regain du focus audio lorsqu'une application a demandé temporairement le focus audio
                 {
                     if (!enPauseParDemandeLongue && !enPauseParUtilisateur)
-                        musiqueDemaEtFocusEtMajNotif();
+                        musiqueDemaEtFocusEtMaj();
                 }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS://Cas de demande d'un focus permanent par une autre application
@@ -232,12 +232,11 @@ public class MusiqueService extends Service {
             musiqueInitialisation();
             musiqueDemaEtFocus();
             notificationInit();
-            //startForeground(NOTIFICATION_ID, notifBuilder.build());//Démarre le service en foreground afin de permettre de continuer la musique après l'avoir fermé
             enPauseParUtilisateur=false;
         }
         else if (!musiquePlayer.isPlaying())
         {
-            musiqueDemaEtFocusEtMajNotif();
+            musiqueDemaEtFocusEtMaj();
             enPauseParUtilisateur=false;
         }
         else {
@@ -289,10 +288,10 @@ public class MusiqueService extends Service {
         }
     }
 
-    public void musiqueDemaEtFocusEtMajNotif()
+    public void musiqueDemaEtFocusEtMaj()
     {
         musiqueDemaEtFocus();
-        //notificationMaj();
+        mediaSessionBoutonsMaj();
     }
 
     public void musiquePause() {
@@ -300,6 +299,7 @@ public class MusiqueService extends Service {
         handlerTemps.removeCallbacks(runnableTemps);
         envoieBroadcast(EXTRA_MAJ_SIMPLE);
         //notificationMaj();
+        mediaSessionBoutonsMaj();
     }
 
     public void arretTotalMusique()
@@ -476,12 +476,12 @@ public class MusiqueService extends Service {
         }
         else
         {
-            mediaSessionMaj();
+            mediaSessionDonneesMaj();
         }
 
         notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
                 .setShowActionsInCompactView(1, 2, 3)//Ajoute les boutons à la notification en mode compacté
-                .setMediaSession(mediaSession.getSessionToken())
+                .setMediaSession(mediaSession.getSessionToken())//Ajout de la MediaSession au MediaStyle permet à Android 11 ou supérieur d'analyser la notification comme une gestion de musique
         );
 
         notifManagerCompat = NotificationManagerCompat.from(MusiqueService.this);//Création d'une gestion de notification
@@ -494,7 +494,7 @@ public class MusiqueService extends Service {
             notificationManager.createNotificationChannel(notifChannel);//Création du channel de notificatios
         }
 
-        startForeground(NOTIFICATION_ID, notifBuilder.build());//Démarre le service en foreground afin de permettre de continuer la musique après l'avoir fermé
+        startForeground(NOTIFICATION_ID, notifBuilder.build());//Démarre le service au premier-plan afin de permettre de continuer la musique après l'avoir fermé
     }
 
     public void notificationMaj()
@@ -518,7 +518,7 @@ public class MusiqueService extends Service {
 
         //Initialisation des boutons du MediaSession
         mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
-                .setState(PlaybackStateCompat.STATE_PAUSED, musiquePlayer.getCurrentPosition(), 1)
+                .setState(PlaybackStateCompat.STATE_PLAYING, musiquePlayer.getCurrentPosition(), 1)
                 .setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY |
                         PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
                         PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_SEEK_TO)
@@ -550,14 +550,14 @@ public class MusiqueService extends Service {
         public void onPlay() {
             super.onPlay();
             Toast.makeText(getApplicationContext(), "Play", Toast.LENGTH_SHORT).show();
-            musiqueDemaPause();
+            musiqueDemaEtFocusEtMaj();
         }
 
         @Override
         public void onPause() {
             super.onPause();
             Toast.makeText(getApplicationContext(), "Pause", Toast.LENGTH_SHORT).show();
-            musiqueDemaPause();
+            musiquePause();
         }
 
         @Override
@@ -583,7 +583,7 @@ public class MusiqueService extends Service {
         }
     }
 
-    public void mediaSessionMaj()
+    public void mediaSessionDonneesMaj()
     {
         //Intialisation des données de la musiques
         mediaSession.setMetadata(new MediaMetadataCompat.Builder()
@@ -597,6 +597,25 @@ public class MusiqueService extends Service {
                 //.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, "Test Artist")
                 .build()
         );
+    }
+
+    public void mediaSessionBoutonsMaj()
+    {
+        PlaybackStateCompat.Builder playBackBuilderTempo = new PlaybackStateCompat.Builder();
+
+        if (musiquePlayer.isPlaying())
+        {
+            playBackBuilderTempo.setState(PlaybackStateCompat.STATE_PLAYING, musiquePlayer.getCurrentPosition(), 1);
+        }
+        else
+        {
+            playBackBuilderTempo.setState(PlaybackStateCompat.STATE_PAUSED, musiquePlayer.getCurrentPosition(), 1);
+        }
+        playBackBuilderTempo.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY |
+                PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
+                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_SEEK_TO);
+
+        mediaSession.setPlaybackState(playBackBuilderTempo.build());
     }
 
     private void arretMediaSession() {
