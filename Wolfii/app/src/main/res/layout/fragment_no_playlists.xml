@@ -34,10 +34,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:textSize="20dp"
         android:text="@string/no_playlist"
+        android:textColor="#fff"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgViewLogo"
         android:gravity="center_horizontal" />
+
+
     <TextView
         android:id="@+id/txtConseil"
         android:layout_width="wrap_content"
@@ -50,9 +53,11 @@
         android:layout_marginBottom="13dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:textSize="20dp"
+        android:textColor="#fff"
         android:text="@string/no_playlist_conseil"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtInfo"
         android:gravity="center_horizontal" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
