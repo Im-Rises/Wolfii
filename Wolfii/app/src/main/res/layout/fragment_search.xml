@@ -38,7 +38,6 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:id="@+id/result_search"
             android:layout_width="match_parent"
@@ -46,6 +45,5 @@
             android:orientation="horizontal"
             tools:ignore="MissingConstraints" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

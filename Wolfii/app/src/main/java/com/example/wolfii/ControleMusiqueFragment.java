@@ -35,8 +35,7 @@ import static com.example.wolfii.MainActivity.mService;
 
 
 /*A FAIRE :
- *
- * Faire maj du bouton dema/pause du contrôle musique
+ * 
  *
  */
 
