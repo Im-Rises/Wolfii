@@ -149,7 +149,7 @@ public class MusiqueService extends Service {
 
     @Override
     public void onDestroy() {
-        //Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_LONG).show();
         estActif=false;
         super.onDestroy();
     }
@@ -452,12 +452,11 @@ public class MusiqueService extends Service {
         notifBuilder.setNotificationSilent();                                           //Désactive le son de la notification
         notifBuilder.setSubText(":  " + (positionMusique + 1) + "/" + maMusique.size());//Donne le numéro de la musique sur la playlist en cours
         notifBuilder.setShowWhen(false);                                                //Enlève l'affichage de l'heure à laquelle la notification est apaprue
-        
         notifBuilder.setContentIntent(musiquePenIntRetourAppli);                        //Ajoute l'intent à l'appui sur la notification (retour application)
+        notifBuilder.setDeleteIntent(musiquePenIntArret);                               //PendingIntent qui prend place lors du swipe de la notification sur Android 11
 
         //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_SERVICE (pour recevoir les commandes boutons)
         registerReceiver(broadcastReceiverNotifCmd, intentFilterDirecService);
-
 
         //Ajout des boutons à la notification pour le contrôle musique
         if (musiqueBoucle) {
