@@ -27,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -44,7 +46,7 @@ public class ControleMusiqueFragment extends Fragment {
 
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
 
-    private TextView txtViewMusiqueTemps, txtViewMusiqueDuree, txtViewTitreMusique;   //TextView du temps de lecture de la musique
+    private TextView txtViewMusiqueTemps, txtViewMusiqueDuree, txtViewTitreMusique, txtViewAuteurMusique;   //TextView du temps de lecture de la musique
 
     private Button showCurrentPlaylist;  //boutons de la page
 
@@ -85,6 +87,8 @@ public class ControleMusiqueFragment extends Fragment {
         this.txtViewMusiqueDuree = (TextView) root.findViewById(R.id.txtViewMusiqueDuree);
 
         this.txtViewTitreMusique = (TextView) root.findViewById(R.id.txtViewTitreMusique);
+
+        this.txtViewAuteurMusique = (TextView) root.findViewById(R.id.txtViewAuteurMusique);
 
         this.cmdDemaPause = (ImageView) root.findViewById(R.id.btnDemaPause);
         this.cmdDemaPause.setSoundEffectsEnabled(false);
@@ -271,6 +275,7 @@ public class ControleMusiqueFragment extends Fragment {
         imgViewMusique.setImageBitmap(mService.recupImageMusique());
         txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
         txtViewTitreMusique.setText(mService.getMusiqueTitre());
+        txtViewAuteurMusique.setText(mService.getMusiqueAuteur());
         majInterface();
     }
 
@@ -292,7 +297,8 @@ public class ControleMusiqueFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     public void majInterfaceFin()
     {
-        txtViewTitreMusique.setText("...");
+        txtViewTitreMusique.setText("");
+        txtViewAuteurMusique.setText("");
         txtViewMusiqueDuree.setText("00:00");
         txtViewMusiqueTemps.setText("00:00");
         seekBarMusique.setProgress(0);
