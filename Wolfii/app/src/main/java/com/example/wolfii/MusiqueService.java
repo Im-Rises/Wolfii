@@ -487,6 +487,7 @@ public class MusiqueService extends Service {
         else
         {
             mediaSessionBoutonsMaj();
+            mediaSessionDonneesMaj();
         }
 
         notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
