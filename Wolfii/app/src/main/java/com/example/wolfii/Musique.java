@@ -12,13 +12,15 @@ public class Musique {
     private String author;
     private String duration;
     private String dateTaken;
+    private String genre;
 
-    Musique(String name, String author, String path, String duration, String dateTaken) {
+    Musique(String name, String author, String path, String duration, String dateTaken, String genre) {
         this.name = name;
         this.path = path;
         this.author = author;
         this.duration = duration;
         this.dateTaken = dateTaken;
+        this.genre = genre;
     }
 
     // GETTER
@@ -28,4 +30,5 @@ public class Musique {
     public String getDuration() {return duration;}
     public String getAuthor() {return author;}
     public String getDateTaken() {return dateTaken;}
+    public String getGenre() {return genre;}
 }

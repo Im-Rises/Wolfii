@@ -35,6 +35,9 @@ public class MainData implements Serializable {
     @ColumnInfo(name = "dateTaken")
     private String dateTaken;
 
+    @ColumnInfo(name = "genre")
+    private String genre;
+
 
     // GETTER
     public int getId() {
@@ -46,6 +49,7 @@ public class MainData implements Serializable {
     public String getAuthor() {return author;}
     public String getDuration() {return duration;}
     public String getDateTaken() {return dateTaken;}
+    public String getGenre() {return genre;}
 
     // SETTER
     public void setId(int id) {
@@ -57,4 +61,5 @@ public class MainData implements Serializable {
     public void setAuthor(String author) {this.author = author;}
     public void setDuration(String duration) {this.duration = duration;}
     public void setDateTaken(String dateTaken) {this.dateTaken = dateTaken;}
+    public void setGenre(String genre) {this.genre = genre;}
 }

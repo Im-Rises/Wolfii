@@ -44,12 +44,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide(); // on cache la barre d'action
-        try {   database = RoomDB.getInstance(this); }
-        catch (Exception e) {
-            Log.d("debug_db", e.getMessage ());
-        }
-        //database = RoomDB.getInstance(this);
-        //dataList = database.mainDao().getAll();
+
+        database = RoomDB.getInstance(this); // on initialise la base de donnees
         estActif=true;
 
         //////////////////////////////////////////////////////////////
@@ -67,9 +63,6 @@ public class MainActivity extends AppCompatActivity {
         bindService(intent, connection, 0);//Permet l'arrêt du Service avant l'arrêt du BoundService (permettant d'arrêter le service par les boutons notification)
         //bindService(intent, connection, Context.BIND_AUTO_CREATE);//Arrêt du Service autorisé que si le BoundService est au préalable arrêté
         //////////////////////////////////////////////////////////////
-
-
-
 
 
         // on verifie un paquet de permission
@@ -122,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             int songLocation = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
             int songDuration = songCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
             int songDateTaken = songCursor.getColumnIndex(MediaStore.Audio.Media.DATE_TAKEN);
-            int songGenre = songCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_MUSIC);
+            int songGenre = 25; // la colonne des genres
             do {
                 // on recupere une par une certaines metadonnees des nos musiques
                 String currentTitle = songCursor.getString(songTitle);
@@ -130,21 +123,16 @@ public class MainActivity extends AppCompatActivity {
                 String currentPath = songCursor.getString(songLocation);
                 String currentDuration = songCursor.getString(songDuration);
                 String currentDateTaken = songCursor.getString(songDateTaken);
-                //try{
-                    String currentIsMusic = songCursor.getString(songGenre);
-                    Log.d("debug_genre", String.valueOf (currentTitle + " " + currentIsMusic));
+                String currentGenre = songCursor.getString(songGenre);
 
-                /*}
-                catch (Exception e) {
-                    Log.d("debug_genre", e.getMessage ());
-                }
-                 */
-                // on ajoute cette musique a notre array si c'est bien une musique
-                /*if(currentIsMusic !=null) {
-                    if(currentIsMusic.equals ("1")) {*/
-                        maMusique.add(new Musique(currentTitle, currentArtist, currentPath, currentDuration, currentDateTaken));
-                    //}
-                //}
+                maMusique.add(new Musique(
+                        currentTitle,
+                        currentArtist,
+                        currentPath,
+                        currentDuration,
+                        currentDateTaken,
+                        currentGenre));
+
             } while (songCursor.moveToNext()); // on arrete quand on est arrive a la fin du curseur
         }
         // on reverse le tableau pour avoir les titres telecharges recement en premier
