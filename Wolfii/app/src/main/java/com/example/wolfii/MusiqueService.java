@@ -728,6 +728,8 @@ public class MusiqueService extends Service {
 
     public boolean getMusiqueBoucle(){ return musiqueBoucle;}
 
+    public String getMusiqueAuteur(){return maMusique.get(positionMusique).getAuthor();}
+
 
     /*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
 
