@@ -34,9 +34,14 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.Integer.parseInt;
+
+/*
+* NOTES :
+* 
+*
+ */
 
 public class MusiqueService extends Service {
 
