@@ -90,7 +90,11 @@ public class MusiqueService extends Service {
 
 
 
-/*///////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE//////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /*---------------------------------------------------------FONCTION ONCREATE--------------------------------------------------------------*/
 
     @Override
@@ -150,6 +154,10 @@ public class MusiqueService extends Service {
         super.onDestroy();
     }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////FONCTIONS DE DECLARATION DU BOUND SERVICE///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 //-----------------------------------------------------------------GESTION BOUND SERVICE-----------------------------------------------------------------------------
 
@@ -166,22 +174,39 @@ public class MusiqueService extends Service {
     }
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////FONCTIONS DE MAJ DE L'INTERFACE DE LA PAGE DE CONTROLE MUSIQUE ///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
     /*---------------------------------------------------------RUNNABLE MAJ INTERFACES--------------------------------------------------------------*/
 
 
-    //Gestion du déplacement de la maj auto du seekbar et des textView
+    //Gestion du déplacement de la maj auto du seekbar et des textView de la page controleur de musique
     private Runnable runnableTemps = new Runnable() {
         @Override
         public void run() {
             if (musiquePlayer != null) {
-
                 envoieBroadcast(EXTRA_MAJ_SIMPLE);
-
                 handlerTemps.postDelayed(this, 1000);//Remet dans la pile du handler un appel pour le Runnable (this)
             }
         }
     };
 
+
+    /*-----------------------------------------------------FONCTIONS ENVOIE BROADCAST--------------------------------------------------------------*/
+    public void envoieBroadcast(final String extra) {
+        Intent intent = new Intent()
+                .setAction(DIRECTION_ACTIVITY)
+                .putExtra(TYPE_MAJ,extra);
+        sendBroadcast(intent);
+    }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////GESTION DES INTERRUPTIONS///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*---------------------------------------------------------GESTION AUDIOFOCUS--------------------------------------------------------------*/
 
@@ -195,7 +220,7 @@ public class MusiqueService extends Service {
                 case AudioManager.AUDIOFOCUS_GAIN://Cas de regain du focus audio lorsqu'une application a demandé temporairement le focus audio
                 {
                     if (!enPauseParDemandeLongue && !enPauseParUtilisateur)
-                        musiqueDemaEtFocusEtMaj();
+                        musiqueDemaEtFocus();
                 }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS://Cas de demande d'un focus permanent par une autre application
@@ -210,7 +235,7 @@ public class MusiqueService extends Service {
     };
 
 
-    /*----------------------------------------------BROADCASTRECEIVER PAUSE MUISQUE JACK DEBRANCHEE--------------------------------------------------------------*/
+    /*----------------------------------------------BROADCASTRECEIVER PAUSE MUSIQUE JACK DEBRANCHEE--------------------------------------------------------------*/
 
     //Gestion du débranchement d'une prise jack pour écouter la musique
     private BroadcastReceiver broadcastReceiverJack = new BroadcastReceiver() {
@@ -225,26 +250,29 @@ public class MusiqueService extends Service {
 
 
 
-    /*---------------------------------------------------------FONCTIONS DE GESTION MUSIQUE--------------------------------------------------------------*/
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////FONCTIONS DE GESTION DE LA MUSIQUE///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*--------------------------------------------DEMARRAGE ET MISE EN PAUSE DE LA MUSQUE PAR L'UTILISATEUR--------------------------------------------------------------*/
     public void musiqueDemaPause() {
         if (musiquePlayer == null) {
+            //Mettre ici un try catch si la musique n'est pas trouvée
             musiqueInitialisation();
             musiqueDemaEtFocus();
-            notificationInitMaj();
-            enPauseParUtilisateur=false;
         }
         else if (!musiquePlayer.isPlaying())
         {
-            musiqueDemaEtFocusEtMaj();
-            enPauseParUtilisateur=false;
+            musiqueDemaEtFocus();
         }
         else {
             musiquePause();
             enPauseParUtilisateur=true;
         }
-        enPauseParDemandeLongue=false;
     }
+
+    /*--------------------------------------------INITIALISATION MUSIQUE--------------------------------------------------------------*/
 
     public void musiqueInitialisation() {
         musiquePlayer = MediaPlayer.create(this, maMusique.get(positionMusique).getPathUri());//Création du MediaPlayer
@@ -252,10 +280,10 @@ public class MusiqueService extends Service {
         musiquePlayer.setOnCompletionListener(new EcouteurMusiqueFinie());
     }
 
+    /*--------------------------------------------DEMANDE DE FOCUS ET DEMARRAGE DE LA MUSIQUE--------------------------------------------------------------*/
 
     public void musiqueDemaEtFocus() {
-/*
-        Fonction de demande d'utilisation unique des sorties audio du téléphone
+        /*Fonction de demande d'utilisation unique des sorties audio du téléphone
         et démarrage de la musique.
          */
 
@@ -280,81 +308,79 @@ public class MusiqueService extends Service {
         }
 
         if (resultat == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            musiquePlayer.start();//Démarre la musique
-
             //déclaration de l'enregistrement d'un BoradcastReceiver pour la gestion quand une prise jack est débranchée
             IntentFilter intentFilterJack = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
             registerReceiver(broadcastReceiverJack, intentFilterJack);
-            envoieBroadcast(EXTRA_MAJ_INIT);
+
+            envoieBroadcast(EXTRA_MAJ_INIT);//Initialisation de la page de contrôle musique
+            musiquePlayer.start();//Démarre la musique
+            notificationInitEtMaj();
+            enPauseParDemandeLongue=false;
+            enPauseParUtilisateur=false;
         }
     }
 
-    public void musiqueDemaEtFocusEtMaj()
-    {
-        musiqueDemaEtFocus();
-        //notificationMaj();
-        notificationInitMaj();
-        mediaSessionBoutonsMaj();
-    }
+    /*--------------------------------------------MISE EN PAUSE DE LA MUSIQUE--------------------------------------------------------------*/
 
     public void musiquePause() {
-        musiquePlayer.pause();
-        handlerTemps.removeCallbacks(runnableTemps);
-        envoieBroadcast(EXTRA_MAJ_SIMPLE);
-        //notificationMaj();
-        notificationInitMaj();
-        mediaSessionBoutonsMaj();
+        musiquePlayer.pause();//Mise en pause de la musique
+        handlerTemps.removeCallbacks(runnableTemps);//Arret de l'handler/reunnable qui envoie des brodcast pour la mise à jour de la page de contrôle musique
+        envoieBroadcast(EXTRA_MAJ_SIMPLE);//Mise à jour de la page de controle musique
+        notificationInitEtMaj();
     }
 
-    public void arretTotalMusique()
+    /*--------------------------------------------ARRET DE LA MUSIQUE SIMPLE(pour le changeemnt de musique)--------------------------------------------------------------*/
+
+    public void arretSimpleMusique()//Arret simple d'une musique en cours
     {
         if (musiquePlayer != null) {
-            protocoleArret();
+            handlerTemps.removeCallbacks(runnableTemps);//Arret de la mise à jour de la page de contrôle musique pour le resynchroniser avec une potentielle future musique
+
+            musiquePlayer.release();//Vidage de la mémoire de musique
+            musiquePlayer = null;
+        }
+    }
+
+    /*--------------------------------------------ARRET TOTAL MUSIQUE POUR L'ARRET DE LECTURE DE MUSIQUE--------------------------------------------------------------*/
+
+    public void arretTotalMusique()//Arret appelé dès qu'on arrête toute lecture en cours
+    {
+        if (musiquePlayer != null) {
+            arretSimpleMusique();
+
+            //Abandon du focus audio en fonction de la version d'android
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                musiqueManager.abandonAudioFocusRequest(musiqueFocusRequest);
+            } else {
+                musiqueManager.abandonAudioFocus(musiqueFocusChange);
+            }
+
+            unregisterReceiver(broadcastReceiverNotifCmd);//Arret du BroadcastReceiver de réception des commandes de notification
+            unregisterReceiver(broadcastReceiverJack);//Arret du BroadcastReceiver de réception du débranchement d'une prise jack
+
             stopForeground(true);
             arretMediaSession();
-            mediaSessionNotifInitBool =false;
             envoieBroadcast(EXTRA_MAJ_FIN);
+            mediaSessionNotifInitBool=false;
         }
     }
 
-    public void arretSimpleMusique()
-    {
-        if (musiquePlayer != null) {
-            protocoleArret();
-        }
-    }
-
-    private void protocoleArret() {
-        handlerTemps.removeCallbacks(runnableTemps);
-
-        musiquePlayer.release();
-        musiquePlayer = null;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            musiqueManager.abandonAudioFocusRequest(musiqueFocusRequest);
-        } else {
-            musiqueManager.abandonAudioFocus(musiqueFocusChange);
-        }
-
-        unregisterReceiver(broadcastReceiverNotifCmd);
-        unregisterReceiver(broadcastReceiverJack);
-    }
-
+    /*--------------------------------------------PASSAGE A LA MUSIQUE SUIVANTE--------------------------------------------------------------*/
 
     public void musiqueSuivante() {
         //Remplacer musique arret par une autre fonction qui arrête pas la notif etc...
         arretSimpleMusique();
         positionMusique++;
 
-        if (positionMusique>= maMusique.size())
-            positionMusique=0;
+        if (positionMusique >= maMusique.size())
+            positionMusique = 0;
 
+        //On appelle la fonction musiqueDemaPause afin d'initialiser la musique et la lancer car avant elle a été mise à nulle
         musiqueDemaPause();
         envoieBroadcast(EXTRA_MAJ_INIT);
-        //notificationMaj();
-        notificationInitMaj();
-        mediaSessionBoutonsMaj();
     }
+
+    /*--------------------------------------------PASSAGE A LA MUSIQUE PRECEDENTE--------------------------------------------------------------*/
 
     public void musiquePrecedente() {
         //Remplacer musique arret par une autre fonction qui arrête pas la notif etc...
@@ -364,22 +390,22 @@ public class MusiqueService extends Service {
         if (positionMusique < 0)
             positionMusique=maMusique.size()-1;
 
+        //On appelle la fonction musiqueDemaPause afin d'initialiser la musique et la lancer car avant elle a été mise à nulle
         musiqueDemaPause();
         envoieBroadcast(EXTRA_MAJ_INIT);
-        //notificationMaj();
-        notificationInitMaj();
-        mediaSessionBoutonsMaj();
     }
+
+    /*--------------------------------------------MISE EN BOUCLE DE LA MUSIQUE--------------------------------------------------------------*/
 
     public void musiqueBoucleDeboucle() {
-        if (musiquePlayer != null) {
-            //musiquePlayer.setLooping(!musiquePlayer.isLooping());
-            musiqueBoucle= !musiqueBoucle;
-        }
-
-        //notificationMaj();
-        notificationInitMaj();
+        musiqueBoucle = !musiqueBoucle;
+        notificationInitEtMaj();
     }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////GESTION FIN DE MUSIQUE///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -392,7 +418,7 @@ public class MusiqueService extends Service {
             //on passe à la musique suivante (pas de besoin de véirifer si la musique boucle)
             if (musiqueBoucle)
             {
-                musiqueDemaEtFocusEtMaj();
+                musiqueDemaEtFocus();
             }
             else
             {
@@ -402,53 +428,17 @@ public class MusiqueService extends Service {
     }
 
 
-    /*-----------------------------------------------------FONCTIONS ENVOIE BROADCAST--------------------------------------------------------------*/
-    public void envoieBroadcast(final String extra) {
-        Intent intent = new Intent()
-                .setAction(DIRECTION_ACTIVITY)
-                .putExtra(TYPE_MAJ,extra);
-        sendBroadcast(intent);
-    }
 
 
-
-    /*---------------------------------------------------------FONCTION BORADCASTRECEIVER NOTIFICATION COMMANDE--------------------------------------------------------------*/
-
-    private BroadcastReceiver broadcastReceiverNotifCmd = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getStringExtra(TYPE_NOTIFICATION)) {
-                case "REJOUER":
-                    musiqueBoucleDeboucle();
-                    break;
-                case "DEMAPAUSE":
-                    musiqueDemaPause();
-                    break;
-                case "PRECEDENT":
-                    musiquePrecedente();
-                    break;
-                case "SUIVANT":
-                    musiqueSuivante();
-                    break;
-                case "ARRET":
-                    arretTotalMusique();
-                    if (!MainActivity.estActif)
-                    {
-                        stopSelf();
-                    }
-                    break;
-            }
-        }
-    };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////GESTION NOTIFICATION/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////////////////////////VERSION FONCTIONNELLE////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*--------------------------------------------INITIALISATION ET MISE A JOUR DE LA NOTIFICATION--------------------------------------------------------------*/
 
-    public void notificationInitMaj() {
+    public void notificationInitEtMaj() {
 
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(MusiqueService.this, CHANNEL_ID);//Inititalisation d'un constructeur de notification
 
@@ -497,7 +487,7 @@ public class MusiqueService extends Service {
         }
         else
         {
-            mediaSessionDonneesMaj();
+            mediaSessionBoutonsMaj();
         }
 
         notifBuilder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()//Défini le style de notification en "notification de médias"
@@ -525,9 +515,45 @@ public class MusiqueService extends Service {
             notifManagerCompat.notify(NOTIFICATION_ID,notifBuilder.build());
         }
 
-        mediaSessionNotifInitBool =true;//Attribue la valeur déjà initialisé une fois à notre variable booléenne
+        mediaSessionNotifInitBool = true;//Attribue la valeur déjà initialisé une fois à notre variable booléenne
     }
 
+
+    /*---------------------------------------------------------BORADCASTRECEIVER DES BOUTONS DE LA NOTIFICATION--------------------------------------------------------------*/
+
+    private BroadcastReceiver broadcastReceiverNotifCmd = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getStringExtra(TYPE_NOTIFICATION)) {
+                case "REJOUER":
+                    musiqueBoucleDeboucle();
+                    break;
+                case "DEMAPAUSE":
+                    musiqueDemaPause();
+                    break;
+                case "PRECEDENT":
+                    musiquePrecedente();
+                    break;
+                case "SUIVANT":
+                    musiqueSuivante();
+                    break;
+                case "ARRET":
+                    arretTotalMusique();
+                    if (!MainActivity.estActif)
+                    {
+                        stopSelf();
+                    }
+                    break;
+            }
+        }
+    };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////FONCTIONS DE MEDIASESSION/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    /*---------------------------------------------------------FONCTION MEDIA SESSION--------------------------------------------------------------*/
 
     public void mediaSessionInit() {
 
@@ -552,28 +578,26 @@ public class MusiqueService extends Service {
         @Override
         public void onPlay() {
             super.onPlay();
-            //Toast.makeText(getApplicationContext(), "Play", Toast.LENGTH_SHORT).show();
-            musiqueDemaEtFocusEtMaj();
+            //musiqueDemaEtFocus();
+            musiqueDemaPause();
         }
 
         @Override
         public void onPause() {
             super.onPause();
-            //Toast.makeText(getApplicationContext(), "Pause", Toast.LENGTH_SHORT).show();
-            musiquePause();
+            //musiquePause();
+            musiqueDemaPause();
         }
 
         @Override
         public void onSkipToNext() {
             super.onSkipToNext();
-            //Toast.makeText(getApplicationContext(), "Suivant", Toast.LENGTH_SHORT).show();
             musiqueSuivante();
         }
 
         @Override
         public void onSkipToPrevious() {
             super.onSkipToPrevious();
-            //Toast.makeText(getApplicationContext(), "Precedent", Toast.LENGTH_SHORT).show();
             musiquePrecedente();
         }
 
@@ -582,7 +606,6 @@ public class MusiqueService extends Service {
         public void onSeekTo(long pos) {
             super.onSeekTo(pos);
             musiquePlayer.seekTo((int) pos);
-            //Toast.makeText(getApplicationContext(), "Seekbar" + pos, Toast.LENGTH_SHORT).show();
             mediaSessionBoutonsMaj();
         }
     }
@@ -624,6 +647,12 @@ public class MusiqueService extends Service {
     }
 
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////FONCTIONS DE TRAITEMENT D'IMAGES/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /*----------------------------------------------------FONCTIONS RECUPERTATION/CONVERSION IMAGE--------------------------------------------------------------*/
 
     public Bitmap recupImageMusique() {
@@ -644,6 +673,9 @@ public class MusiqueService extends Service {
         }
     }
 
+
+    /*--------------------------------------------FONCTION DE CONVERSION D'IMAGE DRAWABLE EN BITMAP-------------------------------------------------------------*/
+
     public Bitmap drawableEnBitmap(int drawableRes) {
         @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = getResources().getDrawable(drawableRes);
         Canvas canvas = new Canvas();
@@ -656,6 +688,10 @@ public class MusiqueService extends Service {
     }
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////GETTERS ET SETTERS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*--------------------------------------------------------------FONCTIONS GETTER--------------------------------------------------------------*/
 
@@ -700,15 +736,5 @@ public class MusiqueService extends Service {
     public void setMusiquePlaylist(ArrayList<Musique> musique, int position) {
         maMusique = copyArrayList(musique);
         this.positionMusique = position;
-    }
-
-
-    /*--------------------------------------AUTRES FONCTIONS------------------------------------------------*/
-
-    @SuppressLint("DefaultLocale")
-    private String millisecondesEnMinutesSeconde(int tmpsMillisecondes) {
-        return String.format("%02d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes),
-                TimeUnit.MILLISECONDS.toSeconds(tmpsMillisecondes) - TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes) * 60);
     }
 }

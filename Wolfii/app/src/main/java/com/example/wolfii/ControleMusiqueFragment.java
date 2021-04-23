@@ -38,7 +38,7 @@ import static com.example.wolfii.MainActivity.mService;
 
 /*A FAIRE :
  *
- * Faire maj du bouton dema pause du contrôle musique
+ * Faire maj du bouton dema/pause du contrôle musique
  *
  */
 
@@ -83,11 +83,6 @@ public class ControleMusiqueFragment extends Fragment {
         this.cmdDemaPause = (Button) root.findViewById(R.id.btnDemaPause);
         this.cmdDemaPause.setSoundEffectsEnabled(false);
         this.cmdDemaPause.setOnClickListener(new EcouteurBtnDemaPause());
-
-/*        if (mService.getMusiquePlayerIsPlaying())
-            cmdDemaPause.setBackground(R.drawable.pauseblanc);
-        else
-            cmdDemaPause.setBackground(R.drawable.);*/
 
         this.cmdPrecedent = (ImageView) root.findViewById(R.id.btnMusiquePrecedente);
         this.cmdPrecedent.setSoundEffectsEnabled(false);
@@ -169,7 +164,9 @@ public class ControleMusiqueFragment extends Fragment {
             // On place la mise à jour une fois qu'on a finis de déplacer le seekbar (évite un
             // rechargement du mediasession nombreux et inutile, car en plus qu'il n'est pas visible lorsqu'on
             // déplace le seekbar de cette page)
-            mService.mediaSessionBoutonsMaj();
+            if (mService.getMusiquePlayerIsSet()) {
+                mService.mediaSessionBoutonsMaj();
+            }
         }
     }
 
@@ -191,8 +188,9 @@ public class ControleMusiqueFragment extends Fragment {
         @Override
         public void onClick(View v) {
             //Active désactive la boucle de la musique actuelle
-            if (mService.getMusiquePlayerIsSet())
+            if (mService.getMusiquePlayerIsSet()) {
                 mService.musiqueBoucleDeboucle();
+            }
         }
     }
 
@@ -208,7 +206,7 @@ public class ControleMusiqueFragment extends Fragment {
 
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.listes, showCurrentPlaylistFragment, null);
-            fragmentTransaction.commit ();
+            fragmentTransaction.commit();
         }
     }
 
@@ -241,19 +239,17 @@ public class ControleMusiqueFragment extends Fragment {
     private BroadcastReceiver broadcastReceiverMajInterface = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //if (mService.getMusiquePlayerIsSet()) {
-                switch (intent.getStringExtra(TYPE_MAJ)) {
-                    case EXTRA_MAJ_INIT:
-                        majInterfaceInit();//Mise à jour de l'interface
-                        break;
-                    case EXTRA_MAJ_SIMPLE:
-                        majInterface();//Mise à jour de l'interface
-                        break;
-                    case EXTRA_MAJ_FIN:
-                        majInterfaceFin();
-                        break;
-                }
-            //}
+            switch (intent.getStringExtra(TYPE_MAJ)) {
+                case EXTRA_MAJ_INIT:
+                    majInterfaceInit();//Mise à jour de l'interface au démarrage de la page
+                    break;
+                case EXTRA_MAJ_SIMPLE:
+                    majInterface();//Mise à jour de l'interface
+                    break;
+                case EXTRA_MAJ_FIN:
+                    majInterfaceFin();//Mise à jour interface d'arrêt de la lecture de musiques
+                    break;
+            }
         }
     };
 
@@ -271,20 +267,25 @@ public class ControleMusiqueFragment extends Fragment {
     public void majInterface() {
         seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
         txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
+        //Mettre ici l'état si c'est en lecture ou non
+        //Mettre ici si la musique boucle ou non
     }
 
     @SuppressLint("SetTextI18n")
     public void majInterfaceFin()
     {
-        txtViewTitreMusique.setText("");
+        txtViewTitreMusique.setText("...");
         txtViewMusiqueDuree.setText("00:00");
         txtViewMusiqueTemps.setText("00:00");
-        imgViewMusique.setImageBitmap(mService.drawableEnBitmap(R.drawable.loup));
-        //imgViewMusique.setImageBitmap();
+        imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.loup));
     }
 
 
-    /*--------------------------------------AUTRES FONCTIONS------------------------------------------------*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////AUTRES FONCTIONS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*--------------------------------------CONVERSION TEMPS EN MILLISECONDE EN MINTES ET SECONDES------------------------------------------------*/
 
     @SuppressLint("DefaultLocale")
     private String millisecondesEnMinutesSeconde(int tmpsMillisecondes) {
@@ -292,6 +293,22 @@ public class ControleMusiqueFragment extends Fragment {
                 TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes),
                 TimeUnit.MILLISECONDS.toSeconds(tmpsMillisecondes) - TimeUnit.MILLISECONDS.toMinutes(tmpsMillisecondes) * 60);
     }
+
+    /*--------------------------------------CONVERSION DRAWABLE EN BITMAP------------------------------------------------*/
+
+    public Bitmap drawableEnBitmap(int drawableRes) {
+        @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = getResources().getDrawable(drawableRes);
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+
+    /*--------------------------------------ARRONDIR LES ANGLES D'IMAGEBITMAP------------------------------------------------*/
 
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
