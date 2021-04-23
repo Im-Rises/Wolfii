@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:backgroundTint="@color/white"
             tools:ignore="MissingConstraints">
 
             <EditText
@@ -24,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="14sp"
+                android:textColor="#fff"
                 tools:ignore="Suspicious0dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -35,6 +37,7 @@
                 android:text="@string/search" />
 
         </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/result_search"
