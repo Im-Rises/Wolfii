@@ -8,6 +8,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:id="@+id/myRecyclerView"
+        tools:listitem="@layout/genre_item"
         android:layout_height="wrap_content"/>
 
 </FrameLayout>

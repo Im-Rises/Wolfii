@@ -34,7 +34,7 @@ public class ArtistFragment extends Fragment {
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById (R.id.myRecyclerView);
 
-        monArtisteAdapter = new MyStringAdapter (mesArtistes, getActivity (), false);
+        monArtisteAdapter = new MyStringAdapter (mesArtistes, getActivity ());
         ClickOnArtist clickOnArtist = new ClickOnArtist ();
         clickOnArtist.setContext (getActivity ());
         clickOnArtist.setRecyclerViewForMusic (mRecyclerView);

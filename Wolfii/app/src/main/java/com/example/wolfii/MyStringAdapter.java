@@ -18,15 +18,20 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
     // classe qui est responsable de chaque cellule
     // responsable du recyclage des view
     // view holder = accelerer le rendu de la liste, il sera déclaré au sein de l'adapter
-    List<String> mesArtistes;
+    private List<String> mesArtistes;
     public static Context context;
-    Boolean isPlaylist;
+    private Boolean isPlaylist = false;
+    private Boolean isGenre = false;
 
-    public MyStringAdapter (ArrayList<String> mesArtistes, Context sContext, Boolean isPlaylist) {
+    public MyStringAdapter (ArrayList<String> mesArtistes, Context sContext) {
         this.mesArtistes = mesArtistes;
-        this.isPlaylist = isPlaylist;
     }
 
+    // SETTER
+    public void setIsPlaylist(Boolean isPlaylist) {this.isPlaylist = isPlaylist;}
+    public void setIsGenre(Boolean isGenre) {this.isGenre = isGenre;}
+
+    // GETTER
     public Object getItem(int position) {
         return mesArtistes.get(position);
     }
@@ -46,7 +51,9 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
         // on cherche notre vue avec inflater
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         // on va chercher notre layout
-        View view = layoutInflater.inflate(R.layout.musique_item, parent, false);
+        View view = isGenre ?
+                layoutInflater.inflate(R.layout.genre_item, parent, false) :
+                layoutInflater.inflate(R.layout.musique_item, parent, false);
         // on renvoie le viewholder
         return new MyViewHolder(view);
     }

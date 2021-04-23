@@ -41,8 +41,8 @@ public class NouveautesFragment extends Fragment {
 
         // on recupere toutes les playlists
         mRecyclerView= root.findViewById (R.id.myRecyclerView);
-        monAdapter = new MyStringAdapter (mesGenres, getActivity (), true);
-
+        monAdapter = new MyStringAdapter (mesGenres, getActivity ());
+        monAdapter.setIsGenre (true);
         mRecyclerView.setLayoutManager (new GridLayoutManager (getActivity (), 2));
         ClickOnGenre clickOnGenre = new ClickOnGenre ();
         clickOnGenre.setRecyclerViewForMusic (mRecyclerView);

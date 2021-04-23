@@ -37,7 +37,8 @@ public class PlaylistFragment extends Fragment {
         for (MainData m : dataList)
             if (! playlists.contains (m.getPlaylist ())) playlists.add (m.getPlaylist ());
         mRecyclerView= (RecyclerView) root.findViewById (R.id.myRecyclerView);
-        monAdapter = new MyStringAdapter (playlists, getActivity (), true);
+        monAdapter = new MyStringAdapter (playlists, getActivity ());
+        monAdapter.setIsPlaylist (true);
 
         mRecyclerView.setLayoutManager (new LinearLayoutManager (getActivity ().getApplicationContext (), LinearLayout.VERTICAL, false));
         ClickOnPlaylist clickOnPlaylist = new ClickOnPlaylist ();
