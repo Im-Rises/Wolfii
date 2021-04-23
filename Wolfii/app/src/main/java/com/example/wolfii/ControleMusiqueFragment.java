@@ -286,9 +286,9 @@ public class ControleMusiqueFragment extends Fragment {
             txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
 
             if (mService.getMusiquePlayerIsPlaying())
-                cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_pause_circle_outline_24));
+                cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.playbutton));
             else
-                cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
+                cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.pauseblanc));
         }
 
         setImageRejoueRejouer();
