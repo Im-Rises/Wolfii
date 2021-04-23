@@ -28,10 +28,9 @@ public class ListAllSongsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_listallsongs, container, false);
-        //database.getInstance (getActivity ());
-        // creation du recyclerview
+
         mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
-        maMusique = MainActivity.maMusique; // on recupere ici toutes les musiques sous forme d'un tableau
+        maMusique = MainActivity.mesMusiques; // on recupere ici toutes les musiques sous forme d'un tableau
 
         monAdapter = new MyMusiqueAdapter (maMusique, getActivity ());
         ClickOnMusic clickOnMusic = new ClickOnMusic ();
@@ -43,16 +42,5 @@ public class ListAllSongsFragment extends Fragment {
         mRecyclerView.setAdapter(monAdapter);
 
         return root;
-    }
-    private void rm(String path) {
-        try {
-            // delete the original file
-            File file = new File(path);
-            file.delete();
-            Log.d("debug_delete", "ok");
-        }
-        catch (Exception e) {
-            Log.e("tag", e.getMessage());
-        }
     }
 }

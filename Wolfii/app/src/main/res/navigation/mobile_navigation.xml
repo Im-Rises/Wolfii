@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_nouveaute">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.wolfii.ListAllSongsFragment"
+        android:id="@+id/navigation_nouveaute"
+        android:name="com.example.wolfii.NouveautesFragment"
         android:label="@string/queue"
-        tools:layout="@layout/fragment_listallsongs" />
+        tools:layout="@layout/fragment_nouveautes" />
 
     <fragment
         android:id="@+id/navigation_artiste"
@@ -26,10 +26,12 @@
     <fragment
         android:id="@+id/navigation_search"
         android:name="com.example.wolfii.SearchFragment"
+        android:label="@string/search"
         tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/navigation_identification"
+        android:label="@string/shazam"
         android:name="com.example.wolfii.IdentificationFragment"
         tools:layout="@layout/fragment_identification" />
 </navigation>

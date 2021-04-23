@@ -7,7 +7,7 @@
         android:title="@string/lecteur" />
 
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_nouveaute"
         android:icon="@drawable/ic_queue"
         android:title="@string/queue" />
     <item

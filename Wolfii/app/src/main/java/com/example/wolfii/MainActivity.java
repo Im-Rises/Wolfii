@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +28,9 @@ import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ArrayList<Musique> maMusique = new ArrayList<>();
+    public static ArrayList<Musique> mesMusiques = new ArrayList<>();
     public static ArrayList<String> mesArtistes = new ArrayList<>();
+    public static ArrayList<String> mesGenres = new ArrayList<> ();
     private static final int MY_PERMISSION_REQUEST = 1;
 
     public static boolean estActif=false;
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     public static MusiqueService mService;                            //Déclaration pointeur vers le service
     public static boolean mBound = false;                             //Variable qui témoigne de l'activation du service
     public static RoomDB database;  // notre base de donnees
-    //public static ArrayList<MainData> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_artiste, R.id.navigation_dashboard, R.id.navigation_search, R.id.navigation_identification)
+                R.id.navigation_nouveaute, R.id.navigation_nouveaute, R.id.navigation_dashboard, R.id.navigation_search, R.id.navigation_identification)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        maMusique = getMusic();
-        mesArtistes = getArtistes(maMusique);
+        mesMusiques = getMusic();
+        mesArtistes = getArtistes(mesMusiques);
     }
 
     // on trie les musiques selon les artistes
@@ -132,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
                         currentDuration,
                         currentDateTaken,
                         currentGenre));
-
+                // on repertorie tous les differents genres dispos
+                if(!mesGenres.contains (currentGenre)) mesGenres.add(currentGenre);
             } while (songCursor.moveToNext()); // on arrete quand on est arrive a la fin du curseur
         }
         // on reverse le tableau pour avoir les titres telecharges recement en premier

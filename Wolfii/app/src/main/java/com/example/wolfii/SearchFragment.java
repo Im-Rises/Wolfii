@@ -48,7 +48,7 @@ public class SearchFragment extends Fragment {
 
     public ArrayList<Musique> rechercher(String search) {
         ArrayList<Musique> musiques = new ArrayList<> ();
-        for(Musique m : MainActivity.maMusique) if(m.getName ().contains (search) || m.getAuthor ().contains (search)) musiques.add(m);
+        for(Musique m : MainActivity.mesMusiques) if(m.getName ().contains (search) || m.getAuthor ().contains (search)) musiques.add(m);
         return musiques;
     }
 }
