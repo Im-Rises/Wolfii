@@ -90,13 +90,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-<<<<<<< HEAD
-=======
             android:textSize="15dp"
->>>>>>> 84e9728301ccb8e6948b7c9b310cb63f817f25e4
             android:text="00:00"
             android:textAlignment="textEnd"
-            android:textSize="15dp"
             app:layout_constraintStart_toEndOf="@+id/txtViewMusiqueTemps" />
     </LinearLayout>
     <!-- ********************************************* -->

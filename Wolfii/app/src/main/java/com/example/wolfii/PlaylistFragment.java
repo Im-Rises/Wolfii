@@ -60,40 +60,4 @@ public class PlaylistFragment extends Fragment {
 
         return root;
     }
-    public class ClickOnNewPlaylist implements View.OnClickListener {
-        private Context context;
-
-        public void setContext(Context context) {this.context = context;}
-
-        private EditText nom;
-        private Button valider;
-
-        @Override
-        public void onClick (View v) {
-            Dialog dialog = new Dialog(context);
-
-            // set content view
-            dialog.setContentView(R.layout.dialog_new_playlist);
-
-            // initialize width and height
-            int width = WindowManager.LayoutParams.MATCH_PARENT;
-            int height = WindowManager.LayoutParams.WRAP_CONTENT;
-            //set layout
-            dialog.getWindow().setLayout(width, height);
-            dialog.show ();
-
-            valider = dialog.findViewById (R.id.confirmCreate);
-            nom = dialog.findViewById (R.id.name);
-
-            valider.setOnClickListener (new View.OnClickListener () {
-                @Override
-                public void onClick (View v) {
-                    MainData data = new MainData ();
-                    data.setPlaylist (nom.getText ().toString ());
-
-                    database.mainDao ().insert (data);
-                }
-            });
-        }
-    }
 }
