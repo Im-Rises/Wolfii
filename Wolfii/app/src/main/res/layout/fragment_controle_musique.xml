@@ -79,11 +79,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:gravity="start"
-=======
             android:textSize="15dp"
->>>>>>> d6b8a74064fcde928d507d3ce3921616ca49d5d4
             android:text="00:00"
             android:textAlignment="textStart" />
 
@@ -92,11 +89,8 @@
             android:layout_width="wrap_content"
             android:layout_height="19dp"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:gravity="end"
-=======
             android:textSize="15dp"
->>>>>>> d6b8a74064fcde928d507d3ce3921616ca49d5d4
             android:text="00:00"
             android:textAlignment="textEnd"
             app:layout_constraintStart_toEndOf="@+id/txtViewMusiqueTemps" />

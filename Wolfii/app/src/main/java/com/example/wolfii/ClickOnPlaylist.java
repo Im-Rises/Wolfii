@@ -30,12 +30,14 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
     public void onArtisteItemClick (View view, String playlist, int position) {
         List<MainData> musiquesMainData = database.mainDao ().getMusicFromPlaylist (playlist);
         for(MainData data : musiquesMainData) {
-            musiques.add(new Musique(data.getNomMusique (),
-                    data.getAuthor (),
-                    data.getPath (),
-                    data.getDuration (),
-                    data.getDateTaken (),
-                    data.getGenre ()));
+            if(data.getPath () != null) {
+                musiques.add (new Musique (data.getNomMusique (),
+                        data.getAuthor (),
+                        data.getPath (),
+                        data.getDuration (),
+                        data.getDateTaken (),
+                        data.getGenre ()));
+            }
         }
 
         monMusiqueAdapter = new MyMusiqueAdapter (musiques, context);

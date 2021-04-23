@@ -1,10 +1,15 @@
 package com.example.wolfii;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
@@ -20,18 +25,24 @@ import static com.example.wolfii.MainActivity.database;
 public class PlaylistFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MyStringAdapter monAdapter;
+    private Button newPlaylist;
 
     PlaylistFragment(){}
 
     @SuppressLint({"WrongConstant", "SetTextI18n"})
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_liste_recherche, container, false);
+        View root = inflater.inflate(R.layout.fragment_playlist, container, false);
 
         ////////////////////// PLAYLISTS ////////////////////////////
         // on recupere toutes les donnees de la base de donnees et on cree son adapter
         List<MainData> dataList = database.mainDao ().getAll ();
         ArrayList<String> playlists = new ArrayList<String> ();
+
+        newPlaylist = root.findViewById (R.id.new_playlist);
+        ClickOnNewPlaylist clickOnNewPlaylist = new ClickOnNewPlaylist ();
+        clickOnNewPlaylist.setContext (getActivity ());
+        newPlaylist.setOnClickListener (clickOnNewPlaylist);
 
         // on recupere toutes les playlists
         for (MainData m : dataList)
@@ -48,6 +59,41 @@ public class PlaylistFragment extends Fragment {
         mRecyclerView.setAdapter (monAdapter);
 
         return root;
+    }
+    public class ClickOnNewPlaylist implements View.OnClickListener {
+        private Context context;
 
+        public void setContext(Context context) {this.context = context;}
+
+        private EditText nom;
+        private Button valider;
+
+        @Override
+        public void onClick (View v) {
+            Dialog dialog = new Dialog(context);
+
+            // set content view
+            dialog.setContentView(R.layout.dialog_new_playlist);
+
+            // initialize width and height
+            int width = WindowManager.LayoutParams.MATCH_PARENT;
+            int height = WindowManager.LayoutParams.WRAP_CONTENT;
+            //set layout
+            dialog.getWindow().setLayout(width, height);
+            dialog.show ();
+
+            valider = dialog.findViewById (R.id.confirmCreate);
+            nom = dialog.findViewById (R.id.name);
+
+            valider.setOnClickListener (new View.OnClickListener () {
+                @Override
+                public void onClick (View v) {
+                    MainData data = new MainData ();
+                    data.setPlaylist (nom.getText ().toString ());
+
+                    database.mainDao ().insert (data);
+                }
+            });
+        }
     }
 }
