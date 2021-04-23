@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -22,7 +21,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -49,7 +47,9 @@ public class ControleMusiqueFragment extends Fragment {
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree, txtViewTitreMusique;   //TextView du temps de lecture de la musique
 
-    private Button cmdDemaPause,cmdRejouer, showCurrentPlaylist;  //boutons de la page
+    private Button cmdRejouer, showCurrentPlaylist;  //boutons de la page
+
+    private ImageView cmdDemaPause;
 
     private ImageView cmdSuivant,cmdPrecedent;
 
@@ -66,6 +66,13 @@ public class ControleMusiqueFragment extends Fragment {
     private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";
 
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_controle_musique, container, false);
@@ -80,7 +87,7 @@ public class ControleMusiqueFragment extends Fragment {
 
         this.txtViewTitreMusique = (TextView) root.findViewById(R.id.txtViewTitreMusique);
 
-        this.cmdDemaPause = (Button) root.findViewById(R.id.btnDemaPause);
+        this.cmdDemaPause = (ImageView) root.findViewById(R.id.btnDemaPause);
         this.cmdDemaPause.setSoundEffectsEnabled(false);
         this.cmdDemaPause.setOnClickListener(new EcouteurBtnDemaPause());
 
@@ -143,6 +150,13 @@ public class ControleMusiqueFragment extends Fragment {
         getActivity().unregisterReceiver(broadcastReceiverMajInterface);
     }
 
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////FONCTIONS D'ACTION DES BOUTONS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /*--------------------------------------FONCTION/CLASS SEEKBAR------------------------------------------------*/
 
     private class EcouteurSeekBar implements SeekBar.OnSeekBarChangeListener {
@@ -171,9 +185,6 @@ public class ControleMusiqueFragment extends Fragment {
     }
 
 
-
-    /*--------------------------------------FONCTION BOUTONS------------------------------------------------*/
-
     private class EcouteurBtnDemaPause implements View.OnClickListener{
         @Override
         public void onClick(View v) {
@@ -193,23 +204,6 @@ public class ControleMusiqueFragment extends Fragment {
             }
         }
     }
-
-    private class ShowCurrentPlaylist implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            // show current playlist
-            ArrayList<Musique> currentPlaylist = mService.getCurrentPlaylist ();
-            int positionMusique = mService.getPositionMusique ();
-
-            ShowCurrentPlaylistFragment showCurrentPlaylistFragment = new ShowCurrentPlaylistFragment ();
-            showCurrentPlaylistFragment.setMaMusique(currentPlaylist);
-
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.listes, showCurrentPlaylistFragment, null);
-            fragmentTransaction.commit();
-        }
-    }
-
 
     private class EcouteurMusiqueSuivante implements View.OnClickListener{
         @Override
@@ -231,8 +225,27 @@ public class ControleMusiqueFragment extends Fragment {
         }
     }
 
+    private class ShowCurrentPlaylist implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            // show current playlist
+            ArrayList<Musique> currentPlaylist = mService.getCurrentPlaylist ();
+            int positionMusique = mService.getPositionMusique ();
+
+            ShowCurrentPlaylistFragment showCurrentPlaylistFragment = new ShowCurrentPlaylistFragment ();
+            showCurrentPlaylistFragment.setMaMusique(currentPlaylist);
+
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.listes, showCurrentPlaylistFragment, null);
+            fragmentTransaction.commit();
+        }
+    }
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////FONCTIONS MAJ INTERFACE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*----------------------------------GESTION BROADCASTRECEIVER--------------------------------------------------*/
 
@@ -253,11 +266,11 @@ public class ControleMusiqueFragment extends Fragment {
         }
     };
 
-    /*--------------------------------------FONTION MAJ INTERFACE---------------------------------------------------*/
 
     public void majInterfaceInit() {
         seekBarMusique.setMax(mService.getMusiquePlayerDuration());
-        imgViewMusique.setImageBitmap(getRoundedCornerBitmap (mService.recupImageMusique(), 100));
+        //imgViewMusique.setImageBitmap(getRoundedCornerBitmap (mService.recupImageMusique(), 100));
+        imgViewMusique.setImageBitmap(mService.recupImageMusique());
         txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
         txtViewTitreMusique.setText(mService.getMusiqueTitre());
         majInterface();
@@ -267,8 +280,15 @@ public class ControleMusiqueFragment extends Fragment {
     public void majInterface() {
         seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
         txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
-        //Mettre ici l'état si c'est en lecture ou non
-        //Mettre ici si la musique boucle ou non
+
+        if (mService.getMusiquePlayerIsPlaying())
+        {
+            cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_pause_circle_outline_24));
+        }
+        else
+        {
+            cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -279,6 +299,7 @@ public class ControleMusiqueFragment extends Fragment {
         txtViewMusiqueTemps.setText("00:00");
         imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.loup));
     }
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -305,30 +326,5 @@ public class ControleMusiqueFragment extends Fragment {
         drawable.draw(canvas);
 
         return bitmap;
-    }
-
-
-    /*--------------------------------------ARRONDIR LES ANGLES D'IMAGEBITMAP------------------------------------------------*/
-
-    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
-                .getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-        final float roundPx = pixels;
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-        paint.setXfermode(new PorterDuffXfermode (PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        return output;
     }
 }
