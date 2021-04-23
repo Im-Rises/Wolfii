@@ -404,7 +404,10 @@ public class MusiqueService extends Service {
 
     public void musiqueBoucleDeboucle() {
         musiqueBoucle = !musiqueBoucle;
-        notificationInitEtMaj();
+        if (musiquePlayer!=null)
+            notificationInitEtMaj();
+
+        envoieBroadcast(EXTRA_MAJ_SIMPLE);
     }
 
 
@@ -612,6 +615,7 @@ public class MusiqueService extends Service {
             super.onSeekTo(pos);
             musiquePlayer.seekTo((int) pos);
             mediaSessionBoutonsMaj();
+            envoieBroadcast(EXTRA_MAJ_SIMPLE);
         }
     }
 

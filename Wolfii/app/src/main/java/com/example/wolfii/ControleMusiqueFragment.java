@@ -47,9 +47,9 @@ public class ControleMusiqueFragment extends Fragment {
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree, txtViewTitreMusique;   //TextView du temps de lecture de la musique
 
-    private Button cmdRejouer, showCurrentPlaylist;  //boutons de la page
+    private Button showCurrentPlaylist;  //boutons de la page
 
-    private ImageView cmdDemaPause;
+    private ImageView cmdDemaPause, cmdRejouer;
 
     private ImageView cmdSuivant,cmdPrecedent;
 
@@ -99,7 +99,7 @@ public class ControleMusiqueFragment extends Fragment {
         this.cmdSuivant.setSoundEffectsEnabled(false);
         this.cmdSuivant.setOnClickListener(new EcouteurMusiqueSuivante());
 
-        this.cmdRejouer = (Button) root.findViewById(R.id.btnRejouer);
+        this.cmdRejouer = (ImageView) root.findViewById(R.id.btnRejouer);
         this.cmdRejouer.setSoundEffectsEnabled(false);
         this.cmdRejouer.setOnClickListener(new EcouteurBtnRejouer());
 
@@ -117,9 +117,10 @@ public class ControleMusiqueFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter(DIRECTION_ACTIVITY);
         getActivity().registerReceiver(broadcastReceiverMajInterface, intentFilter);
 
-        if (mService.getMusiquePlayerIsSet()) {
+        if (mService.getMusiquePlayerIsSet())
             majInterfaceInit();//Mise à jour de l'interface
-        }
+        else
+            setImageRejoueRejouer();
 
         return root;
     }
@@ -199,9 +200,7 @@ public class ControleMusiqueFragment extends Fragment {
         @Override
         public void onClick(View v) {
             //Active désactive la boucle de la musique actuelle
-            if (mService.getMusiquePlayerIsSet()) {
-                mService.musiqueBoucleDeboucle();
-            }
+            mService.musiqueBoucleDeboucle();
         }
     }
 
@@ -278,17 +277,17 @@ public class ControleMusiqueFragment extends Fragment {
 
 
     public void majInterface() {
-        seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
-        txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
+        if (mService.getMusiquePlayerIsSet()) {
+            seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
+            txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
 
-        if (mService.getMusiquePlayerIsPlaying())
-        {
-            cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_pause_circle_outline_24));
+            if (mService.getMusiquePlayerIsPlaying())
+                cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_pause_circle_outline_24));
+            else
+                cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
         }
-        else
-        {
-            cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
-        }
+
+        setImageRejoueRejouer();
     }
 
     @SuppressLint("SetTextI18n")
@@ -297,7 +296,17 @@ public class ControleMusiqueFragment extends Fragment {
         txtViewTitreMusique.setText("...");
         txtViewMusiqueDuree.setText("00:00");
         txtViewMusiqueTemps.setText("00:00");
+        seekBarMusique.setProgress(0);
         imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.loup));
+        cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
+    }
+
+    public void setImageRejoueRejouer()
+    {
+        if (mService.getMusiqueBoucle())
+            cmdRejouer.setImageBitmap(drawableEnBitmap(R.drawable.image_rejoue));
+        else
+            cmdRejouer.setImageBitmap(drawableEnBitmap(R.drawable.image_rejouer));
     }
 
 
