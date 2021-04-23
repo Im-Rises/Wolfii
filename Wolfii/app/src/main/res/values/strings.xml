@@ -23,4 +23,5 @@
     <string name="retournerAuLecteur">Revenir au Lecteur</string>
     <string name="addToCurrentPlaylist">Ajouter à la file de lecture</string>
     <string name="emptyPlaylist">Vider file de lecture</string>
+    <string name="mesGenres">Mes Genres</string>
 </resources>
