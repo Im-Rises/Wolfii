@@ -1,6 +1,7 @@
 package com.example.wolfii;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,26 +25,25 @@ public class SearchFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
-        shuffleiv = root.findViewById (R.id.shuffle);
-        shuffleiv.setVisibility (View.INVISIBLE);
 
         fragmentManager = getActivity ().getSupportFragmentManager ();
 
         Button button = root.findViewById (R.id.bt_search);
         EditText editText = root.findViewById (R.id.musique);
         ClickOnSearch clickOnSearch = new ClickOnSearch ();
-        clickOnSearch.setSearch (editText.getText ().toString ());
+        clickOnSearch.setEditText (editText);
         button.setOnClickListener(clickOnSearch);
         return root;
     }
     private class ClickOnSearch implements OnClickListener {
 
-        private String search;
+        private EditText editText;
 
-        private void setSearch(String search){this.search = search;}
+        public void setEditText(EditText editText) {this.editText = editText;}
 
         @Override
         public void onClick (View v) {
+            String search = editText.getText().toString ();
             ArrayList<Musique> musiques = rechercher (search);
             Fragment fragment = new ListSearchFragment (musiques, search);
             fragmentTransaction = fragmentManager.beginTransaction();

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ public class ListSearchFragment extends Fragment {
     private MyMusiqueAdapter monAdapter;
     private String artiste;
     private static ArrayList<Musique> musiques = new ArrayList<> ();
+    private ImageView shuffleiv;
 
     ListSearchFragment(ArrayList<Musique> musiques, String artiste){
         this.musiques = musiques;
@@ -30,6 +32,9 @@ public class ListSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_liste_recherche, container, false);
+
+        shuffleiv = root.findViewById (R.id.shuffle);
+        shuffleiv.setVisibility (View.INVISIBLE);
 
         TextView textView = root.findViewById (R.id.search_artiste);
         textView.setText ("resultat(s) pour : \"" + this.artiste + "\"");
