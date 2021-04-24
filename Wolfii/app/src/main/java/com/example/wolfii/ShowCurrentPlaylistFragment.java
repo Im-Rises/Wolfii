@@ -22,7 +22,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
-    private ImageView shuffleiv;
+    private ImageView shuffleiv, playPause, reload, next, previous;
 
 
     public void setMaMusique(ArrayList<Musique> musiques) {maMusique = musiques;}
@@ -41,6 +41,11 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         shuffle.setmRecyclerView (mRecyclerView);
         shuffle.setPlaylist (maMusique);
         shuffleiv.setOnClickListener (shuffle);
+
+        next = root.findViewById (R.id.next);
+        previous = root.findViewById (R.id.previous);
+        reload = root.findViewById (R.id.reload);
+        playPause = root.findViewById (R.id.playPause);
 
         monAdapter = new MyMusiqueAdapter (maMusique, getActivity ());
         ClickOnMusic clickOnMusic = new ClickOnMusic ();
