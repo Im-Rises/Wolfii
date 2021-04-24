@@ -185,8 +185,10 @@ public class ControleMusiqueFragment extends Fragment {
 
 
     public void majInterface() {
-        seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
-        txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
+        if (mService.getMusiquePlayerIsSet()) {
+            seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
+            txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
+        }
     }
 
     @SuppressLint("SetTextI18n")

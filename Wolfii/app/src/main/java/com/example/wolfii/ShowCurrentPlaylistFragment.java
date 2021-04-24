@@ -121,10 +121,8 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private class EcouteurBtnDemaPause implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            //if (mService.getMusiquePlayerIsSet())
-            //{
-            mService.musiqueDemaPause();
-            //}
+            if (mService.getMusiquePlayerIsSet())
+                mService.musiqueDemaPause();
         }
     }
 
@@ -139,20 +137,18 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private class EcouteurMusiqueSuivante implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            //if (mService.getMusiquePlayerIsSet())
-            //{
-            mService.musiqueSuivante();
-            //}
+            if (mService.getMusiquePlayerIsSet())
+                mService.musiqueSuivante();
+
         }
     }
 
     private  class EcouteurMusiquePrecedente implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            //if (mService.getMusiquePlayerIsSet())
-            //{
-            mService.musiquePrecedente();
-            //}
+            if (mService.getMusiquePlayerIsSet())
+                mService.musiquePrecedente();
+
         }
     }
 
@@ -180,10 +176,12 @@ public class ShowCurrentPlaylistFragment extends Fragment {
 
 
     public void majInterface() {
-        if (mService.getMusiquePlayerIsPlaying())
-            playPause.setImageBitmap(drawableEnBitmap(R.drawable.pauseblanc));
-        else
-            playPause.setImageBitmap(drawableEnBitmap(R.drawable.playbutton));
+        if (mService.getMusiquePlayerIsSet()) {
+            if (mService.getMusiquePlayerIsPlaying())
+                playPause.setImageBitmap(drawableEnBitmap(R.drawable.pauseblanc));
+            else
+                playPause.setImageBitmap(drawableEnBitmap(R.drawable.playbutton));
+        }
         setImageRejoueRejouer();
     }
 
@@ -199,7 +197,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         if (mService.getMusiqueBoucle())
             reload.setImageBitmap(drawableEnBitmap(R.drawable.image_rejoue));
         else
-            reload.setImageBitmap(drawableEnBitmap(R.drawable.image_rejouer));
+            reload.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_repeat_24));
     }
 
 
