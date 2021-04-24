@@ -37,13 +37,14 @@ public class AlbumFragment extends Fragment {
     @SuppressLint({"WrongConstant", "SetTextI18n"})
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_liste_recherche, container, false);
+        View root = inflater.inflate(R.layout.simple_list, container, false);
 
         ////////////////////////// ALBUMS /////////////////////////////
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById (R.id.myRecyclerView);
         shuffle = root.findViewById (R.id.shuffle);
         shuffle.setVisibility (View.INVISIBLE);
+
 
         monArtisteAdapter = new MyStringAdapter (mesAlbums, getActivity ());
         monArtisteAdapter.setIsAlbum (true);

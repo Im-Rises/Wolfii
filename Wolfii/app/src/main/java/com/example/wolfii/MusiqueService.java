@@ -32,6 +32,8 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import java.util.ArrayList;
+
+import static com.example.wolfii.MainActivity.database;
 import static java.lang.Integer.parseInt;
 
 
@@ -265,7 +267,8 @@ public class MusiqueService extends Service {
             }
             catch (Exception e)
             {
-                Toast.makeText(getApplicationContext(),"Erreur : "+e.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Cette Musique n'existe plus",Toast.LENGTH_LONG).show();
+                database.mainDao ().deleteFromPath (maMusique.get(positionMusique).getPath ());
             }
         }
         else if (!musiquePlayer.isPlaying())

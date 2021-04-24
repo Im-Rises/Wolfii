@@ -28,12 +28,10 @@ public interface MainDao {
 
     @Query ("UPDATE Wolfii SET playlist = :newName WHERE playlist = :sPlaylist")
     void rename(String sPlaylist, String newName);
-    /*
-    //update query
-    @Query("UPDATE playlists SET text = :sText where ID = :sID")
-    void update(int sID, String sText);
-     */
 
+    // supprimer une musique depuis son path
+    @Query ("DELETE FROM Wolfii WHERE path = :sPath")
+    void deleteFromPath(String sPath);
 
     // get all data query
     @Query("SELECT * FROM Wolfii")
