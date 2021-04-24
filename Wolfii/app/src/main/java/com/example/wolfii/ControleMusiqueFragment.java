@@ -71,7 +71,7 @@ public class ControleMusiqueFragment extends Fragment {
 
         this.txtViewAuteurMusique = (TextView) root.findViewById(R.id.txtViewAuteurMusique);
 
-        this.cmdDemaPause = (ImageView) root.findViewById(R.id.btnDemaPause);
+/*        this.cmdDemaPause = (ImageView) root.findViewById(R.id.btnDemaPause);
         this.cmdDemaPause.setSoundEffectsEnabled(false);
         this.cmdDemaPause.setOnClickListener(new EcouteurBtnDemaPause());
 
@@ -85,7 +85,7 @@ public class ControleMusiqueFragment extends Fragment {
 
         this.cmdRejouer = (ImageView) root.findViewById(R.id.btnRejouer);
         this.cmdRejouer.setSoundEffectsEnabled(false);
-        this.cmdRejouer.setOnClickListener(new EcouteurBtnRejouer());
+        this.cmdRejouer.setOnClickListener(new EcouteurBtnRejouer());*/
 
         this.showCurrentPlaylist = root.findViewById (R.id.showCurrentPlaylist);
         this.showCurrentPlaylist.setOnClickListener (new ShowCurrentPlaylist());
@@ -170,44 +170,6 @@ public class ControleMusiqueFragment extends Fragment {
         }
     }
 
-
-    private class EcouteurBtnDemaPause implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            //if (mService.getMusiquePlayerIsSet())
-            //{
-                mService.musiqueDemaPause();
-            //}
-        }
-    }
-
-    private class EcouteurBtnRejouer implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            //Active désactive la boucle de la musique actuelle
-            mService.musiqueBoucleDeboucle();
-        }
-    }
-
-    private class EcouteurMusiqueSuivante implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            //if (mService.getMusiquePlayerIsSet())
-            //{
-                mService.musiqueSuivante();
-            //}
-        }
-    }
-
-    private  class EcouteurMusiquePrecedente implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            //if (mService.getMusiquePlayerIsSet())
-            //{
-                mService.musiquePrecedente();
-            //}
-        }
-    }
 
     private class ShowCurrentPlaylist implements View.OnClickListener{
         @Override
