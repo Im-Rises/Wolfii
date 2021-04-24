@@ -39,6 +39,8 @@ public class ControleMusiqueFragment extends Fragment {
 
     private ImageView imgViewMusique;
 
+    private ArrayList<Musique> currentPlaylist;
+
     private FragmentManager fragmentManager;
 
     private FragmentTransaction fragmentTransaction;
@@ -63,13 +65,13 @@ public class ControleMusiqueFragment extends Fragment {
         fragmentManager = getActivity().getSupportFragmentManager ();
 
         //Liaisons des Boutons, des TextViews et du SeekBar de l'interface dans la code.
-        this.txtViewMusiqueTemps = (TextView) root.findViewById(R.id.txtViewMusiqueTemps);
+        this.txtViewMusiqueTemps = root.findViewById(R.id.txtViewMusiqueTemps);
 
-        this.txtViewMusiqueDuree = (TextView) root.findViewById(R.id.txtViewMusiqueDuree);
+        this.txtViewMusiqueDuree = root.findViewById(R.id.txtViewMusiqueDuree);
 
-        this.txtViewTitreMusique = (TextView) root.findViewById(R.id.txtViewTitreMusique);
+        this.txtViewTitreMusique = root.findViewById(R.id.txtViewTitreMusique);
 
-        this.txtViewAuteurMusique = (TextView) root.findViewById(R.id.txtViewAuteurMusique);
+        this.txtViewAuteurMusique = root.findViewById(R.id.txtViewAuteurMusique);
 
 /*        this.cmdDemaPause = (ImageView) root.findViewById(R.id.btnDemaPause);
         this.cmdDemaPause.setSoundEffectsEnabled(false);
@@ -85,10 +87,10 @@ public class ControleMusiqueFragment extends Fragment {
 
         this.cmdRejouer = (ImageView) root.findViewById(R.id.btnRejouer);
         this.cmdRejouer.setSoundEffectsEnabled(false);
-        this.cmdRejouer.setOnClickListener(new EcouteurBtnRejouer());*/
+        this.cmdRejouer.setOnClickListener(new EcouteurBtnRejouer());
 
         this.showCurrentPlaylist = root.findViewById (R.id.showCurrentPlaylist);
-        this.showCurrentPlaylist.setOnClickListener (new ShowCurrentPlaylist());
+        this.showCurrentPlaylist.setOnClickListener (new ShowCurrentPlaylist());*/
 
 
         this.seekBarMusique=(SeekBar) root.findViewById(R.id.seekBarMusique);
@@ -103,8 +105,19 @@ public class ControleMusiqueFragment extends Fragment {
 
         if (mService.getMusiquePlayerIsSet())
             majInterfaceInit();//Mise à jour de l'interface
-        else
-            setImageRejoueRejouer();
+        else {
+            //setImageRejoueRejouer();
+        }
+
+        currentPlaylist = mService.getCurrentPlaylist ();
+        int positionMusique = mService.getPositionMusique ();
+
+        ShowCurrentPlaylistFragment showCurrentPlaylistFragment = new ShowCurrentPlaylistFragment ();
+        showCurrentPlaylistFragment.setMaMusique(currentPlaylist);
+
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.listes, showCurrentPlaylistFragment, null);
+        fragmentTransaction.commit();
 
         return root;
     }
@@ -171,24 +184,6 @@ public class ControleMusiqueFragment extends Fragment {
     }
 
 
-    private class ShowCurrentPlaylist implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            // show current playlist
-            ArrayList<Musique> currentPlaylist = mService.getCurrentPlaylist ();
-            int positionMusique = mService.getPositionMusique ();
-
-            ShowCurrentPlaylistFragment showCurrentPlaylistFragment = new ShowCurrentPlaylistFragment ();
-            showCurrentPlaylistFragment.setMaMusique(currentPlaylist);
-
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.listes, showCurrentPlaylistFragment, null);
-            fragmentTransaction.commit();
-        }
-    }
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////FONCTIONS MAJ INTERFACE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,6 +209,7 @@ public class ControleMusiqueFragment extends Fragment {
 
 
     public void majInterfaceInit() {
+        currentPlaylist = mService.getCurrentPlaylist ();
         seekBarMusique.setMax(mService.getMusiquePlayerDuration());
         imgViewMusique.setImageBitmap(mService.recupImageMusique());
         txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
@@ -246,17 +242,20 @@ public class ControleMusiqueFragment extends Fragment {
         txtViewMusiqueTemps.setText("00:00");
         seekBarMusique.setProgress(0);
         imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.loup));
-        cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
+        //cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
         setImageRejoueRejouer();
     }
 
     public void setImageRejoueRejouer()
     {
+        /*
         if (mService.getMusiqueBoucle())
             cmdRejouer.setImageBitmap(drawableEnBitmap(R.drawable.image_rejoue));
         else
             cmdRejouer.setImageBitmap(drawableEnBitmap(R.drawable.image_rejouer));
+        */
     }
+
 
 
 
