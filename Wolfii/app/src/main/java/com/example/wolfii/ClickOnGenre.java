@@ -30,18 +30,26 @@ public class ClickOnGenre implements MyStringAdapter.ArtisteItemClickListener {
     private ArrayList<Musique> musiques;
     private RecyclerView mRecyclerView;
     private Context context;
-    private ImageView shuffle;
+    private ImageView shuffleiv;
 
     public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
     public void setContext(Context sContext){context = sContext;}
-    public void setShuffle(ImageView shuffle) {this.shuffle = shuffle;}
+    public void setShuffle(ImageView shuffle) {this.shuffleiv = shuffle;}
 
     @SuppressLint("WrongConstant")
     @Override
     public void onArtisteItemClick (View view, String genre, int position) {
         musiques = !genre.equals ("Download")  ? recuperer_musique (genre) : mesMusiques;
 
-        shuffle.setVisibility (View.VISIBLE);
+        shuffleiv.setVisibility (View.VISIBLE);
+
+        shuffleiv.setVisibility (View.VISIBLE);
+        ClickOnShuffle shuffle = new ClickOnShuffle ();
+        shuffle.setContext (context);
+        shuffle.setmRecyclerView (mRecyclerView);
+        shuffle.setPlaylist (musiques);
+        shuffleiv.setOnClickListener (shuffle);
+
 
         monMusiqueAdapter = new MyMusiqueAdapter (musiques, context);
         ClickOnMusic clicker = new ClickOnMusic();

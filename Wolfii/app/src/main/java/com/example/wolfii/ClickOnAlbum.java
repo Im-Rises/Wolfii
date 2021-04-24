@@ -30,12 +30,12 @@ public class ClickOnAlbum implements MyStringAdapter.ArtisteItemClickListener {
     private ArrayList<Musique> musiques;
     private RecyclerView mRecyclerView;
     private Context context;
-    private ImageView shuffle;
+    private ImageView shuffleiv;
 
     // SETTER
     public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
     public void setContext(Context sContext){context = sContext;}
-    public void setShuffle(ImageView shuffle) {this.shuffle = shuffle;}
+    public void setShuffle(ImageView shuffle) {this.shuffleiv = shuffle;}
 
     @SuppressLint("WrongConstant")
     @Override
@@ -43,7 +43,12 @@ public class ClickOnAlbum implements MyStringAdapter.ArtisteItemClickListener {
         Log.d("debug_clickonalbum", "ok");
         musiques = recuperer_musique (album);
 
-        shuffle.setVisibility (View.VISIBLE);
+        shuffleiv.setVisibility (View.VISIBLE);
+        ClickOnShuffle shuffle = new ClickOnShuffle ();
+        shuffle.setContext (context);
+        shuffle.setmRecyclerView (mRecyclerView);
+        shuffle.setPlaylist (musiques);
+        shuffleiv.setOnClickListener (shuffle);
 
         monMusiqueAdapter = new MyMusiqueAdapter (musiques, context);
         ClickOnMusic clicker = new ClickOnMusic();

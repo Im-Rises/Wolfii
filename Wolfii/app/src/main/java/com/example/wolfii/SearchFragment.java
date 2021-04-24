@@ -7,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,10 +17,15 @@ import androidx.fragment.app.FragmentTransaction;
 import java.util.ArrayList;
 
 public class SearchFragment extends Fragment {
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private ImageView shuffleiv;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_search, container, false);
+
+        shuffleiv = root.findViewById (R.id.shuffle);
+        shuffleiv.setVisibility (View.INVISIBLE);
 
         fragmentManager = getActivity ().getSupportFragmentManager ();
 
