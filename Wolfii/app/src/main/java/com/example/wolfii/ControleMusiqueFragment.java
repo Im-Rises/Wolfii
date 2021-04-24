@@ -48,7 +48,6 @@ public class ControleMusiqueFragment extends Fragment {
     private float rotationImageValeur=0f;
     private Handler handlerRotation = new Handler();
     private boolean imageRotationEncours= false;
-    private boolean pageEnpause=false;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,8 +91,11 @@ public class ControleMusiqueFragment extends Fragment {
         fragmentTransaction.commit();
 
 
-        if (mService.getMusiquePlayerIsSet())
+        if (mService.getMusiquePlayerIsSet()) {
             majInterfaceInit();//Mise à jour de l'interface
+        }
+
+        demaPauseRotationImage();
 
         return root;
     }
@@ -105,7 +107,6 @@ public class ControleMusiqueFragment extends Fragment {
     public void onPause() {
         super.onPause();
         arretRotationImage();
-        pageEnpause=true;
     }
 
 
@@ -119,7 +120,7 @@ public class ControleMusiqueFragment extends Fragment {
         else
             majInterfaceFin();
 
-        pageEnpause=false;
+        demaPauseRotationImage();
     }
 
     /*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
@@ -153,14 +154,13 @@ public class ControleMusiqueFragment extends Fragment {
     /*--------------------------------------DEMARRER ROTATION IMAGE------------------------------------------------*/
     public void demaPauseRotationImage()
     {
-        if (mService.getMusiquePlayerIsPlaying() && !imageRotationEncours)
-        {
-            handlerRotation.post(runnableTempsRotationImage);
-            imageRotationEncours=true;
-        }
-        else if (!mService.getMusiquePlayerIsPlaying())
-        {
-            arretRotationImage();
+        if (mService.getMusiquePlayerIsSet()) {
+            if (mService.getMusiquePlayerIsPlaying() && !imageRotationEncours) {
+                handlerRotation.post(runnableTempsRotationImage);
+                imageRotationEncours = true;
+            } else if (!mService.getMusiquePlayerIsPlaying()) {
+                arretRotationImage();
+            }
         }
     }
 
@@ -219,11 +219,14 @@ public class ControleMusiqueFragment extends Fragment {
                 case MusiqueService.EXTRA_MAJ_INIT:
                     majInterfaceInit();//Mise à jour de l'interface au démarrage de la page
                     break;
-                case MusiqueService.EXTRA_MAJ_SIMPLE:
+                case MusiqueService.EXTRA_MAJ_INFOS:
                     majInterface();//Mise à jour de l'interface
                     break;
                 case MusiqueService.EXTRA_MAJ_FIN:
                     majInterfaceFin();//Mise à jour interface d'arrêt de la lecture de musiques
+                    break;
+                case MusiqueService.EXTRA_MAJ_BOUTONS:
+                    demaPauseRotationImage();
                     break;
             }
         }
@@ -242,12 +245,8 @@ public class ControleMusiqueFragment extends Fragment {
 
 
     public void majInterface() {
-        if (mService.getMusiquePlayerIsSet()) {
-            seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
-            txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
-            if (!pageEnpause)
-                demaPauseRotationImage();
-        }
+        seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
+        txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
     }
 
     @SuppressLint("SetTextI18n")
@@ -258,7 +257,6 @@ public class ControleMusiqueFragment extends Fragment {
         txtViewMusiqueDuree.setText("00:00");
         txtViewMusiqueTemps.setText("00:00");
         seekBarMusique.setProgress(0);
-
         arretRotationImage();
         imgViewMusique.setRotation(0);
         imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.logostyle));

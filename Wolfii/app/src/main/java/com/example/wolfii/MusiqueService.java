@@ -62,7 +62,8 @@ public class MusiqueService extends Service {
     public static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
     public static final String TYPE_MAJ = "TYPE_MAJ";
     public static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
-    public static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
+    public static final String EXTRA_MAJ_INFOS = "CMD_MAJ_INFOS";
+    public static final String EXTRA_MAJ_BOUTONS = "CMD_MAJ_BOUTONS";
     public static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";
 
     //Variables de redirection vers le service (ici) pour la réception des commandes des boutons notification
@@ -190,10 +191,8 @@ public class MusiqueService extends Service {
     private Runnable runnableTemps = new Runnable() {
         @Override
         public void run() {
-            //if (getMusiquePlayerIsSet()) {
-                envoieBroadcast(EXTRA_MAJ_SIMPLE);
-                handlerTemps.postDelayed(this, 1000);//Remet dans la pile du handler un appel pour le Runnable (this)
-            //}
+            envoieBroadcast(EXTRA_MAJ_INFOS);
+            handlerTemps.postDelayed(this, 1000);//Remet dans la pile du handler un appel pour le Runnable (this)
         }
     };
 
@@ -321,8 +320,9 @@ public class MusiqueService extends Service {
             IntentFilter intentFilterJack = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
             registerReceiver(broadcastReceiverJack, intentFilterJack);
 
-            envoieBroadcast(EXTRA_MAJ_INIT);//Initialisation de la page de contrôle musique
             musiquePlayer.start();//Démarre la musique
+            envoieBroadcast(EXTRA_MAJ_INIT);//Initialisation de la page de contrôle musique
+            envoieBroadcast(EXTRA_MAJ_BOUTONS);
             notificationInitEtMaj();
             enPauseParDemandeLongue=false;
             enPauseParUtilisateur=false;
@@ -334,7 +334,8 @@ public class MusiqueService extends Service {
     public void musiquePause() {
         musiquePlayer.pause();//Mise en pause de la musique
         handlerTemps.removeCallbacks(runnableTemps);//Arret de l'handler/reunnable qui envoie des brodcast pour la mise à jour de la page de contrôle musique
-        envoieBroadcast(EXTRA_MAJ_SIMPLE);//Mise à jour de la page de controle musique
+        envoieBroadcast(EXTRA_MAJ_INFOS);//Mise à jour de la page de controle musique
+        envoieBroadcast(EXTRA_MAJ_BOUTONS);
         notificationInitEtMaj();
     }
 
@@ -412,7 +413,7 @@ public class MusiqueService extends Service {
         if (getMusiquePlayerIsSet())
             notificationInitEtMaj();
 
-        envoieBroadcast(EXTRA_MAJ_SIMPLE);
+        envoieBroadcast(EXTRA_MAJ_BOUTONS);
     }
 
 
@@ -617,7 +618,7 @@ public class MusiqueService extends Service {
             super.onSeekTo(pos);
             musiquePlayer.seekTo((int) pos);
             mediaSessionBoutonsMaj();
-            envoieBroadcast(EXTRA_MAJ_SIMPLE);
+            envoieBroadcast(EXTRA_MAJ_INFOS);
         }
     }
 

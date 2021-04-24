@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.util.ArrayList;
 
+import kotlin.jvm.internal.Ref;
+
 import static com.example.wolfii.MainActivity.mService;
 
 public class ShowCurrentPlaylistFragment extends Fragment {
@@ -80,8 +82,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter(MusiqueService.DIRECTION_ACTIVITY);
         getActivity().registerReceiver(broadcastReceiverMajInterface, intentFilter);
 
-        if (mService.getMusiquePlayerIsSet())
-            majInterface();//Mise à jour de l'interface
+        majInterfaceBouton();
 
         return root;
     }
@@ -92,8 +93,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mService.getMusiquePlayerIsSet())
-            majInterface();
+        majInterfaceBouton();
     }
 
 
@@ -133,7 +133,6 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         public void onClick(View v) {
             if (mService.getMusiquePlayerIsSet())
                 mService.musiqueSuivante();
-
         }
     }
 
@@ -142,7 +141,6 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         public void onClick(View v) {
             if (mService.getMusiquePlayerIsSet())
                 mService.musiquePrecedente();
-
         }
     }
 
@@ -157,9 +155,8 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getStringExtra(MusiqueService.TYPE_MAJ)) {
-                case MusiqueService.EXTRA_MAJ_INIT:
-                case MusiqueService.EXTRA_MAJ_SIMPLE:
-                    majInterface();//Mise à jour de l'interface
+                case MusiqueService.EXTRA_MAJ_BOUTONS:
+                    majInterfaceBouton();
                     break;
                 case MusiqueService.EXTRA_MAJ_FIN:
                     majInterfaceFin();//Mise à jour interface d'arrêt de la lecture de musiques
@@ -168,8 +165,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         }
     };
 
-
-    public void majInterface() {
+    public void majInterfaceBouton() {
         if (mService.getMusiquePlayerIsSet()) {
             if (mService.getMusiquePlayerIsPlaying())
                 playPause.setImageBitmap(drawableEnBitmap(R.drawable.pauseblanc));
@@ -179,12 +175,16 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         setImageRejoueRejouer();
     }
 
+
     @SuppressLint("SetTextI18n")
     public void majInterfaceFin()
     {
         playPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
         setImageRejoueRejouer();
     }
+
+
+
 
     public void setImageRejoueRejouer()
     {
