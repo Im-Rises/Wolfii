@@ -331,7 +331,7 @@ public class ControleMusiqueFragment extends Fragment {
 
     /*--------------------------------------CONVERSION DRAWABLE EN BITMAP------------------------------------------------*/
 
-    public Bitmap drawableEnBitmap(int drawableRes) {
+    public Bitmap drawableEnBitmap (int drawableRes) {
         @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = getResources().getDrawable(drawableRes);
         Canvas canvas = new Canvas();
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);

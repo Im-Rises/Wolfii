@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Musique> mesMusiques = new ArrayList<>();
     public static ArrayList<String> mesArtistes = new ArrayList<>();
     public static ArrayList<String> mesGenres = new ArrayList<> ();
+    public static ArrayList<String> mesAlbums = new ArrayList<> ();
+    public static ArrayList<String> mesAlbumsImages = new ArrayList<> ();
+
     private static final int MY_PERMISSION_REQUEST = 1;
 
     public static boolean estActif=false;
@@ -87,16 +91,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
         mesMusiques = getMusic();
-        mesArtistes = getArtistes(mesMusiques);
     }
 
-    // on trie les musiques selon les artistes
-    public static ArrayList<String> getArtistes(ArrayList<Musique> musiques) {
-        ArrayList<String> mesArtistes = new ArrayList<>();
-        for (Musique m : musiques)
-            if (!mesArtistes.contains(m.getAuthor())) mesArtistes.add(m.getAuthor());
-        return mesArtistes;
-    }
 
     // On recupere toutes les musiques disponibles sur le telephone
     public ArrayList getMusic() {
@@ -114,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             int songLocation = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
             int songDuration = songCursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
             int songDateTaken = songCursor.getColumnIndex(MediaStore.Audio.Media.DATE_TAKEN);
+            int songAlbum = songCursor.getColumnIndex (MediaStore.Audio.Media.ALBUM);
             int songGenre = 25; // la colonne des genres
             do {
                 // on recupere une par une certaines metadonnees des nos musiques
@@ -123,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 String currentDuration = songCursor.getString(songDuration);
                 String currentDateTaken = songCursor.getString(songDateTaken);
                 String currentGenre = songCursor.getString(songGenre);
+                String currentAlbum = songCursor.getString (songAlbum);
 
                 maMusique.add(new Musique(
                         currentTitle,
@@ -130,9 +128,15 @@ public class MainActivity extends AppCompatActivity {
                         currentPath,
                         currentDuration,
                         currentDateTaken,
-                        currentGenre));
+                        currentGenre,
+                        currentAlbum));
                 // on repertorie tous les differents genres dispos
                 if(!mesGenres.contains (currentGenre)) mesGenres.add(currentGenre);
+                if(!mesArtistes.contains(currentArtist)) mesArtistes.add(currentArtist);
+                if(!mesAlbums.contains (currentAlbum)) {
+                    mesAlbums.add(currentAlbum);
+                    mesAlbumsImages.add(currentPath);
+                }
             } while (songCursor.moveToNext()); // on arrete quand on est arrive a la fin du curseur
         }
         // on reverse le tableau pour avoir les titres telecharges recement en premier

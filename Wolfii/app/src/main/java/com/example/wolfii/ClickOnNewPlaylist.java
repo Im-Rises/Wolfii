@@ -15,7 +15,6 @@ public class ClickOnNewPlaylist implements View.OnClickListener {
 
     public void setContext(Context context) {this.context = context;}
 
-
     @Override
     public void onClick (View v) {
         Dialog dialog = new Dialog(context);
@@ -40,6 +39,7 @@ public class ClickOnNewPlaylist implements View.OnClickListener {
                 data.setPlaylist (nom.getText ().toString ());
 
                 database.mainDao ().insert (data);
+
             }
         });
     }

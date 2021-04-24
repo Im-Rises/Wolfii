@@ -1,6 +1,12 @@
 package com.example.wolfii;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.wolfii.MainActivity.mesAlbums;
+import static com.example.wolfii.MainActivity.mesAlbumsImages;
+import static com.example.wolfii.MainActivity.mesMusiques;
+
 public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyViewHolder> {
     // classe qui est responsable de chaque cellule
     // responsable du recyclage des view
@@ -22,6 +32,9 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
     public static Context context;
     private Boolean isPlaylist = false;
     private Boolean isGenre = false;
+    private Boolean isAlbum = false;
+
+    private int positionAlbum = 0;
 
     public MyStringAdapter (ArrayList<String> mesArtistes, Context sContext) {
         this.mesArtistes = mesArtistes;
@@ -30,6 +43,7 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
     // SETTER
     public void setIsPlaylist(Boolean isPlaylist) {this.isPlaylist = isPlaylist;}
     public void setIsGenre(Boolean isGenre) {this.isGenre = isGenre;}
+    public void setIsAlbum(Boolean isAlbum) {this.isAlbum = isAlbum;}
 
     // GETTER
     public Object getItem(int position) {
@@ -51,9 +65,9 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
         // on cherche notre vue avec inflater
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         // on va chercher notre layout
-        View view = isGenre ?
-                layoutInflater.inflate(R.layout.genre_item, parent, false) :
-                layoutInflater.inflate(R.layout.musique_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.musique_item, parent, false);
+        if(isGenre) view = layoutInflater.inflate(R.layout.genre_item, parent, false);
+        if(isAlbum) view = layoutInflater.inflate(R.layout.album_item, parent, false);
         // on renvoie le viewholder
         return new MyViewHolder(view);
     }
@@ -62,6 +76,10 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         // affiche les viewholder en donnant la position
         holder.display(mesArtistes.get(position));
+        if(isAlbum) {
+            holder.display (mesAlbums.get(position));
+            holder.showImage (position);
+        }
         Log.d("position", position + "");
         if(isPlaylist) {
             String playlist = mesArtistes.get (position);
@@ -91,42 +109,61 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView mName;
         private ImageView bt_settings;
+        private ImageView album;
 
         public MyViewHolder(@NonNull View itemView) {
             // itemview = vue de chaque cellule
             super(itemView);
 
-            // afficher le nom de la musique courante
-            mName = (TextView) itemView.findViewById(R.id.name);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mArtisteItemClickListener != null) {
-                        mArtisteItemClickListener.onArtisteItemClick(
-                                itemView,
-                                (String) getItem(getAdapterPosition()),
-                                getAdapterPosition());
+            if(isAlbum) {
+                album = itemView.findViewById (R.id.album);
+            }
+            else {
+
+                // afficher le nom de la musique courante
+                mName = (TextView) itemView.findViewById (R.id.name);
+                itemView.setOnClickListener (new View.OnClickListener () {
+                    @Override
+                    public void onClick (View v) {
+                        if (mArtisteItemClickListener != null) {
+                            mArtisteItemClickListener.onArtisteItemClick (
+                                    itemView,
+                                    (String) getItem (getAdapterPosition ()),
+                                    getAdapterPosition ());
+                        }
                     }
-                }
-            });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mArtisteItemClickListener != null) {
-                        mArtisteItemClickListener.onArtisteItemLongClick(
-                                itemView,
-                                (String)getItem(getAdapterPosition()),
-                                getAdapterPosition());
+                });
+                itemView.setOnLongClickListener (new View.OnLongClickListener () {
+                    @Override
+                    public boolean onLongClick (View v) {
+                        if (mArtisteItemClickListener != null) {
+                            mArtisteItemClickListener.onArtisteItemLongClick (
+                                    itemView,
+                                    (String) getItem (getAdapterPosition ()),
+                                    getAdapterPosition ());
+                        }
+                        return false;
                     }
-                    return false;
-                }
-            });
-            bt_settings = itemView.findViewById(R.id.bt_settings);
+                });
+                bt_settings = itemView.findViewById (R.id.bt_settings);
+            }
         }
         void display(String artiste) {
             // ne jamais le mettre dans le constructeur
-            mName.setText(artiste);
+            if(isAlbum) {
+            }
+            else {
+                mName.setText(artiste);
+            }
         }
+        void showImage(int position){
+            RecupererImage image = new RecupererImage (mesAlbumsImages.get (position), context);
+            try {
+                album.setImageBitmap (image.recupImageMusique ());
+            }
+            catch (Exception e) {
 
+            }
+        }
     }
 }

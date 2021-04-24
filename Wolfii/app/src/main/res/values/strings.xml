@@ -8,8 +8,8 @@
     <string name="delete">Supprimer</string>
     <string name="edit">Éditer la musique</string>
     <string name="new_playlist">nouvelle playlist</string>
-    <string name="mesPlaylists">mes playlists</string>
-    <string name="mesArtistes">mes artistes</string>
+    <string name="mesPlaylists">playlists</string>
+    <string name="mesArtistes">artistes</string>
     <string name="insert_playlist_name">Nom de la playlist</string>
     <string name="creer">créer</string>
     <string name="add_to_playlist">Ajouter à une playlist</string>
@@ -25,4 +25,5 @@
     <string name="emptyPlaylist">Vider file de lecture</string>
     <string name="mesGenres">Mes Genres</string>
     <string name="createPlaylist">Créer la playlist</string>
+    <string name="albums">albums</string>
 </resources>

@@ -36,7 +36,8 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
                         data.getPath (),
                         data.getDuration (),
                         data.getDateTaken (),
-                        data.getGenre ()));
+                        data.getGenre (),
+                        data.getAlbum ()));
             }
         }
 
