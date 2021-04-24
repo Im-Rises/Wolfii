@@ -86,6 +86,9 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter(DIRECTION_ACTIVITY);
         getActivity().registerReceiver(broadcastReceiverMajInterface, intentFilter);
 
+        if (mService.getMusiquePlayerIsSet())
+            majInterface();//Mise à jour de l'interface
+
         return root;
     }
 
