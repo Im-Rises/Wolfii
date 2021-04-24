@@ -54,6 +54,7 @@ public class ControleMusiqueFragment extends Fragment {
     private float rotationImageValeur=0f;
     private Handler handlerRotation = new Handler();
     private boolean imageRotationEncours= false;
+    private boolean pageEnpause=false;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,20 +105,13 @@ public class ControleMusiqueFragment extends Fragment {
     }
 
 
-/*    *//*--------------------------------------FONCTION ONSTART------------------------------------------------*//*
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }*/
-
     /*--------------------------------------FONCTION ONPAUSE------------------------------------------------*/
 
     @Override
     public void onPause() {
         super.onPause();
-        //Toast.makeText(getContext(),"PAUSE de l'appli",Toast.LENGTH_LONG).show();
         arretRotationImage();
+        pageEnpause=true;
     }
 
 
@@ -126,12 +120,12 @@ public class ControleMusiqueFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //Toast.makeText(getContext(),"REPRISE de l'appli",Toast.LENGTH_LONG).show();
-
         if (mService.getMusiquePlayerIsSet())
             majInterfaceInit();
         else
             majInterfaceFin();
+
+        pageEnpause=false;
     }
 
     /*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
@@ -257,7 +251,8 @@ public class ControleMusiqueFragment extends Fragment {
         if (mService.getMusiquePlayerIsSet()) {
             seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
             txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
-            demaPauseRotationImage();
+            if (!pageEnpause)
+                demaPauseRotationImage();
         }
     }
 
