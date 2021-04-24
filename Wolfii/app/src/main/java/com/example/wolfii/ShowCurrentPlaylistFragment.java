@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,9 +33,21 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private MyMusiqueAdapter monAdapter;
     private ImageView shuffleiv, reload, playPause, next, previous;
 
+    private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
+    private static final String TYPE_MAJ = "TYPE_MAJ";
+    private static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
+    private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
+    private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";
+
 
     public void setMaMusique(ArrayList<Musique> musiques) {maMusique = musiques;}
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*------------------------------------------FONCTION ONCREATE-----------------------------------------------------*/
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -65,10 +81,38 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));
         mRecyclerView.setAdapter(monAdapter);
 
+
+        //Enregistrement du receiver pour la mise à jour de l'interface
+        IntentFilter intentFilter = new IntentFilter(DIRECTION_ACTIVITY);
+        getActivity().registerReceiver(broadcastReceiverMajInterface, intentFilter);
+
         return root;
     }
 
 
+    /*--------------------------------------FONCTION ONRESUME------------------------------------------------*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        majInterface();
+    }
+
+
+    /*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //Arrêt broadcast receiver de mise à jour de l'interface
+        getActivity().unregisterReceiver(broadcastReceiverMajInterface);
+    }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////FONCTIONS D'ACTION DES BOUTONS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private class EcouteurBtnDemaPause implements View.OnClickListener{
         @Override
@@ -109,19 +153,17 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     }
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////FONCTIONS MAJ INTERFACE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   /* *//*----------------------------------GESTION BROADCASTRECEIVER--------------------------------------------------*//*
+    /*----------------------------------GESTION BROADCASTRECEIVER--------------------------------------------------*/
 
     private BroadcastReceiver broadcastReceiverMajInterface = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getStringExtra(TYPE_MAJ)) {
                 case EXTRA_MAJ_INIT:
-                    majInterfaceInit();//Mise à jour de l'interface au démarrage de la page
-                    break;
                 case EXTRA_MAJ_SIMPLE:
                     majInterface();//Mise à jour de l'interface
                     break;
@@ -133,50 +175,42 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     };
 
 
-    public void majInterfaceInit() {
-        seekBarMusique.setMax(mService.getMusiquePlayerDuration());
-        imgViewMusique.setImageBitmap(mService.recupImageMusique());
-        txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
-        txtViewTitreMusique.setText(mService.getMusiqueTitre());
-        txtViewAuteurMusique.setText(mService.getMusiqueAuteur());
-        majInterface();
-    }
-
-
     public void majInterface() {
         //if (mService.getMusiquePlayerIsSet()) {
-        seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
-        txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
-
         if (mService.getMusiquePlayerIsPlaying())
-            cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.pauseblanc));
+            playPause.setImageBitmap(drawableEnBitmap(R.drawable.pauseblanc));
         else
-            cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.playbutton));
+            playPause.setImageBitmap(drawableEnBitmap(R.drawable.playbutton));
         //}
-
         setImageRejoueRejouer();
     }
 
     @SuppressLint("SetTextI18n")
     public void majInterfaceFin()
     {
-        txtViewTitreMusique.setText("");
-        txtViewAuteurMusique.setText("");
-        txtViewMusiqueDuree.setText("00:00");
-        txtViewMusiqueTemps.setText("00:00");
-        seekBarMusique.setProgress(0);
-        imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.loup));
-        cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
+        playPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
         setImageRejoueRejouer();
     }
 
     public void setImageRejoueRejouer()
     {
         if (mService.getMusiqueBoucle())
-            cmdRejouer.setImageBitmap(drawableEnBitmap(R.drawable.image_rejoue));
+            reload.setImageBitmap(drawableEnBitmap(R.drawable.image_rejoue));
         else
-            cmdRejouer.setImageBitmap(drawableEnBitmap(R.drawable.image_rejouer));
+            reload.setImageBitmap(drawableEnBitmap(R.drawable.image_rejouer));
     }
-*/
 
+
+    /*--------------------------------------CONVERSION DRAWABLE EN BITMAP------------------------------------------------*/
+
+    public Bitmap drawableEnBitmap (int drawableRes) {
+        @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = getResources().getDrawable(drawableRes);
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
 }

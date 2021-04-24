@@ -71,21 +71,6 @@ public class ControleMusiqueFragment extends Fragment {
 
         this.txtViewAuteurMusique = (TextView) root.findViewById(R.id.txtViewAuteurMusique);
 
-/*        this.cmdDemaPause = (ImageView) root.findViewById(R.id.btnDemaPause);
-        this.cmdDemaPause.setSoundEffectsEnabled(false);
-        this.cmdDemaPause.setOnClickListener(new EcouteurBtnDemaPause());
-
-        this.cmdPrecedent = (ImageView) root.findViewById(R.id.btnMusiquePrecedente);
-        this.cmdPrecedent.setSoundEffectsEnabled(false);
-        this.cmdPrecedent.setOnClickListener(new EcouteurMusiquePrecedente());
-
-        this.cmdSuivant = (ImageView) root.findViewById(R.id.btnMusiqueSuivante);
-        this.cmdSuivant.setSoundEffectsEnabled(false);
-        this.cmdSuivant.setOnClickListener(new EcouteurMusiqueSuivante());
-
-        this.cmdRejouer = (ImageView) root.findViewById(R.id.btnRejouer);
-        this.cmdRejouer.setSoundEffectsEnabled(false);
-        this.cmdRejouer.setOnClickListener(new EcouteurBtnRejouer());*/
 
         this.showCurrentPlaylist = root.findViewById (R.id.showCurrentPlaylist);
         this.showCurrentPlaylist.setOnClickListener (new ShowCurrentPlaylist());
@@ -103,17 +88,8 @@ public class ControleMusiqueFragment extends Fragment {
 
         if (mService.getMusiquePlayerIsSet())
             majInterfaceInit();//Mise à jour de l'interface
-        else
-            setImageRejoueRejouer();
 
         return root;
-    }
-
-
-    /*--------------------------------------FONCTION ONSTART------------------------------------------------*/
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
 
@@ -233,8 +209,6 @@ public class ControleMusiqueFragment extends Fragment {
             else
                 cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.playbutton));
         //}
-
-        setImageRejoueRejouer();
     }
 
     @SuppressLint("SetTextI18n")
@@ -247,15 +221,6 @@ public class ControleMusiqueFragment extends Fragment {
         seekBarMusique.setProgress(0);
         imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.loup));
         cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
-        setImageRejoueRejouer();
-    }
-
-    public void setImageRejoueRejouer()
-    {
-        if (mService.getMusiqueBoucle())
-            cmdRejouer.setImageBitmap(drawableEnBitmap(R.drawable.image_rejoue));
-        else
-            cmdRejouer.setImageBitmap(drawableEnBitmap(R.drawable.image_rejouer));
     }
 
 
