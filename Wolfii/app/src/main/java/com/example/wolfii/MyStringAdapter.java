@@ -117,59 +117,43 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
 
             if(isAlbum) {
                 album = itemView.findViewById (R.id.album);
-                album.setOnClickListener (new View.OnClickListener () {
-                    @Override
-                    public void onClick (View v) {
-                        if (mArtisteItemClickListener != null) {
-                            mArtisteItemClickListener.onArtisteItemClick (
-                                    itemView,
-                                    (String) getItem (getAdapterPosition ()),
-                                    getAdapterPosition ());
-                        }
-                    }
-                });
-                album.setOnLongClickListener (new View.OnLongClickListener () {
-                    @Override
-                    public boolean onLongClick (View v) {
-                        if (mArtisteItemClickListener != null) {
-                            mArtisteItemClickListener.onArtisteItemLongClick (
-                                    itemView,
-                                    (String) getItem (getAdapterPosition ()),
-                                    getAdapterPosition ());
-                        }
-                        return false;
-                    }
-                });
+                album.setOnClickListener (new Click ());
+                album.setOnLongClickListener (new LongClick ());
 
             }
             else {
 
                 // afficher le nom de la musique courante
                 mName = (TextView) itemView.findViewById (R.id.name);
-                itemView.setOnClickListener (new View.OnClickListener () {
-                    @Override
-                    public void onClick (View v) {
-                        if (mArtisteItemClickListener != null) {
-                            mArtisteItemClickListener.onArtisteItemClick (
-                                    itemView,
-                                    (String) getItem (getAdapterPosition ()),
-                                    getAdapterPosition ());
-                        }
-                    }
-                });
-                itemView.setOnLongClickListener (new View.OnLongClickListener () {
-                    @Override
-                    public boolean onLongClick (View v) {
-                        if (mArtisteItemClickListener != null) {
-                            mArtisteItemClickListener.onArtisteItemLongClick (
-                                    itemView,
-                                    (String) getItem (getAdapterPosition ()),
-                                    getAdapterPosition ());
-                        }
-                        return false;
-                    }
-                });
+                itemView.setOnClickListener (new Click ());
+                itemView.setOnLongClickListener (new LongClick ());
                 bt_settings = itemView.findViewById (R.id.bt_settings);
+            }
+        }
+        public class Click implements View.OnClickListener {
+
+            @Override
+            public void onClick (View v) {
+                if (mArtisteItemClickListener != null) {
+                    mArtisteItemClickListener.onArtisteItemClick (
+                            itemView,
+                            (String) getItem (getAdapterPosition ()),
+                            getAdapterPosition ());
+                }
+            }
+        }
+
+        public class LongClick implements  View.OnLongClickListener {
+
+            @Override
+            public boolean onLongClick (View v) {
+                if (mArtisteItemClickListener != null) {
+                    mArtisteItemClickListener.onArtisteItemLongClick (
+                            itemView,
+                            (String) getItem (getAdapterPosition ()),
+                            getAdapterPosition ());
+                }
+                return false;
             }
         }
         void display(String artiste) {
