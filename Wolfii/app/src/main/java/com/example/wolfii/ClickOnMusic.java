@@ -35,6 +35,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
     public void onMusiqueItemClick (View view, Musique musique, int position) {
         Toast.makeText(Wolfii.getAppContext (), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
 
+        mService.arretSimpleMusique();
         mService.setMusiquePlaylist(mesMusiques, position);
         mService.musiqueDemaPause();
     }

@@ -342,12 +342,12 @@ public class MusiqueService extends Service {
 
     public void arretSimpleMusique()//Arret simple d'une musique en cours
     {
-        //if (getMusiquePlayerIsSet()) {
+        if (getMusiquePlayerIsSet()) {
             handlerTemps.removeCallbacks(runnableTemps);//Arret de la mise à jour de la page de contrôle musique pour le resynchroniser avec une potentielle future musique
 
             musiquePlayer.release();//Vidage de la mémoire de musique
             musiquePlayer = null;
-        //}
+        }
     }
 
     /*--------------------------------------------ARRET TOTAL MUSIQUE POUR L'ARRET DE LECTURE DE MUSIQUE--------------------------------------------------------------*/
@@ -408,7 +408,8 @@ public class MusiqueService extends Service {
 
     public void musiqueBoucleDeboucle() {
         musiqueBoucle = !musiqueBoucle;
-        //if (getMusiquePlayerIsSet())
+
+        if (getMusiquePlayerIsSet())
             notificationInitEtMaj();
 
         envoieBroadcast(EXTRA_MAJ_SIMPLE);
