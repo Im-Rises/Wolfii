@@ -25,7 +25,7 @@ public class NouveautesFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private MyStringAdapter monAdapter;
-    private ImageView shuffle;
+    private ImageView shuffle, next, previous, reload, playPause;
 
 
     public NouveautesFragment () {
@@ -42,6 +42,8 @@ public class NouveautesFragment extends Fragment {
 
         shuffle = root.findViewById (R.id.shuffle);
         shuffle.setVisibility (View.INVISIBLE);
+
+
 
         if(!mesGenres.contains ("Download")) mesGenres.add("Download");
 

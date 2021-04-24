@@ -41,8 +41,7 @@ public class ClickOnGenre implements MyStringAdapter.ArtisteItemClickListener {
     public void onArtisteItemClick (View view, String genre, int position) {
         musiques = !genre.equals ("Download")  ? recuperer_musique (genre) : mesMusiques;
 
-        shuffleiv.setVisibility (View.VISIBLE);
-
+        // on affiche le bouton shuffle
         shuffleiv.setVisibility (View.VISIBLE);
         ClickOnShuffle shuffle = new ClickOnShuffle ();
         shuffle.setContext (context);

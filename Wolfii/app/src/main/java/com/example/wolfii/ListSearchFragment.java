@@ -21,7 +21,7 @@ public class ListSearchFragment extends Fragment {
     private MyMusiqueAdapter monAdapter;
     private String artiste;
     private static ArrayList<Musique> musiques = new ArrayList<> ();
-    private ImageView shuffleiv;
+    private ImageView shuffleiv, next, previous, reload, playPause;
 
     ListSearchFragment(ArrayList<Musique> musiques, String artiste){
         this.musiques = musiques;
@@ -35,6 +35,18 @@ public class ListSearchFragment extends Fragment {
 
         shuffleiv = root.findViewById (R.id.shuffle);
         shuffleiv.setVisibility (View.INVISIBLE);
+
+        next = root.findViewById (R.id.next);
+        next.setVisibility (View.INVISIBLE);
+
+        previous = root.findViewById (R.id.previous);
+        previous.setVisibility (View.INVISIBLE);
+
+        reload = root.findViewById (R.id.reload);
+        reload.setVisibility (View.INVISIBLE);
+
+        playPause = root.findViewById (R.id.playPause);
+        playPause.setVisibility (View.INVISIBLE);
 
         TextView textView = root.findViewById (R.id.search_artiste);
         textView.setText ("resultat(s) pour : \"" + this.artiste + "\"");
