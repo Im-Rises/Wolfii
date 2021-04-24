@@ -456,7 +456,7 @@ public class MusiqueService extends Service {
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(MusiqueService.this, CHANNEL_ID);//Inititalisation d'un constructeur de notification
 
         notifBuilder.setVisibility(NotificationCompat.VISIBILITY_SECRET);               //Rend invisible la notification quand le téléphone est vérouillé et permet le controle de la musique
-        notifBuilder.setLargeIcon(recupImageMusique());                                 //Ajoute l'image de la musique lu à la notification
+        notifBuilder.setLargeIcon(recupImageMusiqueNotifSession());                                 //Ajoute l'image de la musique lu à la notification
         notifBuilder.setSmallIcon(R.drawable.loup);                                     //Icone de la notification
         notifBuilder.setContentTitle(maMusique.get(positionMusique).getName());         //Titre de la notification
         notifBuilder.setContentText(maMusique.get(positionMusique).getAuthor());        //Text de la notification
@@ -628,7 +628,7 @@ public class MusiqueService extends Service {
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, maMusique.get(positionMusique).getAuthor())
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, maMusique.get(positionMusique).getName())
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, parseInt(maMusique.get(positionMusique).getDuration()))
-                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, recupImageMusique())
+                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, recupImageMusiqueNotifSession())
                 .build()
         );
     }
@@ -666,13 +666,9 @@ public class MusiqueService extends Service {
 
     /*----------------------------------------------------FONCTIONS RECUPERTATION/CONVERSION IMAGE--------------------------------------------------------------*/
 
-    public Bitmap recupImageMusique() {
-        MediaMetadataRetriever mediaMetadataRechercheur = new MediaMetadataRetriever();
-        mediaMetadataRechercheur.setDataSource(maMusique.get(positionMusique).getPath());
+    public Bitmap recupImageMusiqueNotifSession() {
 
-        byte [] image = mediaMetadataRechercheur.getEmbeddedPicture();
-
-        mediaMetadataRechercheur.release();
+        byte [] image = recupImageMusiqueByte();
 
         if (image!=null)
             //Si une image n'est trouvé dans le fichier audio
@@ -682,6 +678,32 @@ public class MusiqueService extends Service {
             //Si aucune image n'est trouvé dans le fichier mp3 alors on met le logo loup.png
             return drawableEnBitmap(R.drawable.loup);
         }
+    }
+
+    public Bitmap recupImageMusiquePageControle() {
+
+        byte [] image = recupImageMusiqueByte();
+
+        if (image!=null)
+            //Si une image n'est trouvé dans le fichier audio
+            return BitmapFactory.decodeByteArray(image, 0, image.length);
+        else
+        {
+            //Si aucune image n'est trouvé dans le fichier mp3 alors on met le logo logoStyle.png
+            return drawableEnBitmap(R.drawable.logostyle);
+        }
+    }
+
+    public byte[] recupImageMusiqueByte()
+    {
+        MediaMetadataRetriever mediaMetadataRechercheur = new MediaMetadataRetriever();
+        mediaMetadataRechercheur.setDataSource(maMusique.get(positionMusique).getPath());
+
+        byte [] image = mediaMetadataRechercheur.getEmbeddedPicture();
+
+        mediaMetadataRechercheur.release();
+
+        return image;
     }
 
 

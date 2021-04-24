@@ -8,17 +8,24 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RotateDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import java.net.ContentHandlerFactory;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import static com.example.wolfii.MainActivity.mService;
@@ -44,7 +51,9 @@ public class ControleMusiqueFragment extends Fragment {
     private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
     private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";*/
 
-
+    private float rotationImageValeur=0f;
+    private Handler handlerRotation = new Handler();
+    private boolean imageRotationEncours= false;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,11 +104,30 @@ public class ControleMusiqueFragment extends Fragment {
     }
 
 
+/*    *//*--------------------------------------FONCTION ONSTART------------------------------------------------*//*
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }*/
+
+    /*--------------------------------------FONCTION ONPAUSE------------------------------------------------*/
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //Toast.makeText(getContext(),"PAUSE de l'appli",Toast.LENGTH_LONG).show();
+        arretRotationImage();
+    }
+
+
     /*--------------------------------------FONCTION ONRESUME------------------------------------------------*/
 
     @Override
     public void onResume() {
         super.onResume();
+        //Toast.makeText(getContext(),"REPRISE de l'appli",Toast.LENGTH_LONG).show();
+
         if (mService.getMusiquePlayerIsSet())
             majInterfaceInit();
         else
@@ -112,6 +140,47 @@ public class ControleMusiqueFragment extends Fragment {
         super.onDestroy();
         //Arrêt broadcast receiver de mise à jour de l'interface
         getActivity().unregisterReceiver(broadcastReceiverMajInterface);
+    }
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////GESTION ROTATION IMAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*--------------------------------------RUNNABLE DE ROATION DE L'IMAGE------------------------------------------------*/
+    private Runnable runnableTempsRotationImage = new Runnable() {
+        @Override
+        public void run() {
+            if (rotationImageValeur>=360)
+                rotationImageValeur=0;
+
+            rotationImageValeur += 0.5f;
+            imgViewMusique.setRotation(rotationImageValeur);
+            handlerRotation.postDelayed(runnableTempsRotationImage,50);
+        }
+    };
+
+    /*--------------------------------------DEMARRER ROTATION IMAGE------------------------------------------------*/
+    public void demaPauseRotationImage()
+    {
+        if (mService.getMusiquePlayerIsPlaying() && !imageRotationEncours)
+        {
+            handlerRotation.post(runnableTempsRotationImage);
+            imageRotationEncours=true;
+        }
+        else if (!mService.getMusiquePlayerIsPlaying())
+        {
+            arretRotationImage();
+        }
+    }
+
+    /*--------------------------------------ARRETER ROTATION IMAGE------------------------------------------------*/
+    public void arretRotationImage()
+    {
+        handlerRotation.removeCallbacks(runnableTempsRotationImage);
+        imageRotationEncours=false;
     }
 
 
@@ -174,9 +243,9 @@ public class ControleMusiqueFragment extends Fragment {
 
 
     public void majInterfaceInit() {
-        currentPlaylist = mService.getCurrentPlaylist ();
+        currentPlaylist = mService.getCurrentPlaylist();
         seekBarMusique.setMax(mService.getMusiquePlayerDuration());
-        imgViewMusique.setImageBitmap(mService.recupImageMusique());
+        imgViewMusique.setImageBitmap(mService.recupImageMusiquePageControle());
         txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
         txtViewTitreMusique.setText(mService.getMusiqueTitre());
         txtViewAuteurMusique.setText(mService.getMusiqueAuteur());
@@ -188,6 +257,7 @@ public class ControleMusiqueFragment extends Fragment {
         if (mService.getMusiquePlayerIsSet()) {
             seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
             txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
+            demaPauseRotationImage();
         }
     }
 
@@ -199,7 +269,10 @@ public class ControleMusiqueFragment extends Fragment {
         txtViewMusiqueDuree.setText("00:00");
         txtViewMusiqueTemps.setText("00:00");
         seekBarMusique.setProgress(0);
-        imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.loup));
+
+        arretRotationImage();
+        imgViewMusique.setRotation(0);
+        imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.logostyle));
     }
 
 

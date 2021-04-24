@@ -22,7 +22,7 @@
         android:id="@+id/imgViewLogo"
         android:layout_width="257dp"
         android:layout_height="221dp"
-        android:src="@drawable/loup"
+        android:src="@drawable/logostyle"
         app:civ_border_color="#FF000000"
         app:civ_border_width="0dp" />
     <!-- LES TIMERS -->
