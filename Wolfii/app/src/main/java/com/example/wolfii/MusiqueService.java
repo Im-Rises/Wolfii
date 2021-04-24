@@ -151,7 +151,7 @@ public class MusiqueService extends Service {
         //Si l'application a été arrêté automatiquement par le système android car la musique
         //était en pause (aucune activité n'était faite par l'application) alors on arrête toute
         //les notifications au cas où une soit restée.
-        notifManagerCompat.cancelAll();
+        stopForeground(true);
         estActif=false;
     }
 
@@ -512,12 +512,9 @@ public class MusiqueService extends Service {
                 notificationManager.createNotificationChannel(notifChannel);//Création du channel de notificatios
             }
 
-            startForeground(NOTIFICATION_ID, notifBuilder.build());//Démarre le service au premier-plan afin de permettre de continuer la musique après l'avoir fermé
         }
-        else
-        {
-            notifManagerCompat.notify(NOTIFICATION_ID,notifBuilder.build());
-        }
+
+        startForeground(NOTIFICATION_ID, notifBuilder.build());//Démarre le service au premier-plan afin de permettre de continuer la musique après l'avoir fermé
 
         mediaSessionNotifInitBool = true;//Attribue la valeur déjà initialisé une fois à notre variable booléenne
     }
