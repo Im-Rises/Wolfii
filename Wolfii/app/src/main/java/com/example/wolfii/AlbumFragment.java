@@ -37,17 +37,19 @@ public class AlbumFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_liste_recherche, container, false);
 
-        ////////////////////////// ARTISTES /////////////////////////////
+        ////////////////////////// ALBUMS /////////////////////////////
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById (R.id.myRecyclerView);
 
         monArtisteAdapter = new MyStringAdapter (mesAlbums, getActivity ());
+        monArtisteAdapter.setIsAlbum (true);
+        mRecyclerView.setLayoutManager (new GridLayoutManager (getActivity (), 2));
+
         ClickOnAlbum clickOnAlbum = new ClickOnAlbum ();
         clickOnAlbum.setContext (getActivity ());
         clickOnAlbum.setRecyclerViewForMusic (mRecyclerView);
         monArtisteAdapter.setmArtisteItemClickListener (clickOnAlbum);
-        monArtisteAdapter.setIsAlbum (true);
-        mRecyclerView.setLayoutManager (new GridLayoutManager (getActivity (), 2));
+
         mRecyclerView.setAdapter (monArtisteAdapter);
 
         return root;

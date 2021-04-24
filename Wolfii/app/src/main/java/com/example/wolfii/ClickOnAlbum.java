@@ -1,5 +1,6 @@
 package com.example.wolfii;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
@@ -7,8 +8,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.Wolfii;
@@ -29,8 +32,10 @@ public class ClickOnAlbum implements MyStringAdapter.ArtisteItemClickListener {
     public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
     public void setContext(Context sContext){context = sContext;}
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onArtisteItemClick (View view, String album, int position) {
+        Log.d("debug_clickonalbum", "ok");
         musiques = recuperer_musique (album);
 
         monMusiqueAdapter = new MyMusiqueAdapter (musiques, context);
@@ -38,6 +43,7 @@ public class ClickOnAlbum implements MyStringAdapter.ArtisteItemClickListener {
         clicker.setMesMusiques (musiques);
         clicker.setContext (context);
         monMusiqueAdapter.setmMusiqueItemClickListener (clicker);
+        mRecyclerView.setLayoutManager (new LinearLayoutManager (context.getApplicationContext(), LinearLayout.VERTICAL, false));
         mRecyclerView.setAdapter (monMusiqueAdapter);
     }
 

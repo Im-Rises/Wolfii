@@ -117,6 +117,30 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
 
             if(isAlbum) {
                 album = itemView.findViewById (R.id.album);
+                album.setOnClickListener (new View.OnClickListener () {
+                    @Override
+                    public void onClick (View v) {
+                        if (mArtisteItemClickListener != null) {
+                            mArtisteItemClickListener.onArtisteItemClick (
+                                    itemView,
+                                    (String) getItem (getAdapterPosition ()),
+                                    getAdapterPosition ());
+                        }
+                    }
+                });
+                album.setOnLongClickListener (new View.OnLongClickListener () {
+                    @Override
+                    public boolean onLongClick (View v) {
+                        if (mArtisteItemClickListener != null) {
+                            mArtisteItemClickListener.onArtisteItemLongClick (
+                                    itemView,
+                                    (String) getItem (getAdapterPosition ()),
+                                    getAdapterPosition ());
+                        }
+                        return false;
+                    }
+                });
+
             }
             else {
 
