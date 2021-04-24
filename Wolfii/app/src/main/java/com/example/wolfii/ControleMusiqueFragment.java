@@ -25,8 +25,6 @@ import java.util.concurrent.TimeUnit;
 import static com.example.wolfii.MainActivity.mService;
 
 
-
-
 public class ControleMusiqueFragment extends Fragment {
 
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
@@ -52,8 +50,6 @@ public class ControleMusiqueFragment extends Fragment {
     private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";
 
 
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +60,7 @@ public class ControleMusiqueFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_controle_musique, container, false);
 
         // on initialise le fragment manager
-        fragmentManager = getActivity ().getSupportFragmentManager ();
+        fragmentManager = getActivity().getSupportFragmentManager ();
 
         //Liaisons des Boutons, des TextViews et du SeekBar de l'interface dans la code.
         this.txtViewMusiqueTemps = (TextView) root.findViewById(R.id.txtViewMusiqueTemps);
@@ -126,9 +122,10 @@ public class ControleMusiqueFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mService.getMusiquePlayerIsSet()) {
+        if (mService.getMusiquePlayerIsSet())
             majInterfaceInit();
-        }
+        else
+            majInterfaceFin();
     }
 
     /*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
@@ -177,10 +174,10 @@ public class ControleMusiqueFragment extends Fragment {
     private class EcouteurBtnDemaPause implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            if (mService.getMusiquePlayerIsSet())
-            {
+            //if (mService.getMusiquePlayerIsSet())
+            //{
                 mService.musiqueDemaPause();
-            }
+            //}
         }
     }
 
@@ -195,20 +192,20 @@ public class ControleMusiqueFragment extends Fragment {
     private class EcouteurMusiqueSuivante implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            if (mService.getMusiquePlayerIsSet())
-            {
+            //if (mService.getMusiquePlayerIsSet())
+            //{
                 mService.musiqueSuivante();
-            }
+            //}
         }
     }
 
     private  class EcouteurMusiquePrecedente implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            if (mService.getMusiquePlayerIsSet())
-            {
+            //if (mService.getMusiquePlayerIsSet())
+            //{
                 mService.musiquePrecedente();
-            }
+            //}
         }
     }
 
@@ -256,7 +253,6 @@ public class ControleMusiqueFragment extends Fragment {
 
     public void majInterfaceInit() {
         seekBarMusique.setMax(mService.getMusiquePlayerDuration());
-        //imgViewMusique.setImageBitmap(getRoundedCornerBitmap (mService.recupImageMusique(), 100));
         imgViewMusique.setImageBitmap(mService.recupImageMusique());
         txtViewMusiqueDuree.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerDuration()));
         txtViewTitreMusique.setText(mService.getMusiqueTitre());
@@ -266,7 +262,7 @@ public class ControleMusiqueFragment extends Fragment {
 
 
     public void majInterface() {
-        if (mService.getMusiquePlayerIsSet()) {
+        //if (mService.getMusiquePlayerIsSet()) {
             seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
             txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
 
@@ -274,7 +270,7 @@ public class ControleMusiqueFragment extends Fragment {
                 cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.pauseblanc));
             else
                 cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.playbutton));
-        }
+        //}
 
         setImageRejoueRejouer();
     }
@@ -289,6 +285,7 @@ public class ControleMusiqueFragment extends Fragment {
         seekBarMusique.setProgress(0);
         imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.loup));
         cmdDemaPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
+        setImageRejoueRejouer();
     }
 
     public void setImageRejoueRejouer()

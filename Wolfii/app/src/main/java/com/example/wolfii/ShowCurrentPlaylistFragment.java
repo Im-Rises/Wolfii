@@ -22,7 +22,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
-    private ImageView shuffleiv;
+    private ImageView shuffleiv, reload, playPause, next, previous;
 
 
     public void setMaMusique(ArrayList<Musique> musiques) {maMusique = musiques;}

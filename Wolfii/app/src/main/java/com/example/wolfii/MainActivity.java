@@ -11,9 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -21,9 +19,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -168,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    //////////////FONCTION ONDESTROY (FERMETURE APPLICATION)/////
+    /*--------------------------------------FONCTION ONDESTROY------------------------------------------------*/
     @Override
     protected void onDestroy() {
         super.onDestroy();

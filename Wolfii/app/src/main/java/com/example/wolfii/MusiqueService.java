@@ -188,10 +188,10 @@ public class MusiqueService extends Service {
     private Runnable runnableTemps = new Runnable() {
         @Override
         public void run() {
-            if (musiquePlayer != null) {
+            //if (getMusiquePlayerIsSet()) {
                 envoieBroadcast(EXTRA_MAJ_SIMPLE);
                 handlerTemps.postDelayed(this, 1000);//Remet dans la pile du handler un appel pour le Runnable (this)
-            }
+            //}
         }
     };
 
@@ -215,8 +215,6 @@ public class MusiqueService extends Service {
     private AudioManager.OnAudioFocusChangeListener musiqueFocusChange = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
-            Log.e("Type de focusChange", " : " + focusChange);
-
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_GAIN://Cas de regain du focus audio lorsqu'une application a demandé temporairement le focus audio
                 {
@@ -341,19 +339,19 @@ public class MusiqueService extends Service {
 
     public void arretSimpleMusique()//Arret simple d'une musique en cours
     {
-        if (musiquePlayer != null) {
+        //if (getMusiquePlayerIsSet()) {
             handlerTemps.removeCallbacks(runnableTemps);//Arret de la mise à jour de la page de contrôle musique pour le resynchroniser avec une potentielle future musique
 
             musiquePlayer.release();//Vidage de la mémoire de musique
             musiquePlayer = null;
-        }
+        //}
     }
 
     /*--------------------------------------------ARRET TOTAL MUSIQUE POUR L'ARRET DE LECTURE DE MUSIQUE--------------------------------------------------------------*/
 
     public void arretTotalMusique()//Arret appelé dès qu'on arrête toute lecture en cours
     {
-        if (musiquePlayer != null) {
+        //if (getMusiquePlayerIsSet()) {
             arretSimpleMusique();
 
             //Abandon du focus audio en fonction de la version d'android
@@ -370,7 +368,7 @@ public class MusiqueService extends Service {
             arretMediaSession();
             envoieBroadcast(EXTRA_MAJ_FIN);
             mediaSessionNotifInitBool=false;
-        }
+        //}
     }
 
     /*--------------------------------------------PASSAGE A LA MUSIQUE SUIVANTE--------------------------------------------------------------*/
@@ -407,7 +405,7 @@ public class MusiqueService extends Service {
 
     public void musiqueBoucleDeboucle() {
         musiqueBoucle = !musiqueBoucle;
-        if (musiquePlayer!=null)
+        //if (getMusiquePlayerIsSet())
             notificationInitEtMaj();
 
         envoieBroadcast(EXTRA_MAJ_SIMPLE);
