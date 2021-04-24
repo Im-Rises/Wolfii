@@ -259,9 +259,16 @@ public class MusiqueService extends Service {
     /*--------------------------------------------DEMARRAGE ET MISE EN PAUSE DE LA MUSQUE PAR L'UTILISATEUR--------------------------------------------------------------*/
     public void musiqueDemaPause() {
         if (musiquePlayer == null) {
-            //Mettre ici un try catch si la musique n'est pas trouvée
-            musiqueInitialisation();
-            musiqueDemaEtFocus();
+            //Try catch pour vérifier si la musique chargée n'est pas trouvée
+            try
+            {
+                musiqueInitialisation();
+                musiqueDemaEtFocus();
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(getApplicationContext(),"Erreur : "+e.getMessage(),Toast.LENGTH_LONG).show();
+            }
         }
         else if (!musiquePlayer.isPlaying())
         {
@@ -275,7 +282,7 @@ public class MusiqueService extends Service {
 
     /*--------------------------------------------INITIALISATION MUSIQUE--------------------------------------------------------------*/
 
-    public void musiqueInitialisation() {
+    public void musiqueInitialisation() throws Exception {
         musiquePlayer = MediaPlayer.create(this, maMusique.get(positionMusique).getPathUri());//Création du MediaPlayer
         musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);//Définis le mode de fonctionnement sur PARTIAL_WAKE_LOCK pour permettre à la musique de fonctionner sans être sur l'application
         musiquePlayer.setOnCompletionListener(new EcouteurMusiqueFinie());
