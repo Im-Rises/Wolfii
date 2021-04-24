@@ -33,12 +33,6 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private MyMusiqueAdapter monAdapter;
     private ImageView shuffleiv, reload, playPause, next, previous;
 
-/*    private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
-    private static final String TYPE_MAJ = "TYPE_MAJ";
-    private static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
-    private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
-    private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";*/
-
 
     public void setMaMusique(ArrayList<Musique> musiques) {maMusique = musiques;}
 

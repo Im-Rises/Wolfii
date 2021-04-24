@@ -45,12 +45,6 @@ public class ControleMusiqueFragment extends Fragment {
 
     private FragmentTransaction fragmentTransaction;
 
-/*    private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
-    private static final String TYPE_MAJ = "TYPE_MAJ";
-    private static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
-    private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
-    private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";*/
-
     private float rotationImageValeur=0f;
     private Handler handlerRotation = new Handler();
     private boolean imageRotationEncours= false;
