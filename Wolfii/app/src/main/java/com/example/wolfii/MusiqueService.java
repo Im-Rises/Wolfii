@@ -59,11 +59,11 @@ public class MusiqueService extends Service {
     private int positionMusique;//Position de la musique en cours de lecture
 
     //Variables de redirection vers le BoradcastReceiver de l'activité pour la mise  à jour de la page ControleMusiqueFragment.java
-    private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
-    private static final String TYPE_MAJ = "TYPE_MAJ";
-    private static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
-    private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
-    private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";
+    public static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
+    public static final String TYPE_MAJ = "TYPE_MAJ";
+    public static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
+    public static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
+    public static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";
 
     //Variables de redirection vers le service (ici) pour la réception des commandes des boutons notification
     private static final String DIRECTION_SERVICE = "TO_SERVICE";

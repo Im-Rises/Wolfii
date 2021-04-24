@@ -33,11 +33,11 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private MyMusiqueAdapter monAdapter;
     private ImageView shuffleiv, reload, playPause, next, previous;
 
-    private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
+/*    private static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
     private static final String TYPE_MAJ = "TYPE_MAJ";
     private static final String EXTRA_MAJ_INIT = "CMD_MAJ_INIT";
     private static final String EXTRA_MAJ_SIMPLE = "CMD_MAJ_SIMPLE";
-    private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";
+    private static final String EXTRA_MAJ_FIN = "CMD_MAJ_FIN";*/
 
 
     public void setMaMusique(ArrayList<Musique> musiques) {maMusique = musiques;}
@@ -83,7 +83,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
 
 
         //Enregistrement du receiver pour la mise à jour de l'interface
-        IntentFilter intentFilter = new IntentFilter(DIRECTION_ACTIVITY);
+        IntentFilter intentFilter = new IntentFilter(MusiqueService.DIRECTION_ACTIVITY);
         getActivity().registerReceiver(broadcastReceiverMajInterface, intentFilter);
 
         if (mService.getMusiquePlayerIsSet())
@@ -162,12 +162,12 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private BroadcastReceiver broadcastReceiverMajInterface = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            switch (intent.getStringExtra(TYPE_MAJ)) {
-                case EXTRA_MAJ_INIT:
-                case EXTRA_MAJ_SIMPLE:
+            switch (intent.getStringExtra(MusiqueService.TYPE_MAJ)) {
+                case MusiqueService.EXTRA_MAJ_INIT:
+                case MusiqueService.EXTRA_MAJ_SIMPLE:
                     majInterface();//Mise à jour de l'interface
                     break;
-                case EXTRA_MAJ_FIN:
+                case MusiqueService.EXTRA_MAJ_FIN:
                     majInterfaceFin();//Mise à jour interface d'arrêt de la lecture de musiques
                     break;
             }
@@ -202,10 +202,10 @@ public class ShowCurrentPlaylistFragment extends Fragment {
 
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////AUTRES FONCTIONS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     /*--------------------------------------CONVERSION DRAWABLE EN BITMAP------------------------------------------------*/
 
