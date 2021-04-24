@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
+    private ImageView shuffleiv;
 
 
     public void setMaMusique(ArrayList<Musique> musiques) {maMusique = musiques;}
@@ -28,10 +30,17 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_show_current_playlist, container, false);
+        View root = inflater.inflate(R.layout.fragment_liste_recherche, container, false);
         //database.getInstance (getActivity ());
         // creation du recyclerview
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.myRecyclerView);
+        mRecyclerView = root.findViewById(R.id.myRecyclerView);
+
+        shuffleiv = root.findViewById (R.id.shuffle);
+        ClickOnShuffle shuffle = new ClickOnShuffle ();
+        shuffle.setContext (getActivity ());
+        shuffle.setmRecyclerView (mRecyclerView);
+        shuffle.setPlaylist (maMusique);
+        shuffleiv.setOnClickListener (shuffle);
 
         monAdapter = new MyMusiqueAdapter (maMusique, getActivity ());
         ClickOnMusic clickOnMusic = new ClickOnMusic ();
