@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -29,13 +30,18 @@ public class ClickOnGenre implements MyStringAdapter.ArtisteItemClickListener {
     private ArrayList<Musique> musiques;
     private RecyclerView mRecyclerView;
     private Context context;
+    private ImageView shuffle;
+
     public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
     public void setContext(Context sContext){context = sContext;}
+    public void setShuffle(ImageView shuffle) {this.shuffle = shuffle;}
 
     @SuppressLint("WrongConstant")
     @Override
     public void onArtisteItemClick (View view, String genre, int position) {
         musiques = !genre.equals ("Download")  ? recuperer_musique (genre) : mesMusiques;
+
+        shuffle.setVisibility (View.VISIBLE);
 
         monMusiqueAdapter = new MyMusiqueAdapter (musiques, context);
         ClickOnMusic clicker = new ClickOnMusic();

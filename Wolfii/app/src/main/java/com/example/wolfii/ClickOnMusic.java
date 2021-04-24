@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.Wolfii;
@@ -20,6 +21,7 @@ import static com.example.wolfii.MusiqueService.maMusique;
 public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
     private ArrayList<Musique> mesMusiques;
     private static Context context;
+    private ImageView shuffle;
 
     public ClickOnMusic () {
     }
@@ -27,6 +29,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
     // SETTER
     public void setMesMusiques(ArrayList<Musique> musiques) {mesMusiques = musiques;}
     public void setContext(Context sContext){context = sContext;}
+    public void setShuffle(ImageView shuffle) {this.shuffle = shuffle;}
 
     @Override
     public void onMusiqueItemClick (View view, Musique musique, int position) {

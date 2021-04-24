@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -29,14 +30,20 @@ public class ClickOnAlbum implements MyStringAdapter.ArtisteItemClickListener {
     private ArrayList<Musique> musiques;
     private RecyclerView mRecyclerView;
     private Context context;
+    private ImageView shuffle;
+
+    // SETTER
     public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
     public void setContext(Context sContext){context = sContext;}
+    public void setShuffle(ImageView shuffle) {this.shuffle = shuffle;}
 
     @SuppressLint("WrongConstant")
     @Override
     public void onArtisteItemClick (View view, String album, int position) {
         Log.d("debug_clickonalbum", "ok");
         musiques = recuperer_musique (album);
+
+        shuffle.setVisibility (View.VISIBLE);
 
         monMusiqueAdapter = new MyMusiqueAdapter (musiques, context);
         ClickOnMusic clicker = new ClickOnMusic();

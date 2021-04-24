@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,12 +27,17 @@ public class ClickOnArtist implements MyStringAdapter.ArtisteItemClickListener {
     private ArrayList<Musique> musiques;
     private RecyclerView mRecyclerView;
     private Context context;
+    private ImageView shuffle;
+
     public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
     public void setContext(Context sContext){context = sContext;}
+    public void setShuffle(ImageView shuffle) {this.shuffle = shuffle;}
 
     @Override
     public void onArtisteItemClick (View view, String artiste, int position) {
         musiques = recuperer_musique (artiste);
+
+        shuffle.setVisibility (View.VISIBLE);
 
         monMusiqueAdapter = new MyMusiqueAdapter (musiques, context);
         ClickOnMusic clicker = new ClickOnMusic();

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -23,7 +24,9 @@ import static com.example.wolfii.MainActivity.mesGenres;
 public class NouveautesFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    MyStringAdapter monAdapter;
+    private MyStringAdapter monAdapter;
+    private ImageView shuffle;
+
 
     public NouveautesFragment () {
         // Required empty public constructor
@@ -37,17 +40,22 @@ public class NouveautesFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate (R.layout.fragment_nouveautes, container, false);
 
+        shuffle = root.findViewById (R.id.shuffle);
+        shuffle.setVisibility (View.INVISIBLE);
+
         if(!mesGenres.contains ("Download")) mesGenres.add("Download");
 
-        // on recupere toutes les playlists
         mRecyclerView= root.findViewById (R.id.myRecyclerView);
         monAdapter = new MyStringAdapter (mesGenres, getActivity ());
         monAdapter.setIsGenre (true);
         mRecyclerView.setLayoutManager (new GridLayoutManager (getActivity (), 2));
+
         ClickOnGenre clickOnGenre = new ClickOnGenre ();
         clickOnGenre.setRecyclerViewForMusic (mRecyclerView);
         clickOnGenre.setContext (getActivity ());
+        clickOnGenre.setShuffle (shuffle);
         monAdapter.setmArtisteItemClickListener (clickOnGenre);
+
         mRecyclerView.setAdapter (monAdapter);
 
         return root;

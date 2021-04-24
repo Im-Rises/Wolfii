@@ -1,10 +1,12 @@
 package com.example.wolfii;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
@@ -22,6 +24,7 @@ public class ArtistFragment extends Fragment {
     private String artiste;
     private  ArrayList<Musique> musiques = new ArrayList<> ();
     private MyStringAdapter monArtisteAdapter;
+    private ImageView shuffle;
 
     ArtistFragment(){}
 
@@ -32,12 +35,16 @@ public class ArtistFragment extends Fragment {
 
         ////////////////////////// ARTISTES /////////////////////////////
         // creation du recyclerview
-        mRecyclerView = (RecyclerView) root.findViewById (R.id.myRecyclerView);
-
+        mRecyclerView = root.findViewById (R.id.myRecyclerView);
+        shuffle = root.findViewById (R.id.shuffle);
+        shuffle.setVisibility (View.INVISIBLE);
         monArtisteAdapter = new MyStringAdapter (mesArtistes, getActivity ());
+
         ClickOnArtist clickOnArtist = new ClickOnArtist ();
         clickOnArtist.setContext (getActivity ());
         clickOnArtist.setRecyclerViewForMusic (mRecyclerView);
+        clickOnArtist.setShuffle (shuffle);
+
         monArtisteAdapter.setmArtisteItemClickListener (clickOnArtist);
         mRecyclerView.setLayoutManager (new LinearLayoutManager (getActivity ().getApplicationContext (), LinearLayout.VERTICAL, false));
         mRecyclerView.setAdapter (monArtisteAdapter);
