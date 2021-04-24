@@ -98,7 +98,8 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        majInterface();
+        if (mService.getMusiquePlayerIsSet())
+            majInterface();
     }
 
 
@@ -179,12 +180,12 @@ public class ShowCurrentPlaylistFragment extends Fragment {
 
 
     public void majInterface() {
-        //if (mService.getMusiquePlayerIsSet()) {
+
         if (mService.getMusiquePlayerIsPlaying())
             playPause.setImageBitmap(drawableEnBitmap(R.drawable.pauseblanc));
         else
             playPause.setImageBitmap(drawableEnBitmap(R.drawable.playbutton));
-        //}
+
         setImageRejoueRejouer();
     }
 
