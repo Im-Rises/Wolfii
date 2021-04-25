@@ -23,6 +23,7 @@
         android:layout_width="257dp"
         android:layout_height="221dp"
         android:src="@drawable/logostyle"
+        android:background="@drawable/arrondi"
         app:civ_border_color="#FF000000"
         app:civ_border_width="0dp" />
 
@@ -69,18 +70,30 @@
         app:layout_constraintTop_toBottomOf="@+id/timer"
         app:layout_constraintVertical_bias="0.254" />
 
-    <TextView
-        android:id="@+id/txtViewTitreMusique"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:width="10dp"
-        android:height="10dp"
-        android:gravity="center_horizontal"
-        android:padding="5dp"
-        android:textAlignment="center"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/seekBarMusique"
-        app:layout_constraintTop_toBottomOf="@+id/btnDemaPause" />
+    <ScrollView
+        android:id="@+id/SCROLLER_ID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="horizontal"
+        android:fillViewport="true">
+
+        <TextView
+            android:id="@+id/txtViewTitreMusique"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:width="10dp"
+            android:height="10dp"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textColor="#fff"
+            app:layout_constraintBottom_toTopOf="@+id/seekBarMusique"
+            app:layout_constraintTop_toBottomOf="@+id/btnDemaPause" />
+
+
+    </ScrollView>
+
 
     <TextView
         android:id="@+id/txtViewAuteurMusique"
@@ -92,6 +105,7 @@
         android:padding="5dp"
         android:textAlignment="center"
         android:textSize="20dp"
+        android:textColor="#fff"
         app:layout_constraintBottom_toTopOf="@+id/txtViewTitreMusique"
         app:layout_constraintTop_toBottomOf="@+id/btnDemaPause" />
 
