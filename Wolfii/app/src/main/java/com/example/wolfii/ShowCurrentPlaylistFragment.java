@@ -34,10 +34,11 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
     private ImageView shuffleiv, reload, playPause, next, previous;
+    private int positionMusique;
 
 
     public void setMaMusique(ArrayList<Musique> musiques) {maMusique = musiques;}
-
+    public void setPositionMusique(int positionMusique) {this.positionMusique = positionMusique;}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +70,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         playPause.setOnClickListener(new EcouteurBtnDemaPause());
 
         monAdapter = new MyMusiqueAdapter (maMusique, getActivity ());
+        monAdapter.setPositionMusique (positionMusique);
         ClickOnMusic clickOnMusic = new ClickOnMusic ();
         clickOnMusic.setMesMusiques (maMusique);
         clickOnMusic.setContext (getActivity ());

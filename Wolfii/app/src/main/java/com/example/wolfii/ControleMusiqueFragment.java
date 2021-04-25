@@ -53,6 +53,9 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
 
     private FragmentTransaction fragmentTransaction;
 
+    private ShowCurrentPlaylistFragment showCurrentPlaylistFragment = new ShowCurrentPlaylistFragment ();
+
+
     private float rotationImageValeur=0f;
     private Handler handlerRotation = new Handler();
     private boolean imageRotationDejaInit = false;
@@ -92,9 +95,7 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
         getActivity().registerReceiver(broadcastReceiverMajInterface, intentFilter);
 
         currentPlaylist = mService.getCurrentPlaylist ();
-        int positionMusique = mService.getPositionMusique ();
 
-        ShowCurrentPlaylistFragment showCurrentPlaylistFragment = new ShowCurrentPlaylistFragment ();
         showCurrentPlaylistFragment.setMaMusique(currentPlaylist);
 
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -249,6 +250,7 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
 
 
     public void majInterfaceInit() {
+        showCurrentPlaylistFragment.setPositionMusique (mService.getPositionMusique ());
         currentPlaylist = mService.getCurrentPlaylist();
         seekBarMusique.setMax(mService.getMusiquePlayerDuration());
         imgViewMusique.setImageBitmap(mService.recupImageMusiquePageControle());
@@ -260,6 +262,7 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
 
 
     public void majInterface() {
+        showCurrentPlaylistFragment.setPositionMusique (mService.getPositionMusique ());
         seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
         txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
     }

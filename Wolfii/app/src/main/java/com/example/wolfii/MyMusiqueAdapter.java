@@ -1,6 +1,8 @@
 package com.example.wolfii;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -18,8 +21,11 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
     // classe qui est responsable de chaque cellule
     // responsable du recyclage des view
     // view holder = accelerer le rendu de la liste, il sera déclaré au sein de l'adapter
-    ArrayList<Musique> mesMusiques;
+    private ArrayList<Musique> mesMusiques;
     public static Context context;
+
+    private int positionMusique = -1;
+    private Boolean positionMusiqueIsSet = false;
 
     public List<Musique> getMesMusiques() {
         return mesMusiques;
@@ -28,6 +34,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
     public void setMesMusiques(ArrayList<Musique> mesMusiques) {
         this.mesMusiques = mesMusiques;
     }
+    public void setPositionMusique(int positionMusique){this.positionMusique = positionMusique; this.positionMusiqueIsSet=true;}
 
     public MyMusiqueAdapter(ArrayList<Musique> mesMusiques, Context context) {
         this.mesMusiques = mesMusiques;
@@ -59,10 +66,11 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
         return new MyViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         // affiche les viewholder en donnant la position
-        holder.display(mesMusiques.get(position));
+        holder.display(mesMusiques.get(position), position == positionMusique, positionMusiqueIsSet);
         Log.d("position", position + "");
         Musique musique = mesMusiques.get(position);
         ClickOnHolder clickOnHolder = new ClickOnHolder ();
@@ -119,9 +127,18 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
             });
             bt_settings = itemView.findViewById(R.id.bt_settings);
         }
-        void display(Musique musique) {
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+        void display(Musique musique, boolean isCurrentMusic, Boolean positionMusicIsSet) {
             // ne jamais le mettre dans le constructeur
             mName.setText(musique.getName());
+            if(positionMusicIsSet) {
+                if (isCurrentMusic) {
+                    mName.setTextColor (Color.rgb(147,112,219));
+                    mName.setTextAlignment (View.TEXT_ALIGNMENT_CENTER);
+                    mName.setTextSize (20);
+                }
+            }
+
         }
 
     }
