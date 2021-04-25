@@ -46,6 +46,8 @@ public class NouveautesFragment extends Fragment {
 
 
         if(!mesGenres.contains ("Download")) mesGenres.add("Download");
+        if(!mesGenres.contains ("Liked Music")) mesGenres.add("Liked Music");
+
 
         mRecyclerView= root.findViewById (R.id.myRecyclerView);
         monAdapter = new MyStringAdapter (mesGenres, getActivity ());

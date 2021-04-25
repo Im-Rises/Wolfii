@@ -41,6 +41,18 @@ public class ClickOnGenre implements MyStringAdapter.ArtisteItemClickListener {
     public void onArtisteItemClick (View view, String genre, int position) {
         musiques = !genre.equals ("Download")  ? recuperer_musique (genre) : mesMusiques;
 
+        if(genre.equals ("Download")) {
+           musiques = mesMusiques;
+        }
+        else if (genre.equals ("Liked Music")) {
+            for(String path : database.mainDao ().getLikes ())
+                for(Musique musique : mesMusiques)
+                    if(musique.getPath ().equals (path))
+                        musiques.add(musique);
+        }
+        else {
+            musiques = recuperer_musique (genre);
+        }
         // on affiche le bouton shuffle
         shuffleiv.setVisibility (View.VISIBLE);
         ClickOnShuffle shuffle = new ClickOnShuffle ();

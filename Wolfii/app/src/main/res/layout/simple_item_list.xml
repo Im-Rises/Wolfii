@@ -22,12 +22,6 @@
             android:textSize="14sp"/>
         <ImageView
             android:layout_width="wrap_content"
-            android:id="@+id/like"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/unlike"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/bt_settings"
             android:layout_marginStart="8dp"

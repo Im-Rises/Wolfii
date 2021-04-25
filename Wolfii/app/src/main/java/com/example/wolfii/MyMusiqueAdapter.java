@@ -76,6 +76,12 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
         ClickOnHolder clickOnHolder = new ClickOnHolder ();
         clickOnHolder.setMusique (musique);
         holder.bt_settings.setOnClickListener(clickOnHolder);
+
+        ClickOnLike clickOnLike = new ClickOnLike ();
+        clickOnLike.setPath(mesMusiques.get(position).getPath ());
+        clickOnLike.setLike (holder.like);
+        clickOnLike.setContext(context);
+        holder.like.setOnClickListener (clickOnLike);
     }
 
     private class ClickOnHolder implements View.OnClickListener {
@@ -95,7 +101,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView mName;
-        private ImageView bt_settings;
+        private ImageView bt_settings, like;
         public MyViewHolder(@NonNull View itemView) {
             // itemview = vue de chaque cellule
             super(itemView);
@@ -126,6 +132,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
                 }
             });
             bt_settings = itemView.findViewById(R.id.bt_settings);
+            like = itemView.findViewById (R.id.like);
         }
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
         void display(Musique musique, boolean isCurrentMusic, Boolean positionMusicIsSet) {

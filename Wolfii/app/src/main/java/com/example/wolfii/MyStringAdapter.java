@@ -65,7 +65,7 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
         // on cherche notre vue avec inflater
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         // on va chercher notre layout
-        View view = layoutInflater.inflate(R.layout.musique_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.simple_item_list, parent, false);
         if(isGenre) view = layoutInflater.inflate(R.layout.genre_item, parent, false);
         if(isAlbum) view = layoutInflater.inflate(R.layout.album_item, parent, false);
         // on renvoie le viewholder
