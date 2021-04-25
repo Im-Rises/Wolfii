@@ -33,7 +33,7 @@ public class ListArtistPlaylistAlbumFragment extends Fragment {
         // donner un fragment en consequence
         artistFragment = new ArtistFragment ();
         albumFragment = new AlbumFragment ();
-        playlistFragment = database.mainDao ().getAll ().isEmpty () ? new NoPlaylistsFragment () : new PlaylistFragment ();
+        playlistFragment = database.mainDao ().getAllPlaylists ().isEmpty () ? new NoPlaylistsFragment () : new PlaylistFragment ();
 
         // de base on place artistFragment
         fragmentTransaction = fragmentManager.beginTransaction();

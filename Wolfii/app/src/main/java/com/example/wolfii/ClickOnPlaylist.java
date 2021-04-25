@@ -80,7 +80,9 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
 
         delete.setOnClickListener (new View.OnClickListener () {
             public void onClick (View v) {
-                database.mainDao ().deletePlaylist (playlist);
+                database.mainDao ().deletePlaylistFromMusic (playlist);
+                database.mainDao ().deletePlaylistFromPlaylist (playlist);
+
                 Toast.makeText(context, "playlist " +playlist +" supprimée", Toast.LENGTH_SHORT).show();
             }
         });
@@ -102,7 +104,8 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
                     @Override
                     public void onClick (View v) {
                         String newName = name.getText ().toString ();
-                        database.mainDao ().rename (playlist, newName);
+                        database.mainDao ().renameFromMusic (playlist, newName);
+                        database.mainDao ().renameFromPlaylist (playlist, newName);
                         Toast.makeText(context, "playlist " +playlist +" s'appellera maintenant " + newName, Toast.LENGTH_SHORT).show();
                     }
                 });

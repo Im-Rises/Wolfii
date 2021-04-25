@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 // define table name
-@Entity(tableName = "Wolfii")
+@Entity(tableName = "music")
 public class MainData implements Serializable {
     // create id column
 

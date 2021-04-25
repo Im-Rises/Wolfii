@@ -39,8 +39,7 @@ public class PlaylistFragment extends Fragment {
 
         ////////////////////// PLAYLISTS ////////////////////////////
         // on recupere toutes les donnees de la base de donnees et on cree son adapter
-        List<MainData> dataList = database.mainDao ().getAll ();
-        ArrayList<String> playlists = new ArrayList<String> ();
+        ArrayList<String> playlists = (ArrayList<String>) database.mainDao ().getAllPlaylists ();
 
         // on desactive les boutons qui ne nous servent à rien ici
         shuffle = root.findViewById (R.id.shuffle);
@@ -52,9 +51,7 @@ public class PlaylistFragment extends Fragment {
         clickOnNewPlaylist.setContext (getActivity ());
         newPlaylist.setOnClickListener (clickOnNewPlaylist);
 
-        // on recupere toutes les playlists
-        for (MainData m : dataList)
-            if (! playlists.contains (m.getPlaylist ())) playlists.add (m.getPlaylist ());
+
         mRecyclerView= (RecyclerView) root.findViewById (R.id.myRecyclerView);
         monAdapter = new MyStringAdapter (playlists, getActivity ());
         monAdapter.setIsPlaylist (true);

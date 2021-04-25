@@ -5,12 +5,15 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface MainDao {
+    @Insert(onConflict = REPLACE)
+    void createPlaylist(PlaylistData playlistData);
     // insert query
     @Insert(onConflict = REPLACE)
     void insert(MainData mainData);
@@ -23,24 +26,30 @@ public interface MainDao {
     @Delete
     void reset(List<MainData> mainData);
 
-    @Query ("DELETE FROM Wolfii WHERE playlist = :sPlaylist")
-    void deletePlaylist(String sPlaylist);
+    @Query ("DELETE FROM music WHERE playlist = :sPlaylist;")
+    void deletePlaylistFromMusic(String sPlaylist);
 
-    @Query ("UPDATE Wolfii SET playlist = :newName WHERE playlist = :sPlaylist")
-    void rename(String sPlaylist, String newName);
+    @Query ("DELETE FROM playlist WHERE nom = :sPlaylist;")
+    void deletePlaylistFromPlaylist(String sPlaylist);
+
+    @Query ("UPDATE music SET playlist = :newName WHERE playlist = :sPlaylist")
+    void renameFromMusic(String sPlaylist, String newName);
+
+    @Query ("UPDATE playlist SET nom = :newName WHERE nom = :sPlaylist")
+    void renameFromPlaylist(String sPlaylist, String newName);
 
     // supprimer une musique depuis son path
-    @Query ("DELETE FROM Wolfii WHERE path = :sPath")
+    @Query ("DELETE FROM music WHERE path = :sPath")
     void deleteFromPath(String sPath);
 
     // get all data query
-    @Query("SELECT * FROM Wolfii")
+    @Query("SELECT * FROM music")
     List<MainData> getAll();
 
-    @Query ("SELECT playlist FROM Wolfii")
+    @Query ("SELECT nom FROM playlist")
     List<String> getAllPlaylists();
 
-    @Query ("SELECT * FROM Wolfii WHERE playlist= :sPlaylist")
+    @Query ("SELECT * FROM music WHERE playlist= :sPlaylist")
     List<MainData> getMusicFromPlaylist(String sPlaylist);
 
 

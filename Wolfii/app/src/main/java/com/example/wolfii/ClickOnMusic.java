@@ -67,8 +67,12 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
                 data.setDateTaken (musique.getDateTaken ());
                 data.setGenre (musique.getGenre ());
 
+                PlaylistData pData = new PlaylistData ();
+                pData.setNom (editText.getText ().toString ());
+
                 try {
                     database.mainDao ().insert (data);
+                    database.mainDao ().createPlaylist (pData);
                 } catch (Exception e) {
                     Log.d ("debug_db", e.getMessage ());
                 }
