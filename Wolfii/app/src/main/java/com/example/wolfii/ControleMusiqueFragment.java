@@ -30,8 +30,16 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import static com.example.wolfii.MainActivity.mService;
 
+import android.content.Context;
+import android.graphics.Rect;
+import android.text.TextPaint;
+import android.util.AttributeSet;
+import android.view.animation.LinearInterpolator;
+import android.widget.Scroller;
+import android.widget.TextView;
 
-public class ControleMusiqueFragment extends Fragment {
+
+public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment {
 
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
 
@@ -301,4 +309,12 @@ public class ControleMusiqueFragment extends Fragment {
 
         return bitmap;
     }
+
+    /*-------------------------------------FONCTION SCROLL MUSIC TITLE-------------------------------------------------------------------------*/
+
+
+
 }
+
+
+
