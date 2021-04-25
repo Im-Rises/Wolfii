@@ -47,7 +47,10 @@ public class ControleMusiqueFragment extends Fragment {
 
     private float rotationImageValeur=0f;
     private Handler handlerRotation = new Handler();
-    private boolean imageRotationEncours= false;
+    private boolean imageRotationDejaInit = false;
+    private boolean imageRotationEnPause = true;
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,6 +110,7 @@ public class ControleMusiqueFragment extends Fragment {
     public void onPause() {
         super.onPause();
         arretRotationImage();
+        imageRotationEnPause=true;
     }
 
 
@@ -120,6 +124,7 @@ public class ControleMusiqueFragment extends Fragment {
         else
             majInterfaceFin();
 
+        imageRotationEnPause=false;
         demaPauseRotationImage();
     }
 
@@ -154,12 +159,14 @@ public class ControleMusiqueFragment extends Fragment {
     /*--------------------------------------DEMARRER ROTATION IMAGE------------------------------------------------*/
     public void demaPauseRotationImage()
     {
-        if (mService.getMusiquePlayerIsSet()) {
-            if (mService.getMusiquePlayerIsPlaying() && !imageRotationEncours) {
-                handlerRotation.post(runnableTempsRotationImage);
-                imageRotationEncours = true;
-            } else if (!mService.getMusiquePlayerIsPlaying()) {
-                arretRotationImage();
+        if (!imageRotationEnPause) {
+            if (mService.getMusiquePlayerIsSet()) {
+                if (mService.getMusiquePlayerIsPlaying() && !imageRotationDejaInit) {
+                    handlerRotation.post(runnableTempsRotationImage);
+                    imageRotationDejaInit = true;
+                } else if (!mService.getMusiquePlayerIsPlaying()) {
+                    arretRotationImage();
+                }
             }
         }
     }
@@ -168,7 +175,7 @@ public class ControleMusiqueFragment extends Fragment {
     public void arretRotationImage()
     {
         handlerRotation.removeCallbacks(runnableTempsRotationImage);
-        imageRotationEncours=false;
+        imageRotationDejaInit=false;
     }
 
 
