@@ -45,7 +45,7 @@ public class PlaylistFragment extends Fragment {
         // on desactive les boutons qui ne nous servent à rien ici
         shuffle = root.findViewById (R.id.shuffle);
         shuffle.setVisibility (View.INVISIBLE);
-        
+
 
         newPlaylist = root.findViewById (R.id.new_playlist);
         ClickOnNewPlaylist clickOnNewPlaylist = new ClickOnNewPlaylist ();
