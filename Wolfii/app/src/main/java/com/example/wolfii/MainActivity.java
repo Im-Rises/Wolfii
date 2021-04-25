@@ -176,9 +176,9 @@ public class MainActivity extends AppCompatActivity {
         mBound = false;
 
         //Arrête le service si aucune musique n'est en cours
-        if (!mService.getMusiquePlayerIsSet() || !mService.getMusiquePlayerIsPlaying())
+        if (!mService.getMusiquePlayerIsSet())
         {
-            mService.arretTotalMusique();
+            //mService.arretTotalMusique();
             stopService(new Intent(MainActivity.this,MusiqueService.class));
         }
     }
