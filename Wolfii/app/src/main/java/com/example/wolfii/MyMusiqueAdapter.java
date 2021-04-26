@@ -117,6 +117,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
 
             // afficher le nom de la musique courante
             mName = (TextView) itemView.findViewById(R.id.name);
+            mName.setTextColor (Color.BLACK);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

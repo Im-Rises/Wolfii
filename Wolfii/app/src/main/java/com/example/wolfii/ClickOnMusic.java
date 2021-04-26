@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.view.menu.MenuView;
@@ -41,8 +42,10 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         mService.arretSimpleMusique();
         mService.setMusiquePlaylist(mesMusiques, position);
         mService.musiqueDemaPause();
-        if(position == mService.getPositionMusique ()) view.setBackgroundColor (Color.CYAN);
-        else view.setBackgroundColor (Color.WHITE); 
+        if(position == mService.getPositionMusique ()) {
+            view.setBackgroundColor (Color.CYAN);
+        }
+        else view.setBackgroundColor (Color.WHITE);
     }
     public static void longClickMusic(Musique musique, Context context) {
         Dialog dialog = new Dialog(context);
