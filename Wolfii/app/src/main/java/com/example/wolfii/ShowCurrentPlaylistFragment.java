@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
 
 public class ShowCurrentPlaylistFragment extends Fragment {
@@ -29,7 +30,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
-    private ImageView shuffleiv, reload, playPause, next, previous;
+    private ImageView shuffleiv, reload, playPause, next, previous, like;
     private int positionMusique;
 
 
@@ -64,6 +65,15 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         reload.setOnClickListener(new EcouteurBtnRejouer());
         playPause = root.findViewById (R.id.playPause);
         playPause.setOnClickListener(new EcouteurBtnDemaPause());
+        like = root.findViewById (R.id.like);
+        if (database.mainDao ().getLikes ().contains(maMusique.get (positionMusique).getPath ()))
+            like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
+        ClickOnLike clickOnLike = new ClickOnLike ();
+        clickOnLike.setIsWhite (true);
+        clickOnLike.setLike (like);
+        clickOnLike.setContext (getActivity ());
+        clickOnLike.setPath (maMusique.get(positionMusique).getPath ());
+        like.setOnClickListener (clickOnLike);
 
         monAdapter = new MyMusiqueAdapter (maMusique, getActivity ());
         monAdapter.setPositionMusique (positionMusique);

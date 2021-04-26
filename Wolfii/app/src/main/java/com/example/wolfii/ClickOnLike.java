@@ -19,9 +19,12 @@ public class ClickOnLike implements View.OnClickListener{
 
     private ImageView like;
 
+    private Boolean isWhite = false;
+
     public void setPath(String path) {this.path = path;}
     public void setLike(ImageView like) {this.like = like;}
     public void setContext(Context context) {this.context = context;}
+    public void setIsWhite(Boolean isWhite) {this.isWhite = isWhite;}
 
     @Override
     public void onClick (View v) {
@@ -31,13 +34,14 @@ public class ClickOnLike implements View.OnClickListener{
             likeData.setPath (path);
 
             database.mainDao ().insertLike (likeData);
-
-            like.setImageBitmap (drawableEnBitmap (R.drawable.like));
+            if(isWhite) like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
+            else like.setImageBitmap (drawableEnBitmap (R.drawable.like));
         }
         else {
             database.mainDao ().deleteLike (path);
 
-            like.setImageBitmap (drawableEnBitmap (R.drawable.unlike));
+            if(isWhite) like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
+            else like.setImageBitmap (drawableEnBitmap (R.drawable.unlike));
         }
     }
     public Bitmap drawableEnBitmap (int drawableRes) {
