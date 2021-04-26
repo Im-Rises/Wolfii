@@ -36,8 +36,5 @@ public class ClickOnShuffle implements View.OnClickListener{
         clicker.setContext (context);
         monMusiqueAdapter.setmMusiqueItemClickListener (clicker);
         mRecyclerView.setAdapter (monMusiqueAdapter);
-        Log.d("debug_iv", musiques.toString ());
-
-
     }
 }

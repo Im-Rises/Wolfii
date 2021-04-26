@@ -1,5 +1,6 @@
 package com.example.wolfii;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -9,10 +10,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.view.menu.MenuView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.Wolfii;
 
@@ -47,6 +51,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         }
         else view.setBackgroundColor (Color.WHITE);
     }
+    @SuppressLint("WrongConstant")
     public static void longClickMusic(Musique musique, Context context) {
         Dialog dialog = new Dialog(context);
 
@@ -63,6 +68,14 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         EditText editText = dialog.findViewById (R.id.nom_playlist);
         Button addToPlaylist = dialog.findViewById (R.id.add);
         Button addToCurrentPlaylist = dialog.findViewById (R.id.addToCurrentPlaylist);
+
+        RecyclerView rv = dialog.findViewById (R.id.myRecyclerView);
+        ArrayList<String> mesPlaylists = (ArrayList<String>) database.mainDao ().getAllPlaylists ();
+        Log.d("debug_playlist", mesPlaylists.toString ());
+        MyStringAdapter adapter = new MyStringAdapter (mesPlaylists, context);
+        rv.setLayoutManager(new LinearLayoutManager (context.getApplicationContext(), LinearLayout.VERTICAL, false));
+
+        rv.setAdapter (adapter);
 
         addToPlaylist.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v) {
@@ -84,8 +97,8 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
                 } catch (Exception e) {
                     Log.d ("debug_db", e.getMessage ());
                 }
-
                 dialog.dismiss ();
+
             }
         });
 
@@ -103,6 +116,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
                     mService.arretSimpleMusique();
                     mService.musiqueDemaPause();
                 }
+                dialog.dismiss ();
 
             }
         });
