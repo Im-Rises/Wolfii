@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.wolfii.MainActivity.database;
+import static com.example.wolfii.MainActivity.mService;
 
 public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyViewHolder> {
     // classe qui est responsable de chaque cellule
@@ -78,8 +79,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         // affiche les viewholder en donnant la position
-        holder.display(mesMusiques.get(position), position == positionMusique, positionMusiqueIsSet);
-        Log.d("position", position + "");
+        holder.display(mesMusiques.get(position), position);
         Musique musique = mesMusiques.get(position);
         ClickOnHolder clickOnHolder = new ClickOnHolder ();
         clickOnHolder.setMusique (musique);
@@ -145,14 +145,16 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
             album = itemView.findViewById (R.id.image_album);
         }
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-        void display(Musique musique, boolean isCurrentMusic, Boolean positionMusicIsSet) {
+        void display(Musique musique, int position) {
             // ne jamais le mettre dans le constructeur
             mName.setText(musique.getName());
-            if(positionMusicIsSet) {
-                if (isCurrentMusic) {
-                    mName.setTextColor (Color.rgb(147,112,219));
-                    mName.setTextAlignment (View.TEXT_ALIGNMENT_CENTER);
-                    mName.setTextSize (20);
+            if(!mService.getCurrentPlaylist ().isEmpty ()) {
+                if (musique.getName ().equals (mService.getMusiqueTitre ()) && mService.getPositionMusique () == position) {
+                    Log.d ("debug_position", mService.getMusiqueTitre () + " " + musique.getName ());
+                    itemView.setBackgroundColor (Color.CYAN);
+                }
+                else {
+                    itemView.setBackgroundColor (Color.WHITE);
                 }
             }
             if(likedMusic.contains (musique.getPath ())) {
