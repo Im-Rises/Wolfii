@@ -39,7 +39,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         mService.setMusiquePlaylist(mesMusiques, position);
         mService.musiqueDemaPause();
     }
-    public static void longClickMusic(Musique musique) {
+    public static void longClickMusic(Musique musique, Context context) {
         Dialog dialog = new Dialog(context);
 
         // set content view
@@ -103,6 +103,6 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
 
     @Override
     public void onMusiqueItemLongClick (View view, Musique musique, int position) {
-        longClickMusic (musique);
+        longClickMusic (musique, context);
     }
 }

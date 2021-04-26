@@ -99,7 +99,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
 
         @Override
         public void onClick (View v) {
-            ClickOnMusic.longClickMusic (musique);
+            ClickOnMusic.longClickMusic (musique, context);
         }
     }
     @Override

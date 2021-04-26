@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import static com.example.wolfii.ClickOnMusic.*;
 import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
 
@@ -30,7 +31,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
-    private ImageView shuffleiv, reload, playPause, next, previous, like;
+    private ImageView shuffleiv, reload, playPause, next, previous, like, add;
     private int positionMusique;
 
 
@@ -50,6 +51,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         // creation du recyclerview
         mRecyclerView = root.findViewById(R.id.myRecyclerView);
 
+        // shuffle playlist
         shuffleiv = root.findViewById (R.id.shuffle);
         ClickOnShuffle shuffle = new ClickOnShuffle ();
         shuffle.setContext (getActivity ());
@@ -57,14 +59,21 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         shuffle.setPlaylist (maMusique);
         shuffleiv.setOnClickListener (shuffle);
 
+        // next et previous
         next = root.findViewById (R.id.next);
         next.setOnClickListener(new EcouteurMusiqueSuivante());
         previous = root.findViewById (R.id.previous);
         previous.setOnClickListener(new EcouteurMusiquePrecedente());
+
+        // bouton reload
         reload = root.findViewById (R.id.reload);
         reload.setOnClickListener(new EcouteurBtnRejouer());
+
+        // bouton play pause
         playPause = root.findViewById (R.id.playPause);
         playPause.setOnClickListener(new EcouteurBtnDemaPause());
+
+        // bouton like
         like = root.findViewById (R.id.like);
         if (database.mainDao ().getLikes ().contains(maMusique.get (positionMusique).getPath ()))
             like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
@@ -74,6 +83,15 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         clickOnLike.setContext (getActivity ());
         clickOnLike.setPath (maMusique.get(positionMusique).getPath ());
         like.setOnClickListener (clickOnLike);
+
+        // bouton ajouter à une playlist
+        add = root.findViewById (R.id.addToPlaylist);
+        add.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick (View v) {
+                ClickOnMusic.longClickMusic (maMusique.get(positionMusique), getActivity ());
+            }
+        });
 
         monAdapter = new MyMusiqueAdapter (maMusique, getActivity ());
         monAdapter.setPositionMusique (positionMusique);
