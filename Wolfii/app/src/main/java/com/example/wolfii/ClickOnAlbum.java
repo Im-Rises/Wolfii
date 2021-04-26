@@ -3,6 +3,7 @@ package com.example.wolfii;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -55,6 +56,7 @@ public class ClickOnAlbum implements MyStringAdapter.ArtisteItemClickListener {
         clicker.setMesMusiques (musiques);
         clicker.setContext (context);
         monMusiqueAdapter.setmMusiqueItemClickListener (clicker);
+        mRecyclerView.setBackgroundColor (Color.TRANSPARENT);
         mRecyclerView.setLayoutManager (new LinearLayoutManager (context.getApplicationContext(), LinearLayout.VERTICAL, false));
         mRecyclerView.setAdapter (monMusiqueAdapter);
     }
