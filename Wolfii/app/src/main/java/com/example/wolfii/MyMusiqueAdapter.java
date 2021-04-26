@@ -1,7 +1,11 @@
 package com.example.wolfii;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.wolfii.MainActivity.database;
 
 public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyViewHolder> {
     // classe qui est responsable de chaque cellule
@@ -102,6 +108,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView mName;
         private ImageView bt_settings, like;
+        private List<String> likedMusic = database.mainDao ().getLikes ();
         public MyViewHolder(@NonNull View itemView) {
             // itemview = vue de chaque cellule
             super(itemView);
@@ -145,7 +152,20 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
                     mName.setTextSize (20);
                 }
             }
+            if(likedMusic.contains (musique.getPath ())) {
+                like.setImageBitmap (drawableEnBitmap (R.drawable.like));
+            }
 
+        }
+        public Bitmap drawableEnBitmap (int drawableRes) {
+            @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = context.getResources().getDrawable(drawableRes);
+            Canvas canvas = new Canvas();
+            Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            canvas.setBitmap(bitmap);
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            drawable.draw(canvas);
+
+            return bitmap;
         }
 
     }
