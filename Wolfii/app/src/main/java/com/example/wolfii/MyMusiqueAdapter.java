@@ -3,9 +3,11 @@ package com.example.wolfii;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -107,7 +109,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView mName;
-        private ImageView bt_settings, like;
+        private ImageView bt_settings, like, album;
         private List<String> likedMusic = database.mainDao ().getLikes ();
         public MyViewHolder(@NonNull View itemView) {
             // itemview = vue de chaque cellule
@@ -140,6 +142,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
             });
             bt_settings = itemView.findViewById(R.id.bt_settings);
             like = itemView.findViewById (R.id.like);
+            album = itemView.findViewById (R.id.image_album);
         }
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
         void display(Musique musique, boolean isCurrentMusic, Boolean positionMusicIsSet) {
@@ -155,6 +158,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
             if(likedMusic.contains (musique.getPath ())) {
                 like.setImageBitmap (drawableEnBitmap (R.drawable.like));
             }
+            album.setImageBitmap (recupImageMusiquePageControle (musique.getPath ()));
 
         }
         public Bitmap drawableEnBitmap (int drawableRes) {
@@ -167,6 +171,31 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
 
             return bitmap;
         }
+        public byte[] recupImageMusiqueByte(String path)
+        {
+            MediaMetadataRetriever mediaMetadataRechercheur = new MediaMetadataRetriever();
+            mediaMetadataRechercheur.setDataSource(path);
+
+            byte [] image = mediaMetadataRechercheur.getEmbeddedPicture();
+
+            mediaMetadataRechercheur.release();
+
+            return image;
+        }
+        public Bitmap recupImageMusiquePageControle(String path) {
+
+            byte [] image = recupImageMusiqueByte(path);
+
+            if (image!=null)
+                //Si une image n'est trouvé dans le fichier audio
+                return BitmapFactory.decodeByteArray(image, 0, image.length);
+            else
+            {
+                //Si aucune image n'est trouvé dans le fichier mp3 alors on met le logo logoStyle.png
+                return drawableEnBitmap(R.drawable.logostyle);
+            }
+        }
+
 
     }
 }
