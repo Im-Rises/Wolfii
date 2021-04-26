@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
 import java.util.ArrayList;
-
-import kotlin.jvm.internal.Ref;
 
 import static com.example.wolfii.MainActivity.mService;
 
@@ -48,7 +44,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     @SuppressLint("WrongConstant")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_liste_recherche, container, false);
+        View root = inflater.inflate(R.layout.fragment_liste_current_playlist, container, false);
         //database.getInstance (getActivity ());
         // creation du recyclerview
         mRecyclerView = root.findViewById(R.id.myRecyclerView);

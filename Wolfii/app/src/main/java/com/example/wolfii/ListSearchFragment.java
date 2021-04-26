@@ -31,22 +31,10 @@ public class ListSearchFragment extends Fragment {
     @SuppressLint({"WrongConstant", "SetTextI18n"})
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_liste_recherche, container, false);
+        View root = inflater.inflate(R.layout.simple_list, container, false);
 
         shuffleiv = root.findViewById (R.id.shuffle);
         shuffleiv.setVisibility (View.INVISIBLE);
-
-        next = root.findViewById (R.id.next);
-        next.setVisibility (View.INVISIBLE);
-
-        previous = root.findViewById (R.id.previous);
-        previous.setVisibility (View.INVISIBLE);
-
-        reload = root.findViewById (R.id.reload);
-        reload.setVisibility (View.INVISIBLE);
-
-        playPause = root.findViewById (R.id.playPause);
-        playPause.setVisibility (View.INVISIBLE);
 
         TextView textView = root.findViewById (R.id.search_artiste);
         textView.setText ("resultat(s) pour : \"" + this.artiste + "\"");
