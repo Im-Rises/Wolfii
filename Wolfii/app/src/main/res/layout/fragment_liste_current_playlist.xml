@@ -10,8 +10,6 @@
     android:gravity="center_horizontal">
 
     <LinearLayout
-        android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true"
         android:layout_width="330dp"
         android:layout_height="56dp"
         android:background="@drawable/arrondi"
@@ -20,6 +18,9 @@
         android:textAlignment="center">
 
         <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:background="@color/trans"
             android:id="@+id/addToPlaylist"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -29,6 +30,9 @@
 
 
         <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:background="@color/trans"
             android:id="@+id/reload"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -37,24 +41,36 @@
             app:srcCompat="@drawable/ic_baseline_repeat_24" />
 
         <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:background="@color/trans"
             android:id="@+id/previous"
             android:layout_width="44dp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_baseline_skip_previous_24" />
 
         <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:background="@color/trans"
             android:id="@+id/playPause"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_baseline_play_arrow_24" />
 
         <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:background="@color/trans"
             android:id="@+id/next"
             android:layout_width="46dp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_baseline_skip_next_24" />
 
         <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:background="@color/trans"
             android:id="@+id/shuffle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -62,6 +78,9 @@
             android:layout_marginLeft="14dp"
             app:srcCompat="@drawable/ic_baseline_shuffle_24" />
         <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:background="@color/trans"
             android:layout_width="wrap_content"
             android:id="@+id/like"
             android:layout_height="match_parent"

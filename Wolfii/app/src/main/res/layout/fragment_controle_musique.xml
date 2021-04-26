@@ -19,10 +19,11 @@
         app:srcCompat="@drawable/ic_baseline_more_vert_24" />
 
 
+    <!-- LES TIMERS -->
 
     <RelativeLayout
         android:layout_width="400dp"
-        android:layout_height="300dp">
+        android:layout_height="273dp">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -41,6 +42,7 @@
             app:civ_border_color="#FF000000"
             app:civ_border_width="0dp" />
 
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgViewLogo"
             android:layout_width="218dp"
@@ -51,12 +53,12 @@
             android:layout_alignRight="@+id/imgViewLogo2"
             android:layout_alignBottom="@+id/imgViewLogo2"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginStart="13dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginBottom="13dp"
             android:gravity="center_vertical"
             android:src="@drawable/logostyle"
             app:civ_border_color="#FF000000"
@@ -65,12 +67,10 @@
 
     </RelativeLayout>
 
-    <!-- LES TIMERS -->
-
     <LinearLayout
+        android:id="@+id/timers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/timers"
         android:orientation="horizontal"
         android:padding="20dp">
 
@@ -80,9 +80,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="start"
-            android:textSize="15dp"
             android:text="00:00"
-            android:textAlignment="textStart" />
+            android:textAlignment="textStart"
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/txtViewMusiqueDuree"
@@ -90,9 +90,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:textSize="15dp"
             android:text="00:00"
             android:textAlignment="textEnd"
+            android:textSize="15dp"
             app:layout_constraintStart_toEndOf="@+id/txtViewMusiqueTemps" />
     </LinearLayout>
 
