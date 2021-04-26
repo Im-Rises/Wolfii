@@ -2,6 +2,7 @@ package com.example.wolfii;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.view.menu.MenuView;
 
 import com.example.Wolfii;
 
@@ -38,6 +41,8 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         mService.arretSimpleMusique();
         mService.setMusiquePlaylist(mesMusiques, position);
         mService.musiqueDemaPause();
+        if(position == mService.getPositionMusique ()) view.setBackgroundColor (Color.CYAN);
+        else view.setBackgroundColor (Color.WHITE); 
     }
     public static void longClickMusic(Musique musique, Context context) {
         Dialog dialog = new Dialog(context);
