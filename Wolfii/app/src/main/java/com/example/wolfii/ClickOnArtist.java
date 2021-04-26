@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.Wolfii;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
@@ -28,6 +29,8 @@ public class ClickOnArtist implements MyStringAdapter.ArtisteItemClickListener {
     private RecyclerView mRecyclerView;
     private Context context;
     private ImageView shuffleiv;
+    private List<String> hiddenTitle = database.mainDao ().getHiddenTitle ();
+
 
     public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
     public void setContext(Context sContext){context = sContext;}
@@ -35,7 +38,7 @@ public class ClickOnArtist implements MyStringAdapter.ArtisteItemClickListener {
 
     @Override
     public void onArtisteItemClick (View view, String artiste, int position) {
-        musiques = recuperer_musique (artiste);
+        musiques = HideMusic (recuperer_musique (artiste));
 
         shuffleiv.setVisibility (View.VISIBLE);
 
@@ -52,6 +55,13 @@ public class ClickOnArtist implements MyStringAdapter.ArtisteItemClickListener {
         clicker.setContext (context);
         monMusiqueAdapter.setmMusiqueItemClickListener (clicker);
         mRecyclerView.setAdapter (monMusiqueAdapter);
+    }
+    ArrayList<Musique> HideMusic(ArrayList<Musique> musiques){
+        ArrayList<Musique> trueList = new ArrayList<Musique> ();
+        for(Musique m : musiques)
+            if(!hiddenTitle.contains (m.getPath ()))
+                trueList.add(m);
+        return trueList;
     }
 
     @Override

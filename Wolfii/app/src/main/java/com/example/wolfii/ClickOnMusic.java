@@ -68,8 +68,19 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         EditText editText = dialog.findViewById (R.id.nom_playlist);
         Button addToPlaylist = dialog.findViewById (R.id.add);
         Button addToCurrentPlaylist = dialog.findViewById (R.id.addToCurrentPlaylist);
-
+        Button hiddenTitle = dialog.findViewById (R.id.hiddenTitle);
         RecyclerView rv = dialog.findViewById (R.id.myRecyclerView);
+
+        hiddenTitle.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick (View v) {
+                HiddenTitleData hiddenTitleData = new HiddenTitleData ();
+                hiddenTitleData.setPath (musique.getPath ());
+
+                database.mainDao ().insertHiddenTitle (hiddenTitleData);
+            }
+        });
+
         ArrayList<String> mesPlaylists = (ArrayList<String>) database.mainDao ().getAllPlaylists ();
         Log.d("debug_playlist", mesPlaylists.toString ());
         MyStringAdapter adapter = new MyStringAdapter (mesPlaylists, context);

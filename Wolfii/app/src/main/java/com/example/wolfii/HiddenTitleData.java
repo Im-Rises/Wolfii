@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 // define table name
-@Entity(tableName = "likedMusic")
-public class LikeData implements Serializable {
+@Entity(tableName = "hiddenTitle")
+public class HiddenTitleData implements Serializable {
     // create id column
 
     //String name, String author, String path, String duration, String dateTaken

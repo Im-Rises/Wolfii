@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.Wolfii;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
@@ -27,10 +28,11 @@ import static com.example.wolfii.MusiqueService.maMusique;
 public class ClickOnGenre implements MyStringAdapter.ArtisteItemClickListener {
 
     private MyMusiqueAdapter monMusiqueAdapter;
-    private ArrayList<Musique> musiques;
+    private ArrayList<Musique> musiques = new ArrayList<> ();
     private RecyclerView mRecyclerView;
     private Context context;
     private ImageView shuffleiv;
+    private List<String> hiddenTitle = database.mainDao ().getHiddenTitle ();
 
     public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
     public void setContext(Context sContext){context = sContext;}
@@ -39,19 +41,25 @@ public class ClickOnGenre implements MyStringAdapter.ArtisteItemClickListener {
     @SuppressLint("WrongConstant")
     @Override
     public void onArtisteItemClick (View view, String genre, int position) {
-        musiques = !genre.equals ("Download")  ? recuperer_musique (genre) : mesMusiques;
-
         if(genre.equals ("Download")) {
-           musiques = mesMusiques;
+           musiques = HideMusic (mesMusiques);
         }
         else if (genre.equals ("Liked Music")) {
             for(String path : database.mainDao ().getLikes ())
                 for(Musique musique : mesMusiques)
-                    if(musique.getPath ().equals (path))
+                    if(musique.getPath ().equals (path)
+                            && !hiddenTitle.contains (musique.getPath ()))
                         musiques.add(musique);
         }
+        else if (genre.equals ("Hidden Music")) {
+            for(String path : database.mainDao ().getHiddenTitle ())
+                for(Musique musique : mesMusiques)
+                    if(musique.getPath ().equals (path)) {
+                        musiques.add(musique);
+                    }
+        }
         else {
-            musiques = recuperer_musique (genre);
+            musiques = HideMusic(recuperer_musique (genre));
         }
         // on affiche le bouton shuffle
         shuffleiv.setVisibility (View.VISIBLE);
@@ -71,9 +79,36 @@ public class ClickOnGenre implements MyStringAdapter.ArtisteItemClickListener {
         mRecyclerView.setAdapter (monMusiqueAdapter);
     }
 
+    ArrayList<Musique> HideMusic(ArrayList<Musique> musiques){
+        ArrayList<Musique> trueList = new ArrayList<Musique> ();
+        for(Musique m : musiques)
+            if(!hiddenTitle.contains (m.getPath ()))
+                trueList.add(m);
+        return trueList;
+    }
+
     @Override
     public void onArtisteItemLongClick (View view, String genre, int position) {
-        musiques = !genre.equals ("Download")  ? recuperer_musique (genre) : mesMusiques;
+        if(genre.equals ("Download")) {
+            musiques = HideMusic (mesMusiques);
+        }
+        else if (genre.equals ("Liked Music")) {
+            for(String path : database.mainDao ().getLikes ())
+                for(Musique musique : mesMusiques)
+                    if(musique.getPath ().equals (path)
+                            && !hiddenTitle.contains (musique.getPath ()))
+                        musiques.add(musique);
+        }
+        else if (genre.equals ("Hidden Music")) {
+            for(String path : database.mainDao ().getHiddenTitle ())
+                for(Musique musique : mesMusiques)
+                    if(musique.getPath ().equals (path))
+                        musiques.add(musique);
+        }
+        else {
+            musiques = HideMusic(recuperer_musique (genre));
+        }
+
         Dialog dialog = new Dialog(context);
 
         // set content view

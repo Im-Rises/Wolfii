@@ -27,4 +27,5 @@
     <string name="createPlaylist">Créer la playlist</string>
     <string name="albums">albums</string>
     <string name="playlistExistante">playlists existantes :</string>
+    <string name="cacherCeTitre">cacher ce titre</string>
 </resources>

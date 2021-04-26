@@ -55,9 +55,15 @@ public interface MainDao {
     @Insert (onConflict = REPLACE)
     void insertLike(LikeData data);
 
-    @Query ("SELECT path FROM like;")
+    @Query ("SELECT path FROM likedMusic;")
     List<String> getLikes();
 
-    @Query ("DELETE FROM like WHERE path= :sPath;")
+    @Query ("DELETE FROM likedMusic WHERE path= :sPath;")
     void deleteLike(String sPath);
+
+    @Query ("SELECT path FROM hiddenTitle")
+    List<String> getHiddenTitle();
+
+    @Insert(onConflict = REPLACE)
+    void insertHiddenTitle(HiddenTitleData data);
 }

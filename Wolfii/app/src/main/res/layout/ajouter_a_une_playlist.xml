@@ -44,6 +44,12 @@
             android:layout_height="wrap_content"
             android:text="@string/addToCurrentPlaylist"/>
 
+        <Button
+            android:layout_width="match_parent"
+            android:id="@+id/hiddenTitle"
+            android:layout_height="wrap_content"
+            android:text="@string/cacherCeTitre"/>
+
     </LinearLayout>
 
 

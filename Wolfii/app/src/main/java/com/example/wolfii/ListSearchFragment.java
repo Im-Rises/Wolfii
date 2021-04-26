@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.wolfii.MainActivity.database;
 
 public class ListSearchFragment extends Fragment {
     private RecyclerView mRecyclerView;
@@ -22,10 +25,18 @@ public class ListSearchFragment extends Fragment {
     private String artiste;
     private static ArrayList<Musique> musiques = new ArrayList<> ();
     private ImageView shuffleiv, next, previous, reload, playPause;
+    private List<String> hiddenTitle = database.mainDao ().getHiddenTitle ();
 
     ListSearchFragment(ArrayList<Musique> musiques, String artiste){
-        this.musiques = musiques;
+        this.musiques = HideMusic (musiques);
         this.artiste = artiste;
+    }
+    ArrayList<Musique> HideMusic(ArrayList<Musique> musiques){
+        ArrayList<Musique> trueList = new ArrayList<Musique> ();
+        for(Musique m : musiques)
+            if(!hiddenTitle.contains (m.getPath ()))
+                trueList.add(m);
+        return trueList;
     }
 
     @SuppressLint({"WrongConstant", "SetTextI18n"})
