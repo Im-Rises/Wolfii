@@ -53,12 +53,12 @@
             android:layout_alignRight="@+id/imgViewLogo2"
             android:layout_alignBottom="@+id/imgViewLogo2"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="13dp"
-            android:layout_marginLeft="13dp"
-            android:layout_marginTop="13dp"
-            android:layout_marginEnd="13dp"
-            android:layout_marginRight="13dp"
-            android:layout_marginBottom="13dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
             android:src="@drawable/logostyle"
             app:civ_border_color="#FF000000"
@@ -72,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="20dp">
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/txtViewMusiqueTemps"
@@ -80,9 +80,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="start"
+            android:textColor="#fff"
             android:text="00:00"
             android:textAlignment="textStart"
-            android:textSize="15dp" />
+            android:textSize="13dp" />
 
         <TextView
             android:id="@+id/txtViewMusiqueDuree"
@@ -91,8 +92,9 @@
             android:layout_weight="1"
             android:gravity="end"
             android:text="00:00"
+            android:textColor="#fff"
             android:textAlignment="textEnd"
-            android:textSize="15dp"
+            android:textSize="13dp"
             app:layout_constraintStart_toEndOf="@+id/txtViewMusiqueTemps" />
     </LinearLayout>
 
@@ -154,6 +156,18 @@
             android:id="@+id/listes"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
+ 
+        <com.gauravk.audiovisualizer.visualizer.BarVisualizer
+            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/blast"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="180dp"
+            custom:avDensity="0.8"
+            custom:avWidth="4dp"
+            custom:avType="outline"
+            custom:avColor="#FF362E"
+            custom:avSpeed="normal"/>
 
         <!-- LES CONTROLES -
         <LinearLayout

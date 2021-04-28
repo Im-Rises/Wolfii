@@ -38,6 +38,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 import android.widget.TextView;
 
+import com.gauravk.audiovisualizer.visualizer.BarVisualizer;
+
 
 public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment {
 
