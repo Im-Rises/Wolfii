@@ -157,17 +157,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
  
-        <com.gauravk.audiovisualizer.visualizer.BarVisualizer
-            xmlns:custom="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/blast"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginTop="180dp"
-            custom:avDensity="0.8"
-            custom:avWidth="4dp"
-            custom:avType="outline"
-            custom:avColor="#FF362E"
-            custom:avSpeed="normal"/>
+
 
         <!-- LES CONTROLES -
         <LinearLayout

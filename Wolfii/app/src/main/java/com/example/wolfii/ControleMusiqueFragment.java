@@ -8,37 +8,21 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RotateDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import java.net.ContentHandlerFactory;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import static com.example.wolfii.MainActivity.mService;
-
-import android.content.Context;
-import android.graphics.Rect;
-import android.text.TextPaint;
-import android.util.AttributeSet;
-import android.view.animation.LinearInterpolator;
-import android.widget.Scroller;
-import android.widget.TextView;
-
-import com.gauravk.audiovisualizer.visualizer.BarVisualizer;
 
 
 public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment {
