@@ -29,8 +29,12 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.example.wolfii.MainActivity.database;
@@ -256,19 +260,12 @@ public class MusiqueService extends Service {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*--------------------------------------------DEMARRAGE ET MISE EN PAUSE DE LA MUSQUE PAR L'UTILISATEUR--------------------------------------------------------------*/
+
     public void musiqueDemaPause() {
-        if (musiquePlayer == null) {
-            //Try catch pour vérifier si la musique chargée n'est pas trouvée
-            try
-            {
-                musiqueInitialisation();
-                musiqueDemaEtFocus();
-            }
-            catch (Exception e)
-            {
-                Toast.makeText(getApplicationContext(),"Cette Musique n'existe plus",Toast.LENGTH_LONG).show();
-                database.mainDao ().deleteFromPath (maMusique.get(positionMusique).getPath ());
-            }
+        if (musiquePlayer == null)
+        {
+            musiqueInitialisation();
+            musiqueDemaEtFocus();
         }
         else if (!musiquePlayer.isPlaying())
         {
@@ -282,15 +279,60 @@ public class MusiqueService extends Service {
 
     /*--------------------------------------------INITIALISATION MUSIQUE--------------------------------------------------------------*/
 
-    public void musiqueInitialisation() throws Exception {
-        musiquePlayer = MediaPlayer.create(this, maMusique.get(positionMusique).getPathUri());//Création du MediaPlayer
-        musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);//Définis le mode de fonctionnement sur PARTIAL_WAKE_LOCK pour permettre à la musique de fonctionner sans être sur l'application
-        musiquePlayer.setOnCompletionListener(new EcouteurMusiqueFinie());
+    public void musiqueInitialisation() {
+        //Try catch pour vérifier si la musique chargée n'est pas trouvée
+        try
+        {
+            musiquePlayer = MediaPlayer.create(this, maMusique.get(positionMusique).getPathUri());//Création du MediaPlayer pour une resource raw
+            musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);//Définis le mode de fonctionnement sur PARTIAL_WAKE_LOCK pour permettre à la musique de fonctionner sans être sur l'application
+            musiquePlayer.setOnCompletionListener(new EcouteurMusiqueFinie());
+            musiquePlayer.setOnErrorListener(new EcouteurMusiqueErreur());
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),"Erreur musique incorrecte",Toast.LENGTH_LONG).show();
+            database.mainDao ().deleteFromPath (maMusique.get(positionMusique).getPath ());
+        }
     }
+
+    
+
+/*    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void musiqueInitialisationEtDema() {
+        //Try catch pour vérifier si la musique chargée n'est pas trouvée
+        try
+        {
+            musiquePlayer = new MediaPlayer();
+            musiquePlayer.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build()
+            );
+            musiquePlayer.setDataSource(this,maMusique.get(positionMusique).getPathUri());
+            musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);//Définis le mode de fonctionnement sur PARTIAL_WAKE_LOCK pour permettre à la musique de fonctionner sans être sur l'application
+            musiquePlayer.setOnCompletionListener(new EcouteurMusiqueFinie());
+            musiquePlayer.setOnErrorListener(new EcouteurMusiqueErreur());
+            musiquePlayer.prepare();//Prépare la musique
+            musiqueDemaEtFocus();
+        }
+        catch (IOException e)
+        {
+            Toast.makeText(getApplicationContext(),"Erreur musique incorrecte",Toast.LENGTH_LONG).show();
+            database.mainDao ().deleteFromPath (maMusique.get(positionMusique).getPath ());
+        }
+        catch (IllegalArgumentException e)
+        {
+            Toast.makeText(getApplicationContext(),"Erreur musique incorrecte",Toast.LENGTH_LONG).show();
+            database.mainDao ().deleteFromPath (maMusique.get(positionMusique).getPath ());
+        }
+    }*/
+
+
 
     /*--------------------------------------------DEMANDE DE FOCUS ET DEMARRAGE DE LA MUSIQUE--------------------------------------------------------------*/
 
-    public void musiqueDemaEtFocus() {
+    public void musiqueDemaEtFocus(){
         /*Fonction de demande d'utilisation unique des sorties audio du téléphone
         et démarrage de la musique.
          */
@@ -441,6 +483,17 @@ public class MusiqueService extends Service {
         }
     }
 
+
+
+    /*-----------------------------------------------------GESTION ARRIVEE EN FIN DE MUSIQUE--------------------------------------------------------------*/
+
+    private class EcouteurMusiqueErreur implements MediaPlayer.OnErrorListener {
+        @Override
+        public boolean onError(MediaPlayer mp, int what, int extra) {
+            arretTotalMusique();
+            return false;
+        }
+    }
 
 
 
