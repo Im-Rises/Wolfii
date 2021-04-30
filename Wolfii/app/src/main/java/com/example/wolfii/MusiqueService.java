@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.example.wolfii.MainActivity.database;
+import static com.example.wolfii.MainActivity.mService;
 import static java.lang.Integer.parseInt;
 
 
@@ -413,6 +414,7 @@ public class MusiqueService extends Service {
             arretMediaSession();
             envoieBroadcast(EXTRA_MAJ_FIN);
             mediaSessionNotifInitBool=false;
+
         //}
     }
 
