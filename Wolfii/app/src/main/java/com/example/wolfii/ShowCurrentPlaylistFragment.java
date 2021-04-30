@@ -31,7 +31,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
-    private ImageView shuffleiv, reload, playPause, next, previous, like, add;
+    private ImageView shuffleiv, reload, playPause, next, previous, like, add, arret;
     private int positionMusique;
 
 
@@ -72,6 +72,11 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         // bouton play pause
         playPause = root.findViewById (R.id.playPause);
         playPause.setOnClickListener(new EcouteurBtnDemaPause());
+
+        // bouton arrêt musique
+        arret = root.findViewById(R.id.arret);
+        arret.setOnClickListener(new EcouteurMusiqueArret());
+
 
         // bouton like
         like = root.findViewById (R.id.like);
@@ -173,6 +178,14 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         }
     }
 
+    private class EcouteurMusiqueArret implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            if (mService.getMusiquePlayerIsSet())
+                mService.arretTotalMusique();
+        }
+    }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////FONCTIONS MAJ INTERFACE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +231,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     public void setImageRejoueRejouer()
     {
         if (mService.getMusiqueBoucle())
-            reload.setImageBitmap(drawableEnBitmap(R.drawable.image_rejoue));
+            reload.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_repeat_on_24));
         else
             reload.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_repeat_24));
     }
