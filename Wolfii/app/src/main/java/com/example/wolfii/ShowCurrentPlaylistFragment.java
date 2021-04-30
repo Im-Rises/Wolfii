@@ -182,7 +182,10 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if (mService.getMusiquePlayerIsSet())
+            {
                 mService.arretTotalMusique();
+
+            }
         }
     }
 

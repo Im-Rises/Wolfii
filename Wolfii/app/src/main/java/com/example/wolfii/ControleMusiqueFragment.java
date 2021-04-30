@@ -264,6 +264,7 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
         arretRotationImage();
         imgViewMusique.setRotation(0);
         imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.logostyle));
+        rotationImageValeur=0;
     }
 
 
