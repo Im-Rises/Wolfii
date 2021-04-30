@@ -41,7 +41,7 @@ public class AlbumFragment extends Fragment {
         shuffle.setVisibility (View.INVISIBLE);
 
 
-        monArtisteAdapter = new MyStringAdapter (mesAlbums, getActivity ());
+        monArtisteAdapter = new MyStringAdapter (mesAlbums);
         monArtisteAdapter.setIsAlbum (true);
         mRecyclerView.setLayoutManager (new GridLayoutManager (getActivity (), 2));
 

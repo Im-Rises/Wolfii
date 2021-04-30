@@ -40,7 +40,7 @@ public class ArtistFragment extends Fragment {
         shuffle = root.findViewById (R.id.shuffle);
         shuffle.setVisibility (View.INVISIBLE);
 
-        monArtisteAdapter = new MyStringAdapter (mesArtistes, getActivity ());
+        monArtisteAdapter = new MyStringAdapter (mesArtistes);
 
         ClickOnArtist clickOnArtist = new ClickOnArtist ();
         clickOnArtist.setContext (getActivity ());

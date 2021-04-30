@@ -36,7 +36,7 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
 
     private int positionAlbum = 0;
 
-    public MyStringAdapter (ArrayList<String> mesArtistes, Context sContext) {
+    public MyStringAdapter (ArrayList<String> mesArtistes) {
         this.mesArtistes = mesArtistes;
     }
 

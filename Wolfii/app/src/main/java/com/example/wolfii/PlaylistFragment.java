@@ -53,7 +53,7 @@ public class PlaylistFragment extends Fragment {
 
 
         mRecyclerView= (RecyclerView) root.findViewById (R.id.myRecyclerView);
-        monAdapter = new MyStringAdapter (playlists, getActivity ());
+        monAdapter = new MyStringAdapter (playlists);
         monAdapter.setIsPlaylist (true);
 
         mRecyclerView.setLayoutManager (new LinearLayoutManager (getActivity ().getApplicationContext (), LinearLayout.VERTICAL, false));

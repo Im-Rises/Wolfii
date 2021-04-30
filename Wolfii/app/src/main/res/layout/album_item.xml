@@ -17,8 +17,12 @@
         <TextView
             android:layout_width="match_parent"
             android:id="@+id/name"
-            android:textColor="@color/black"
-            android:layout_height="wrap_content"/>
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:textAlignment="center"
+            android:backgroundTint="@color/black"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal" />
     </RelativeLayout>
 </LinearLayout>
 

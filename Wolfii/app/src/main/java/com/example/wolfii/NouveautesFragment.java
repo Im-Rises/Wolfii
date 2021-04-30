@@ -5,19 +5,14 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mesGenres;
 
 
@@ -25,7 +20,7 @@ public class NouveautesFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private MyStringAdapter monAdapter;
-    private ImageView shuffle, next, previous, reload, playPause;
+    private ImageView shuffle;
 
 
     public NouveautesFragment () {
@@ -44,14 +39,13 @@ public class NouveautesFragment extends Fragment {
         shuffle.setVisibility (View.INVISIBLE);
 
 
-
         if(!mesGenres.contains ("Download")) mesGenres.add("Download");
         if(!mesGenres.contains ("Liked Music")) mesGenres.add("Liked Music");
         if(!mesGenres.contains ("Hidden Music")) mesGenres.add("Hidden Music");
 
 
         mRecyclerView= root.findViewById (R.id.myRecyclerView);
-        monAdapter = new MyStringAdapter (mesGenres, getActivity ());
+        monAdapter = new MyStringAdapter (mesGenres);
         monAdapter.setIsGenre (true);
         mRecyclerView.setLayoutManager (new GridLayoutManager (getActivity (), 2));
 
@@ -59,8 +53,8 @@ public class NouveautesFragment extends Fragment {
         clickOnGenre.setRecyclerViewForMusic (mRecyclerView);
         clickOnGenre.setContext (getActivity ());
         clickOnGenre.setShuffle (shuffle);
-        monAdapter.setmArtisteItemClickListener (clickOnGenre);
 
+        monAdapter.setmArtisteItemClickListener (clickOnGenre);
         mRecyclerView.setAdapter (monAdapter);
 
         return root;

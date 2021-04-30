@@ -184,7 +184,8 @@ public class ShowCurrentPlaylistFragment extends Fragment {
             if (mService.getMusiquePlayerIsSet())
             {
                 mService.arretTotalMusique();
-
+                MyMusiqueAdapter myMusique = new MyMusiqueAdapter (mService.maMusique, getActivity ());
+                mRecyclerView.setAdapter (myMusique);
             }
         }
     }

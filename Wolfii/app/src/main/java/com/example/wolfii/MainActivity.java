@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide(); // on cache la barre d'action
 
         database = RoomDB.getInstance(this); // on initialise la base de donnees
-        estActif=true;
+        estActif=true; // pour savoir si l'applie est lancee ou pas
 
         //////////////////////////////////////////////////////////////
         //////////////DEMMARRAGE SERVICE ET CONNEXION/////////////////
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         //////////////////////////////////////////////////////////////
 
 
-        // on verifie un paquet de permission
+        // on verifie si on a bien acces a la permission de lecture des fichiers
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        mesMusiques = getMusic();
+        mesMusiques = getMusic(); // on recupere toutes les musiques dispo l'appareil
     }
 
 

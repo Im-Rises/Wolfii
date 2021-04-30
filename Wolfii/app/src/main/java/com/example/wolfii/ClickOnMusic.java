@@ -83,7 +83,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
 
         ArrayList<String> mesPlaylists = (ArrayList<String>) database.mainDao ().getAllPlaylists ();
         Log.d("debug_playlist", mesPlaylists.toString ());
-        MyStringAdapter adapter = new MyStringAdapter (mesPlaylists, context);
+        MyStringAdapter adapter = new MyStringAdapter (mesPlaylists);
         rv.setLayoutManager(new LinearLayoutManager (context.getApplicationContext(), LinearLayout.VERTICAL, false));
 
         rv.setAdapter (adapter);
