@@ -288,7 +288,7 @@ public class MusiqueService extends Service {
             musiquePlayer.setOnCompletionListener(new EcouteurMusiqueFinie());
             musiquePlayer.setOnErrorListener(new EcouteurMusiqueErreur());
         }
-        catch (Exception e)
+        catch (Exception e)//Catch des exceptions IOException et IllegalArgumentException
         {
             Toast.makeText(getApplicationContext(),"Erreur musique incorrecte",Toast.LENGTH_LONG).show();
             database.mainDao ().deleteFromPath (maMusique.get(positionMusique).getPath ());

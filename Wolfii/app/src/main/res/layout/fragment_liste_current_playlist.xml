@@ -65,7 +65,7 @@
             android:id="@+id/arret"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/ic_baseline_stop_24" />
+            app:srcCompat="@drawable/image_nettoyer" />
 
         <ImageView
             android:foreground="?android:attr/selectableItemBackground"
