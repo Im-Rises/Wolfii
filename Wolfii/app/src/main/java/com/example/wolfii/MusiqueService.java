@@ -45,9 +45,16 @@ public class MusiqueService extends Service {
 
     public static boolean estActif=false;//Variable qui définis si le service est en état de fonctionnement ou arrêté
 
+    private final IBinder binder = new LocalBinder();    // Binder given to clients
+
+    public static ArrayList<Musique> maMusique = new ArrayList<Musique>();//Liste des musiques en cours à lire
+    private int positionMusique;//Position de la musique en cours de lecture
+    private boolean enPauseParUtilisateur = true;//Variable booléenne qui informe si la mise en pause de l'application est par l'utilisateur
+    private boolean enPauseParDemandeLongue = true;//Variable booléenne qui informe si la mise en pause de l'application est par une application du système autre pour un temps indéterminé
+    private boolean musiqueBoucle=false;//Variable booléenne qui informe si la musique est en train de bouclé ou non
+
     private MediaPlayer musiquePlayer;//Lecture musique
     private AudioManager musiqueManager;//AudioManager pour appeler la gestion de l'interruption musique via musiqueFocusmanager
-
     private AudioFocusRequest musiqueFocusRequest;//AudioFocusRequest pour les demande de focus audio pour Andorid 8.0 ou supérieur
 
     private static final String CHANNEL_ID = "NotifControlMusique";             //ID notification de control musique
@@ -55,12 +62,14 @@ public class MusiqueService extends Service {
     private static final int NOTIFICATION_ID = 1;                               //Notification numéro
     private NotificationManagerCompat notifManagerCompat;                //Création d'une gestion de notification de compatibilité
 
-    private Handler handlerTemps = new Handler();               //Handler pour appeler toutes les secondes le runnable
+    //Pending Intent de redirection des commandes boutons de la notification
+    private PendingIntent musiquePenIntRetourAppli;
+    private PendingIntent musiquePenIntRejouer;
+    private PendingIntent musiquePenIntPrecedent;
+    private PendingIntent musiquePenIntDemaPause;
+    private PendingIntent musiquePenIntSuivant;
+    private PendingIntent musiquePenIntArret;
 
-    private final IBinder binder = new LocalBinder();    // Binder given to clients
-
-    public static ArrayList<Musique> maMusique = new ArrayList<Musique>();//Liste des musiques en cours à lire
-    private int positionMusique;//Position de la musique en cours de lecture
 
     //Variables de redirection vers le BoradcastReceiver de l'activité pour la mise  à jour de la page ControleMusiqueFragment.java
     public static final String DIRECTION_ACTIVITY = "TO_ACTIVITY";
@@ -74,18 +83,7 @@ public class MusiqueService extends Service {
     private static final String DIRECTION_SERVICE = "TO_SERVICE";
     private static final String TYPE_NOTIFICATION = "TYPE_NOTIFICATION";
 
-    private boolean enPauseParUtilisateur = true;//Variable booléenne qui informe si la mise en pause de l'application est par l'utilisateur
-    private boolean enPauseParDemandeLongue = true;//Variable booléenne qui informe si la mise en pause de l'application est par une application du système autre pour un temps indéterminé
-
-    private boolean musiqueBoucle=false;//Variable booléenne qui informe si la musique est en train de bouclé ou non
-
-    //Pending Intent de redirection des commandes boutons de la notification
-    private PendingIntent musiquePenIntRetourAppli;
-    private PendingIntent musiquePenIntRejouer;
-    private PendingIntent musiquePenIntPrecedent;
-    private PendingIntent musiquePenIntDemaPause;
-    private PendingIntent musiquePenIntSuivant;
-    private PendingIntent musiquePenIntArret;
+    private Handler handlerTemps = new Handler();               //Handler pour appeler toutes les secondes le runnable
 
     IntentFilter intentFilterDirecService = new IntentFilter(DIRECTION_SERVICE);//Intent Filter pour la mise ne écoute sous le filtre DIRECTION_SERVICE
 
@@ -399,6 +397,7 @@ public class MusiqueService extends Service {
     {
         //if (getMusiquePlayerIsSet()) {
             arretSimpleMusique();
+            maMusique.clear();
 
             //Abandon du focus audio en fonction de la version d'android
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
