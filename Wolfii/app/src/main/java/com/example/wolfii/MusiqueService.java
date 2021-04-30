@@ -33,11 +33,13 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.example.wolfii.MainActivity.database;
+import static com.example.wolfii.MainActivity.mService;
 import static java.lang.Integer.parseInt;
 
 
@@ -90,8 +92,7 @@ public class MusiqueService extends Service {
     private MediaSessionCompat mediaSession;//déclaration d'une média session de contrôle musique
     private boolean mediaSessionNotifInitBool = false;//Valeur booléenne pour informer si l'utilisateur a déjà inititalisé la mediaSession et la notif
 
-
-
+    private RecyclerView recyclerView;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE///////////////////////////////////////////////////////////////////////////////
@@ -398,7 +399,8 @@ public class MusiqueService extends Service {
         //if (getMusiquePlayerIsSet()) {
             arretSimpleMusique();
             maMusique.clear();
-
+            MyMusiqueAdapter myMusique = new MyMusiqueAdapter (maMusique, getApplicationContext ());
+            ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (myMusique);
             //Abandon du focus audio en fonction de la version d'android
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 musiqueManager.abandonAudioFocusRequest(musiqueFocusRequest);
@@ -824,5 +826,8 @@ public class MusiqueService extends Service {
     public void setMusiquePlaylist(ArrayList<Musique> musique, int position) {
         maMusique = copyArrayList(musique);
         this.positionMusique = position;
+    }
+    public void setRecyclerView(RecyclerView rv) {
+        this.recyclerView = rv;
     }
 }
