@@ -28,7 +28,7 @@ import static com.example.wolfii.MainActivity.mService;
 
 public class ShowCurrentPlaylistFragment extends Fragment {
 
-    private RecyclerView mRecyclerView;
+    public static RecyclerView mRecyclerView;
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
     private ImageView shuffleiv, reload, playPause, next, previous, like, add, arret;
