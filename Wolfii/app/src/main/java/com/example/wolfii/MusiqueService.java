@@ -66,7 +66,7 @@ public class MusiqueService extends Service {
 
     //Pending Intent de redirection des commandes boutons de la notification
     private PendingIntent musiquePenIntRetourAppli;
-    private PendingIntent musiquePenIntRejouer;
+    private PendingIntent musiquePenIntLiker;
     private PendingIntent musiquePenIntPrecedent;
     private PendingIntent musiquePenIntDemaPause;
     private PendingIntent musiquePenIntSuivant;
@@ -114,10 +114,10 @@ public class MusiqueService extends Service {
         musiquePenIntRetourAppli = PendingIntent.getActivity(this, 0, musiquePlayerIntent, 0); //Déclaration d'un pendingIntent pour utiliser l'intent précédent dans une notification
 
         //Déclaration des Intents et PenIntents pour le contrôle de la musique sur la notification
-        Intent musiqueIntentRejouer = new Intent()
+        Intent musiqueIntentLiker = new Intent()
                 .setAction(DIRECTION_SERVICE)
-                .putExtra(TYPE_NOTIFICATION, "REJOUER");
-        musiquePenIntRejouer = PendingIntent.getBroadcast(this, 1, musiqueIntentRejouer, PendingIntent.FLAG_UPDATE_CURRENT);
+                .putExtra(TYPE_NOTIFICATION, "LIKER");
+        musiquePenIntLiker = PendingIntent.getBroadcast(this, 1, musiqueIntentLiker, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent musiqueIntentPrecedent = new Intent()
                 .setAction(DIRECTION_SERVICE)
@@ -527,11 +527,13 @@ public class MusiqueService extends Service {
         //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_SERVICE (pour recevoir les commandes boutons)
         registerReceiver(broadcastReceiverNotifCmd, intentFilterDirecService);
 
-        //Ajout des boutons à la notification pour le contrôle musique
-        if (musiqueBoucle) {
-            notifBuilder.addAction(R.drawable.image_rejoue, "Rejouer", musiquePenIntRejouer);   //Ajout le bouton "musique rejouer" à la notification"
-        } else {
-            notifBuilder.addAction(R.drawable.image_rejouer, "Rejouer", musiquePenIntRejouer);  //Ajout le bouton "musique rejouer" à la notification"
+        if (database.mainDao().getLikes().contains(maMusique.get(positionMusique).getPath()))
+        {
+            notifBuilder.addAction(R.drawable.like, "Liked", musiquePenIntLiker);  //Ajout le bouton "musique rejouer" à la notification"
+        }
+        else
+        {
+            notifBuilder.addAction(R.drawable.unlike, "NotLiked", musiquePenIntLiker);  //Ajout le bouton "musique rejouer" à la notification"
         }
 
         notifBuilder.addAction(R.drawable.image_precedent, "Précédent", musiquePenIntPrecedent); //Ajout le bouton "musique précédente à la notification"
@@ -591,8 +593,8 @@ public class MusiqueService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getStringExtra(TYPE_NOTIFICATION)) {
-                case "REJOUER":
-                    musiqueBoucleDeboucle();
+                case "LIKER":
+                    likerMusique();
                     break;
                 case "DEMAPAUSE":
                     musiqueDemaPause();
@@ -613,6 +615,12 @@ public class MusiqueService extends Service {
             }
         }
     };
+
+
+    public void likerMusique()
+    {
+        //POUR CLEMENT
+    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////FONCTIONS DE MEDIASESSION/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
