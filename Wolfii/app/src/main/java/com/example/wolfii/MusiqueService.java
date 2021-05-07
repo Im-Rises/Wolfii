@@ -619,7 +619,16 @@ public class MusiqueService extends Service {
 
     public void likerMusique()
     {
-        //POUR CLEMENT
+        String path = maMusique.get(getPositionMusique ()).getPath ();
+        if(!database.mainDao ().getLikes ().contains (path)) {
+            LikeData likeData = new LikeData ();
+            likeData.setPath (path);
+
+            database.mainDao ().insertLike (likeData);
+        }
+        else {
+            database.mainDao ().deleteLike (path);
+        }
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

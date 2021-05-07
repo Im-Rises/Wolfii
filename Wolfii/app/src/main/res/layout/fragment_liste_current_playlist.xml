@@ -58,14 +58,7 @@
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_baseline_play_arrow_24" />
 
-        <ImageView
-            android:foreground="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:background="@color/trans"
-            android:id="@+id/arret"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/image_nettoyer" />
+
 
         <ImageView
             android:foreground="?android:attr/selectableItemBackground"
@@ -75,6 +68,7 @@
             android:layout_width="46dp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_baseline_skip_next_24" />
+
         <ImageView
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
@@ -96,6 +90,16 @@
             android:layout_marginStart="14dp"
             android:layout_marginLeft="14dp"
             app:srcCompat="@drawable/unlike_white"/>
+        <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:background="@color/trans"
+            android:id="@+id/arret"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/image_nettoyer" />
 
 
     </LinearLayout>
