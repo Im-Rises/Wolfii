@@ -52,65 +52,66 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         mRecyclerView = root.findViewById(R.id.myRecyclerView);
 
         // shuffle playlist
-        shuffleiv = root.findViewById (R.id.shuffle);
-        ClickOnShuffle shuffle = new ClickOnShuffle ();
-        shuffle.setContext (getActivity ());
-        shuffle.setmRecyclerView (mRecyclerView);
-        shuffle.setPlaylist (maMusique);
-        shuffleiv.setOnClickListener (shuffle);
+        shuffleiv = root.findViewById(R.id.shuffle);
+        ClickOnShuffle shuffle = new ClickOnShuffle();
+        shuffle.setContext(getActivity());
+        shuffle.setmRecyclerView(mRecyclerView);
+        shuffle.setPlaylist(maMusique);
+        shuffleiv.setOnClickListener(shuffle);
 
         // next et previous
-        next = root.findViewById (R.id.next);
+        next = root.findViewById(R.id.next);
         next.setOnClickListener(new EcouteurMusiqueSuivante());
-        previous = root.findViewById (R.id.previous);
+        previous = root.findViewById(R.id.previous);
         previous.setOnClickListener(new EcouteurMusiquePrecedente());
 
         // bouton reload
-        reload = root.findViewById (R.id.reload);
+        reload = root.findViewById(R.id.reload);
         reload.setOnClickListener(new EcouteurBtnRejouer());
 
         // bouton play pause
-        playPause = root.findViewById (R.id.playPause);
+        playPause = root.findViewById(R.id.playPause);
         playPause.setOnClickListener(new EcouteurBtnDemaPause());
 
         // bouton arrêt musique
         arret = root.findViewById(R.id.arret);
         arret.setOnClickListener(new EcouteurMusiqueArret());
 
+        if (mService.getMusiquePlayerIsSet()) {
+            // bouton like
+            like = root.findViewById(R.id.like);
+            try {
+                if (!database.mainDao().getLikes().contains(mService.maMusique.get(mService.getPositionMusique()).getPath()))
+                    like.setImageBitmap(drawableEnBitmap(R.drawable.unlike_white));
+                if (!maMusique.isEmpty()) {
+                    if (database.mainDao().getLikes().contains(maMusique.get(positionMusique).getPath()))
+                        like.setImageBitmap(drawableEnBitmap(R.drawable.like_white));
+                    ClickOnLike clickOnLike = new ClickOnLike();
+                    clickOnLike.setIsWhite(true);
+                    clickOnLike.setLike(like);
+                    clickOnLike.setContext(getActivity());
+                    clickOnLike.setPath(maMusique.get(positionMusique).getPath());
+                    like.setOnClickListener(clickOnLike);
 
-        // bouton like
-        like = root.findViewById (R.id.like);
-        try {
-            if(!database.mainDao ().getLikes ().contains (mService.maMusique.get(mService.getPositionMusique ()).getPath ()))
-                like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
-            if(!maMusique.isEmpty ()) {
-                if (database.mainDao ().getLikes ().contains (maMusique.get (positionMusique).getPath ()))
-                    like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
-                ClickOnLike clickOnLike = new ClickOnLike ();
-                clickOnLike.setIsWhite (true);
-                clickOnLike.setLike (like);
-                clickOnLike.setContext (getActivity ());
-                clickOnLike.setPath (maMusique.get (positionMusique).getPath ());
-                like.setOnClickListener (clickOnLike);
 
-
-                // bouton ajouter à une playlist
-                add = root.findViewById (R.id.addToPlaylist);
-                add.setOnClickListener (new View.OnClickListener () {
-                    @Override
-                    public void onClick (View v) {
-                        ClickOnMusic.longClickMusic (maMusique.get (positionMusique), getActivity ());
-                    }
-                });
+                    // bouton ajouter à une playlist
+                    add = root.findViewById(R.id.addToPlaylist);
+                    add.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ClickOnMusic.longClickMusic(maMusique.get(positionMusique), getActivity());
+                        }
+                    });
+                }
+            } catch (Exception e) {
             }
         }
-        catch(Exception e) {}
 
-        monAdapter = new MyMusiqueAdapter (maMusique, getActivity ());
-        monAdapter.setPositionMusique (positionMusique);
-        ClickOnMusic clickOnMusic = new ClickOnMusic ();
-        clickOnMusic.setMesMusiques (maMusique);
-        clickOnMusic.setContext (getActivity ());
+        monAdapter = new MyMusiqueAdapter(maMusique, getActivity());
+        monAdapter.setPositionMusique(positionMusique);
+        ClickOnMusic clickOnMusic = new ClickOnMusic();
+        clickOnMusic.setMesMusiques(maMusique);
+        clickOnMusic.setContext(getActivity());
         monAdapter.setmMusiqueItemClickListener(clickOnMusic);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayout.VERTICAL, false));
