@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
@@ -37,14 +38,6 @@ public class ClickOnLike implements View.OnClickListener{
             database.mainDao ().insertLike (likeData);
             if(isWhite) like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
             else like.setImageBitmap (drawableEnBitmap (R.drawable.like));
-
-            if (mService.getMusiquePlayerIsSet())
-            {
-                if (mService.getMusiquePlayerPath()=="")
-                {
-                    mService.notificationInitEtMaj();
-                }
-            }
         }
         else {
             database.mainDao ().deleteLike (path);
@@ -52,6 +45,10 @@ public class ClickOnLike implements View.OnClickListener{
             if(isWhite) like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
             else like.setImageBitmap (drawableEnBitmap (R.drawable.unlike));
         }
+
+        if (mService.getMusiquePlayerIsSet() && mService.getMusiquePlayerPath()==path)
+            mService.notificationInitEtMaj();
+
     }
     public Bitmap drawableEnBitmap (int drawableRes) {
         @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = context.getResources().getDrawable(drawableRes);

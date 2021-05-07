@@ -524,6 +524,9 @@ public class MusiqueService extends Service {
         //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_SERVICE (pour recevoir les commandes boutons)
         registerReceiver(broadcastReceiverNotifCmd, intentFilterDirecService);
 
+
+
+
         if (database.mainDao().getLikes().contains(maMusique.get(positionMusique).getPath()))
         {
             notifBuilder.addAction(R.drawable.like, "Liked", musiquePenIntLiker);  //Ajout le bouton "musique rejouer" à la notification"
