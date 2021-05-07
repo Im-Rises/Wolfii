@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import static com.example.wolfii.MainActivity.database;
+import static com.example.wolfii.MainActivity.mService;
 import static com.example.wolfii.R.drawable.like;
 
 public class ClickOnLike implements View.OnClickListener{
@@ -36,6 +37,14 @@ public class ClickOnLike implements View.OnClickListener{
             database.mainDao ().insertLike (likeData);
             if(isWhite) like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
             else like.setImageBitmap (drawableEnBitmap (R.drawable.like));
+
+            if (mService.getMusiquePlayerIsSet())
+            {
+                if (mService.getMusiquePlayerPath()=="")
+                {
+                    mService.notificationInitEtMaj();
+                }
+            }
         }
         else {
             database.mainDao ().deleteLike (path);

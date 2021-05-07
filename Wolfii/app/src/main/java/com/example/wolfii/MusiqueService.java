@@ -454,9 +454,6 @@ public class MusiqueService extends Service {
     public void musiqueBoucleDeboucle() {
         musiqueBoucle = !musiqueBoucle;
 
-        if (getMusiquePlayerIsSet())
-            notificationInitEtMaj();
-
         envoieBroadcast(EXTRA_MAJ_BOUTONS);
     }
 
@@ -629,6 +626,8 @@ public class MusiqueService extends Service {
         else {
             database.mainDao ().deleteLike (path);
         }
+        envoieBroadcast(EXTRA_MAJ_BOUTONS);
+        notificationInitEtMaj();
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -826,6 +825,8 @@ public class MusiqueService extends Service {
     public boolean getMusiqueBoucle(){ return musiqueBoucle;}
 
     public String getMusiqueAuteur(){return maMusique.get(positionMusique).getAuthor();}
+
+    public String getMusiquePlayerPath(){return maMusique.get(positionMusique).getPath();}
 
 
     /*--------------------------------------------------------------FONCTIONS SETTER--------------------------------------------------------------*/
