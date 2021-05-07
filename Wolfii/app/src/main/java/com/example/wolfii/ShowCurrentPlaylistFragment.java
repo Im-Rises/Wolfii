@@ -80,28 +80,31 @@ public class ShowCurrentPlaylistFragment extends Fragment {
 
         // bouton like
         like = root.findViewById (R.id.like);
-        if(!database.mainDao ().getLikes ().contains (maMusique.get(positionMusique).getPath ()))
-            like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
-        if(!maMusique.isEmpty ()) {
-            if (database.mainDao ().getLikes ().contains (maMusique.get (positionMusique).getPath ()))
-                like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
-            ClickOnLike clickOnLike = new ClickOnLike ();
-            clickOnLike.setIsWhite (true);
-            clickOnLike.setLike (like);
-            clickOnLike.setContext (getActivity ());
-            clickOnLike.setPath (maMusique.get (positionMusique).getPath ());
-            like.setOnClickListener (clickOnLike);
+        try {
+            if(!database.mainDao ().getLikes ().contains (mService.maMusique.get(mService.getPositionMusique ()).getPath ()))
+                like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
+            if(!maMusique.isEmpty ()) {
+                if (database.mainDao ().getLikes ().contains (maMusique.get (positionMusique).getPath ()))
+                    like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
+                ClickOnLike clickOnLike = new ClickOnLike ();
+                clickOnLike.setIsWhite (true);
+                clickOnLike.setLike (like);
+                clickOnLike.setContext (getActivity ());
+                clickOnLike.setPath (maMusique.get (positionMusique).getPath ());
+                like.setOnClickListener (clickOnLike);
 
 
-            // bouton ajouter à une playlist
-            add = root.findViewById (R.id.addToPlaylist);
-            add.setOnClickListener (new View.OnClickListener () {
-                @Override
-                public void onClick (View v) {
-                    ClickOnMusic.longClickMusic (maMusique.get (positionMusique), getActivity ());
-                }
-            });
+                // bouton ajouter à une playlist
+                add = root.findViewById (R.id.addToPlaylist);
+                add.setOnClickListener (new View.OnClickListener () {
+                    @Override
+                    public void onClick (View v) {
+                        ClickOnMusic.longClickMusic (maMusique.get (positionMusique), getActivity ());
+                    }
+                });
+            }
         }
+        catch(Exception e) {}
 
         monAdapter = new MyMusiqueAdapter (maMusique, getActivity ());
         monAdapter.setPositionMusique (positionMusique);
@@ -218,13 +221,15 @@ public class ShowCurrentPlaylistFragment extends Fragment {
             else
                 playPause.setImageBitmap(drawableEnBitmap(R.drawable.playbutton));
         }
+        try {
+            if (! database.mainDao ().getLikes ().contains (mService.maMusique.get (mService.getPositionMusique ()).getPath ()))
+                like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
+            else
+                like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
 
-        if(!database.mainDao ().getLikes ().contains (maMusique.get(positionMusique).getPath ()))
-            like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
-        else
-            like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
-
-        setImageRejoueRejouer();
+            setImageRejoueRejouer ();
+        }
+        catch (Exception e) {}
     }
 
 
