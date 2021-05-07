@@ -80,6 +80,8 @@ public class ShowCurrentPlaylistFragment extends Fragment {
 
         // bouton like
         like = root.findViewById (R.id.like);
+        if(!database.mainDao ().getLikes ().contains (maMusique.get(positionMusique).getPath ()))
+            like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
         if(!maMusique.isEmpty ()) {
             if (database.mainDao ().getLikes ().contains (maMusique.get (positionMusique).getPath ()))
                 like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
@@ -216,6 +218,8 @@ public class ShowCurrentPlaylistFragment extends Fragment {
             else
                 playPause.setImageBitmap(drawableEnBitmap(R.drawable.playbutton));
         }
+        if(!database.mainDao ().getLikes ().contains (maMusique.get(positionMusique).getPath ()))
+            like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
         setImageRejoueRejouer();
     }
 
