@@ -153,7 +153,7 @@ public class MusiqueService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_SHORT).show();
         //Si l'application a été arrêté automatiquement par le système android car la musique
         //était en pause (aucune activité n'était faite par l'application) alors on arrête toute
         //les notifications au cas où une soit restée.
@@ -399,8 +399,19 @@ public class MusiqueService extends Service {
         //if (getMusiquePlayerIsSet()) {
             arretSimpleMusique();
             maMusique.clear();
-            MyMusiqueAdapter myMusique = new MyMusiqueAdapter (maMusique, getApplicationContext ());
-            ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (myMusique);
+
+
+
+
+
+
+            //MyMusiqueAdapter myMusique = new MyMusiqueAdapter (maMusique, getApplicationContext ());
+            //ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (myMusique);
+
+
+
+
+
             //Abandon du focus audio en fonction de la version d'android
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 musiqueManager.abandonAudioFocusRequest(musiqueFocusRequest);
@@ -411,8 +422,8 @@ public class MusiqueService extends Service {
             unregisterReceiver(broadcastReceiverNotifCmd);//Arret du BroadcastReceiver de réception des commandes de notification
             unregisterReceiver(broadcastReceiverJack);//Arret du BroadcastReceiver de réception du débranchement d'une prise jack
 
-            stopForeground(true);
             arretMediaSession();
+            stopForeground(true);
             envoieBroadcast(EXTRA_MAJ_FIN);
             mediaSessionNotifInitBool=false;
 

@@ -45,16 +45,18 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide(); // on cache la barre d'action
 
         database = RoomDB.getInstance(this); // on initialise la base de donnees
-        estActif=true; // pour savoir si l'applie est lancee ou pas
+        estActif=true; // pour savoir si l'applie est lancée ou pas
 
         //////////////////////////////////////////////////////////////
         //////////////DEMMARRAGE SERVICE ET CONNEXION/////////////////
         //////////////////////////////////////////////////////////////
+
         if (!MusiqueService.estActif)
         {
-            Toast.makeText(MainActivity.this,"Démarrage du service",Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this,"Démarrage du service",Toast.LENGTH_SHORT).show();
             startService(new Intent(MainActivity.this, MusiqueService.class));
         }
+
 
 
         //Création d'une Intent pour la connexion BoundService
@@ -168,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         estActif=false;
 
         //Arrêt Bound Session
@@ -178,9 +179,8 @@ public class MainActivity extends AppCompatActivity {
         //Arrête le service si aucune musique n'est en cours
         if (!mService.getMusiquePlayerIsSet())
         {
-            //mService.arretTotalMusique();
+            //Toast.makeText(getApplicationContext(),"Le MainActivity arrête la service",Toast.LENGTH_SHORT).show();
             stopService(new Intent(MainActivity.this,MusiqueService.class));
         }
     }
-    //////////////////////////////////////////////////////////////
 }
