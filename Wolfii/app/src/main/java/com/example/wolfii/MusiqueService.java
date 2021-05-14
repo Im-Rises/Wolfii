@@ -54,6 +54,7 @@ public class MusiqueService extends Service {
     private boolean enPauseParUtilisateur = true;//Variable booléenne qui informe si la mise en pause de l'application est par l'utilisateur
     private boolean enPauseParDemandeLongue = true;//Variable booléenne qui informe si la mise en pause de l'application est par une application du système autre pour un temps indéterminé
     private boolean musiqueBoucle=false;//Variable booléenne qui informe si la musique est en train de bouclé ou non
+    private boolean isRecyclerViewSet = false;
 
     private MediaPlayer musiquePlayer;//Lecture musique
     private AudioManager musiqueManager;//AudioManager pour appeler la gestion de l'interruption musique via musiqueFocusmanager
@@ -401,16 +402,10 @@ public class MusiqueService extends Service {
             maMusique.clear();
 
 
-
-
-
-
-            //MyMusiqueAdapter myMusique = new MyMusiqueAdapter (maMusique, getApplicationContext ());
-            //ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (myMusique);
-
-
-
-
+            if(isRecyclerViewSet) {
+                MyMusiqueAdapter myMusique = new MyMusiqueAdapter (maMusique, getApplicationContext ());
+                ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (myMusique);
+            }
 
             //Abandon du focus audio en fonction de la version d'android
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -862,5 +857,6 @@ public class MusiqueService extends Service {
     }
     public void setRecyclerView(RecyclerView rv) {
         this.recyclerView = rv;
+        this.isRecyclerViewSet = true;
     }
 }
