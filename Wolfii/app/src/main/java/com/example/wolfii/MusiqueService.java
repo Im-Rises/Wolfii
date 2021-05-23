@@ -155,6 +155,7 @@ public class MusiqueService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_SHORT).show();
+        //stopForeground(true);
         //Si l'application a été arrêté automatiquement par le système android car la musique
         //était en pause (aucune activité n'était faite par l'application) alors on arrête toute
         //les notifications au cas où une soit restée.
