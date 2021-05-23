@@ -20,8 +20,4 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search" />
 
-    <item
-        android:id="@+id/navigation_identification"
-        android:icon="@drawable/ic_mic"
-        android:title="@string/shazam" />
 </menu>

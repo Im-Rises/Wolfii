@@ -29,9 +29,5 @@
         android:label="@string/search"
         tools:layout="@layout/fragment_search" />
 
-    <fragment
-        android:id="@+id/navigation_identification"
-        android:label="@string/shazam"
-        android:name="com.example.wolfii.IdentificationFragment"
-        tools:layout="@layout/fragment_identification" />
+
 </navigation>
