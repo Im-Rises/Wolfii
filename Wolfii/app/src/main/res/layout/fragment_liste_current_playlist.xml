@@ -94,7 +94,7 @@
             app:srcCompat="@drawable/unlike_white"/>
         -->
 
-        <ImageView
+<!--        <ImageView
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:layout_marginStart="14dp"
@@ -103,7 +103,7 @@
             android:id="@+id/arret"
             android:layout_width="30dp"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/image_nettoyer" />
+            app:srcCompat="@drawable/image_nettoyer" />-->
 
 
 

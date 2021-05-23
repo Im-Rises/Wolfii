@@ -73,9 +73,9 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         playPause = root.findViewById(R.id.playPause);
         playPause.setOnClickListener(new EcouteurBtnDemaPause());
 
-        // bouton arrêt musique
+/*        // bouton arrêt musique
         arret = root.findViewById(R.id.arret);
-        arret.setOnClickListener(new EcouteurMusiqueArret());
+        arret.setOnClickListener(new EcouteurMusiqueArret());*/
 
         if (mService.getMusiquePlayerIsSet()) {
             // bouton like
@@ -187,7 +187,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         }
     }
 
-    private class EcouteurMusiqueArret implements View.OnClickListener{
+/*    private class EcouteurMusiqueArret implements View.OnClickListener{
         @Override
         public void onClick(View v) {
             if (mService.getMusiquePlayerIsSet())
@@ -195,7 +195,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
                 mService.arretTotalMusique();
             }
         }
-    }
+    }*/
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
