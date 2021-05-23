@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:id="@+id/artistes_or_musiques"
     android:layout_height="match_parent"
-    android:background="@drawable/fond"
+    android:background="@drawable/darklake"
     android:orientation="vertical">
 
     <LinearLayout
@@ -18,23 +18,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/mes_artistes"
-            android:text="@string/mesArtistes"/>
+            android:text="@string/mesArtistes"
+            android:background="#00FFFFFF"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/mes_playlists"
-            android:text="@string/mesPlaylists"/>
+            android:text="@string/mesPlaylists"
+            android:background="#00FFFFFF"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/mes_albums"
-            android:text="@string/albums"/>
+            android:text="@string/albums"
+            android:background="#00FFFFFF"/>
 
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listes"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:background="#00FFFFFF"/>
 
 </LinearLayout>

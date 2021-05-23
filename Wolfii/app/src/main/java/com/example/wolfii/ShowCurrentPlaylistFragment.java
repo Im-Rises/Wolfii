@@ -94,6 +94,9 @@ public class ShowCurrentPlaylistFragment extends Fragment {
                     like.setOnClickListener(clickOnLike);
 
 
+
+
+
                     // bouton ajouter à une playlist
                     add = root.findViewById(R.id.addToPlaylist);
                     add.setOnClickListener(new View.OnClickListener() {

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fond"
+    android:background="@drawable/darklake"
     tools:context=".SearchFragment">
 
     <LinearLayout
@@ -24,9 +24,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="14sp"
+                android:scrollbarThumbHorizontal="@color/white"
+                android:scrollbarThumbVertical="@color/white"
                 android:textColor="#fff"
-                tools:ignore="Suspicious0dp" />
+                android:textSize="14sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bt_search"

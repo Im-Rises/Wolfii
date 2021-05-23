@@ -10,13 +10,13 @@
     android:gravity="center_horizontal">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_width="330dp"
+        android:layout_height="45dp"
         android:background="@drawable/arrondi"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:textAlignment="center">
-
+    <!--
         <ImageView
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
@@ -27,6 +27,7 @@
             android:layout_marginEnd="14dp"
             android:layout_marginRight="14dp"
             app:srcCompat="@drawable/plus" />
+      -->
 
 
         <ImageView
@@ -80,6 +81,7 @@
             android:layout_marginLeft="14dp"
             app:srcCompat="@drawable/ic_baseline_shuffle_24" />
 
+        <!--
         <ImageView
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
@@ -90,6 +92,8 @@
             android:layout_marginStart="14dp"
             android:layout_marginLeft="14dp"
             app:srcCompat="@drawable/unlike_white"/>
+        -->
+
         <ImageView
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
@@ -100,6 +104,7 @@
             android:layout_width="30dp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/image_nettoyer" />
+
 
 
     </LinearLayout>
