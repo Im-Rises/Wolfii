@@ -13,18 +13,12 @@
     android:gravity="center_horizontal">
 
 
-    <ImageView
-        android:layout_width="36dp"
-        android:layout_height="59dp"
-        android:layout_marginLeft="180dp"
-        app:srcCompat="@drawable/ic_baseline_more_vert_24" />
-
-
     <!-- LES TIMERS -->
 
     <RelativeLayout
         android:layout_width="400dp"
-        android:layout_height="273dp">
+        android:layout_height="273dp"
+        android:layout_marginTop="50dp">
 
 
         <de.hdodenhof.circleimageview.CircleImageView

@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:visibility="visible"
-        tools:visibility="visible">
+        android:background="@color/trans">
 
         <ImageView
             android:id="@+id/image_album"

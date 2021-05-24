@@ -43,7 +43,8 @@
         <ImageView
             android:id="@+id/previous"
             android:layout_width="44dp"
-            android:layout_height="match_parent"
+            android:layout_height="37dp"
+            android:layout_gravity="center_vertical"
             android:background="@color/trans"
             android:clickable="true"
             android:layout_marginRight="10dp"
@@ -63,7 +64,8 @@
         <ImageView
             android:id="@+id/next"
             android:layout_width="46dp"
-            android:layout_height="match_parent"
+            android:layout_height="37dp"
+            android:layout_gravity="center_vertical"
             android:background="@color/trans"
             android:layout_marginLeft="10dp"
             android:clickable="true"
@@ -111,6 +113,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myRecyclerView"
+        android:background="@color/trans"
         tools:listitem="@layout/musique_item"
         android:paddingBottom="60dp"
         android:layout_width="match_parent"

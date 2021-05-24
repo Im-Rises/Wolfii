@@ -10,7 +10,6 @@
         android:id="@+id/myRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/trans"
         android:paddingBottom="60dp"
         tools:listitem="@layout/musique_item" />
 
