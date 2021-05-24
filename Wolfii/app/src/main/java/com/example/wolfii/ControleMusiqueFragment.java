@@ -22,6 +22,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
+import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
 
 
@@ -31,7 +33,7 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree, txtViewTitreMusique, txtViewAuteurMusique;   //TextView du temps de lecture de la musique
 
-    private ImageView imgViewMusique;
+    private ImageView imgViewMusique, like, options;
 
     private ArrayList<Musique> currentPlaylist;
 
@@ -46,6 +48,8 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
     private Handler handlerRotation = new Handler();
     private boolean imageRotationDejaInit = false;
     private boolean imageRotationEnPause = true;
+
+    private static ClickOnLike clickOnLike = new ClickOnLike ();
 
 
 
@@ -68,6 +72,14 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
         this.txtViewTitreMusique = root.findViewById(R.id.txtViewTitreMusique);
 
         this.txtViewAuteurMusique = root.findViewById(R.id.txtViewAuteurMusique);
+
+        this.like = root.findViewById (R.id.like);
+        clickOnLike.setIsWhite (true);
+        clickOnLike.setContext (getActivity ());
+        clickOnLike.setLike (this.like);
+        this.like.setOnClickListener (clickOnLike);
+
+        this.options = root.findViewById (R.id.addToPlaylist);
 
 
         this.seekBarMusique=(SeekBar) root.findViewById(R.id.seekBarMusique);
@@ -250,6 +262,9 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
 
 
     public void majInterface() {
+        clickOnLike.setPath (mService.getMusiquePlayerPath ());
+        if(database.mainDao ().getLikes ().contains (mService.getMusiquePlayerPath ())) this.like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
+        else this.like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
         showCurrentPlaylistFragment.setPositionMusique (mService.getPositionMusique ());
         seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
         txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
