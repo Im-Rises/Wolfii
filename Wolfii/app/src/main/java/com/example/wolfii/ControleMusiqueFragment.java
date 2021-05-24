@@ -33,7 +33,7 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree, txtViewTitreMusique, txtViewAuteurMusique;   //TextView du temps de lecture de la musique
 
-    private ImageView imgViewMusique, like, options;
+    private ImageView imgViewMusique, like, add;
 
     private ArrayList<Musique> currentPlaylist;
 
@@ -79,8 +79,13 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
         clickOnLike.setLike (this.like);
         this.like.setOnClickListener (clickOnLike);
 
-        this.options = root.findViewById (R.id.addToPlaylist);
-
+        this.add = root.findViewById (R.id.addToPlaylist);
+        this.add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClickOnMusic.longClickMusic(mService.maMusique.get(mService.getPositionMusique ()), getActivity());
+            }
+        });
 
         this.seekBarMusique=(SeekBar) root.findViewById(R.id.seekBarMusique);
         this.seekBarMusique.setSoundEffectsEnabled(false);
