@@ -7,13 +7,14 @@
         android:title="@string/lecteur" />
 
     <item
-        android:id="@+id/navigation_nouveaute"
-        android:icon="@drawable/ic_queue"
-        android:title="@string/queue" />
-    <item
         android:id="@+id/navigation_artiste"
-        android:icon="@drawable/ic_artist"
-        android:title="@string/queue_artist"/>
+        android:icon="@drawable/ic_queue"
+        android:title="Bibliothèque"/>
+
+    <item
+        android:id="@+id/navigation_nouveaute"
+        android:icon="@drawable/ic_baseline_folder_24"
+        android:title="@string/queue" />
 
     <item
         android:id="@+id/navigation_search"
