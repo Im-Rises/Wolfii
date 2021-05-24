@@ -57,18 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
         if (!MusiqueService.estActif)
         {
-            Toast.makeText(MainActivity.this,"Démarrage du service",Toast.LENGTH_SHORT).show();
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+/*            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(new Intent(MainActivity.this, MusiqueService.class));
             }
             else
-            {
+            {*/
                 startService(new Intent(MainActivity.this, MusiqueService.class));
-            }
+            /*}*/
         }
-
-
 
         //Création d'une Intent pour la connexion BoundService
         Intent intent = new Intent(MainActivity.this, MusiqueService.class);

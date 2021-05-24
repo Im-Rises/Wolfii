@@ -105,6 +105,8 @@ public class MusiqueService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        Toast.makeText(MusiqueService.this,"Démarrage du service",Toast.LENGTH_SHORT).show();
+
         estActif=true;
         //Gestion du focus de la musique
         musiqueManager = (AudioManager) getSystemService((Context.AUDIO_SERVICE));//initialise l'AudioManager
@@ -155,6 +157,10 @@ public class MusiqueService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_SHORT).show();
+        if (MainActivity.estActif)
+        {
+            startService(new Intent(MusiqueService.this,MusiqueService.class));
+        }
         //stopForeground(true);
         //Si l'application a été arrêté automatiquement par le système android car la musique
         //était en pause (aucune activité n'était faite par l'application) alors on arrête toute
@@ -282,8 +288,7 @@ public class MusiqueService extends Service {
 
     public void musiqueInitialisation() {
         //Try catch pour vérifier si la musique chargée n'est pas trouvée
-        try
-        {
+        try {
             musiquePlayer = MediaPlayer.create(this, maMusique.get(positionMusique).getPathUri());//Création du MediaPlayer pour une resource raw
             musiquePlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);//Définis le mode de fonctionnement sur PARTIAL_WAKE_LOCK pour permettre à la musique de fonctionner sans être sur l'application
             musiquePlayer.setOnCompletionListener(new EcouteurMusiqueFinie());
