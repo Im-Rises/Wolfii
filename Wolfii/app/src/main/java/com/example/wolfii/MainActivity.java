@@ -8,10 +8,13 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -27,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<Musique> mesMusiques = new ArrayList<>();
     public static ArrayList<String> mesArtistes = new ArrayList<>();
-    public static ArrayList<String> mesGenres = new ArrayList<> ();
-    public static ArrayList<String> mesAlbums = new ArrayList<> ();
-    public static ArrayList<String> mesAlbumsImages = new ArrayList<> ();
+    public static ArrayList<String> mesGenres = new ArrayList<>();
+    public static ArrayList<String> mesAlbums = new ArrayList<>();
+    public static ArrayList<String> mesAlbumsImages = new ArrayList<>();
 
     private static final int MY_PERMISSION_REQUEST = 1;
 
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     public static MusiqueService mService;                            //Déclaration pointeur vers le service
     public static boolean mBound = false;                             //Variable qui témoigne de l'activation du service
     public static RoomDB database;  // notre base de donnees
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,14 @@ public class MainActivity extends AppCompatActivity {
         if (!MusiqueService.estActif)
         {
             Toast.makeText(MainActivity.this,"Démarrage du service",Toast.LENGTH_SHORT).show();
-            startService(new Intent(MainActivity.this, MusiqueService.class));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(new Intent(MainActivity.this, MusiqueService.class));
+            }
+            else
+            {
+                startService(new Intent(MainActivity.this, MusiqueService.class));
+            }
         }
 
 
@@ -187,17 +198,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (!MusiqueService.estActif)
+/*        if (!MusiqueService.estActif)
         {
             Toast.makeText(MainActivity.this,"Démarrage du service",Toast.LENGTH_SHORT).show();
             startService(new Intent(MainActivity.this, MusiqueService.class));
-        }
-        Toast.makeText(MainActivity.this,"onStart appelé",Toast.LENGTH_SHORT).show();
+        }*/
     }
-
-/*    @Override
-    protected void onStop() {
-        super.onStop();
-        Toast.makeText(MainActivity.this,"Démarrage du service",Toast.LENGTH_SHORT).show();
-    }*/
 }
