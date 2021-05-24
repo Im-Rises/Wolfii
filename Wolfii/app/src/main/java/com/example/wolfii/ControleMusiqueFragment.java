@@ -145,9 +145,9 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
             if (rotationImageValeur>=360)
                 rotationImageValeur=0;
 
-            rotationImageValeur += 0.5f;
+            rotationImageValeur += 0.2f;
             imgViewMusique.setRotation(rotationImageValeur);
-            handlerRotation.postDelayed(runnableTempsRotationImage,50);
+            handlerRotation.postDelayed(runnableTempsRotationImage,10);
         }
     };
 

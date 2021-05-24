@@ -190,14 +190,4 @@ public class MainActivity extends AppCompatActivity {
             stopService(new Intent(MainActivity.this,MusiqueService.class));
         }
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-/*        if (!MusiqueService.estActif)
-        {
-            Toast.makeText(MainActivity.this,"Démarrage du service",Toast.LENGTH_SHORT).show();
-            startService(new Intent(MainActivity.this, MusiqueService.class));
-        }*/
-    }
 }
