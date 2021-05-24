@@ -32,7 +32,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
     private ArrayList<Musique> mesMusiques;
     private static Context context;
     private ImageView shuffle;
-    public static ArrayList<String> addToPlaylists = new ArrayList<> ();
+    public static ArrayList<String> addToPlaylistsArray = new ArrayList<> ();
 
     public ClickOnMusic () {
     }
@@ -68,7 +68,6 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         dialog.getWindow().setLayout(width, height);
         dialog.show ();
 
-        EditText editText = dialog.findViewById (R.id.nom_playlist);
         Button addToPlaylist = dialog.findViewById (R.id.add);
         Button addToCurrentPlaylist = dialog.findViewById (R.id.addToCurrentPlaylist);
         Button hiddenTitle = dialog.findViewById (R.id.hiddenTitle);
@@ -94,25 +93,28 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
 
         addToPlaylist.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v) {
-                MainData data = new MainData ();
-                data.setNomMusique (musique.getName ());
-                data.setPath (musique.getPath ());
-                data.setPlaylist (editText.getText ().toString ());
-                data.setAuthor (musique.getAuthor ());
-                data.setDuration (musique.getDuration ());
-                data.setDateTaken (musique.getDateTaken ());
-                data.setGenre (musique.getGenre ());
+                for(String playlist : addToPlaylistsArray) {
+                    MainData data = new MainData ();
+                    data.setNomMusique (musique.getName ());
+                    data.setPath (musique.getPath ());
+                    data.setPlaylist (playlist);
+                    data.setAuthor (musique.getAuthor ());
+                    data.setDuration (musique.getDuration ());
+                    data.setDateTaken (musique.getDateTaken ());
+                    data.setGenre (musique.getGenre ());
 
-                PlaylistData pData = new PlaylistData ();
-                pData.setNom (editText.getText ().toString ());
+                    PlaylistData pData = new PlaylistData ();
+                    pData.setNom (playlist);
 
-                try {
-                    database.mainDao ().insert (data);
-                    database.mainDao ().createPlaylist (pData);
-                } catch (Exception e) {
-                    Log.d ("debug_db", e.getMessage ());
+                    try {
+                        database.mainDao ().insert (data);
+                        database.mainDao ().createPlaylist (pData);
+                    } catch (Exception e) {
+                        Log.d ("debug_db", e.getMessage ());
+                    }
+                    dialog.dismiss ();
+
                 }
-                dialog.dismiss ();
 
             }
         });

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.wolfii.ClickOnMusic.addToPlaylistsArray;
 import static com.example.wolfii.MainActivity.mesAlbums;
 import static com.example.wolfii.MainActivity.mesAlbumsImages;
 import static com.example.wolfii.MainActivity.mesMusiques;
@@ -35,11 +36,7 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
     private Boolean isPlaylist = false;
     private Boolean isGenre = false;
     private Boolean isAlbum = false;
-    public static Boolean isLongClickMusic = false;
-
-    public static ArrayList<String> addToPlaylists = new ArrayList<> ();
-
-    private int positionAlbum = 0;
+    private Boolean isLongClickMusic = false;
 
     public MyStringAdapter (ArrayList<String> mesArtistes) {
         this.mesArtistes = mesArtistes;
@@ -100,13 +97,12 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
             holder.cbSelect.setOnCheckedChangeListener (new CompoundButton.OnCheckedChangeListener () {
                 @Override
                 public void onCheckedChanged (CompoundButton buttonView, boolean isChecked) {
-                    if(addToPlaylists.contains (mesArtistes.get(position))) {
-                        addToPlaylists.remove (mesArtistes.get(position));
+                    if(addToPlaylistsArray.contains (mesArtistes.get(position))) {
+                        addToPlaylistsArray.remove (mesArtistes.get(position));
                     }
                     else {
-                        addToPlaylists.add (mesArtistes.get (position));
+                        addToPlaylistsArray.add (mesArtistes.get (position));
                     }
-                    Log.d("checkbox", addToPlaylists.toString ());
                 }
             });
         }
