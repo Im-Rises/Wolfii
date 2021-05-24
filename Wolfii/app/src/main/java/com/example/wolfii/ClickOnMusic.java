@@ -32,6 +32,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
     private ArrayList<Musique> mesMusiques;
     private static Context context;
     private ImageView shuffle;
+    public static ArrayList<String> addToPlaylists = new ArrayList<> ();
 
     public ClickOnMusic () {
     }
@@ -86,6 +87,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         ArrayList<String> mesPlaylists = (ArrayList<String>) database.mainDao ().getAllPlaylists ();
         Log.d("debug_playlist", mesPlaylists.toString ());
         MyStringAdapter adapter = new MyStringAdapter (mesPlaylists);
+        adapter.setIsLongClickMusic(true);
         rv.setLayoutManager(new LinearLayoutManager (context.getApplicationContext(), LinearLayout.VERTICAL, false));
 
         rv.setAdapter (adapter);

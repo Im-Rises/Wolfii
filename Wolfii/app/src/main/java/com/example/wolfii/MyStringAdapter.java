@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +35,9 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
     private Boolean isPlaylist = false;
     private Boolean isGenre = false;
     private Boolean isAlbum = false;
+    public static Boolean isLongClickMusic = false;
+
+    public static ArrayList<String> addToPlaylists = new ArrayList<> ();
 
     private int positionAlbum = 0;
 
@@ -40,11 +45,14 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
         this.mesArtistes = mesArtistes;
     }
 
+
+
+
     // SETTER
     public void setIsPlaylist(Boolean isPlaylist) {this.isPlaylist = isPlaylist;}
     public void setIsGenre(Boolean isGenre) {this.isGenre = isGenre;}
     public void setIsAlbum(Boolean isAlbum) {this.isAlbum = isAlbum;}
-
+    public void setIsLongClickMusic (boolean isLongClickMusic) {this.isLongClickMusic = isLongClickMusic;}
     // GETTER
     public Object getItem(int position) {
         return mesArtistes.get(position);
@@ -66,6 +74,7 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         // on va chercher notre layout
         View view = layoutInflater.inflate(R.layout.simple_item_list, parent, false);
+        if(isLongClickMusic) view = layoutInflater.inflate(R.layout.long_click_music_list, parent, false);
         if(isGenre) view = layoutInflater.inflate(R.layout.genre_item, parent, false);
         if(isAlbum) view = layoutInflater.inflate(R.layout.album_item, parent, false);
         // on renvoie le viewholder
@@ -86,6 +95,20 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
             ClickOnHolder clickOnHolder = new ClickOnHolder ();
             clickOnHolder.setPlaylist (playlist);
             holder.bt_settings.setOnClickListener (clickOnHolder);
+        }
+        if(isLongClickMusic) {
+            holder.cbSelect.setOnCheckedChangeListener (new CompoundButton.OnCheckedChangeListener () {
+                @Override
+                public void onCheckedChanged (CompoundButton buttonView, boolean isChecked) {
+                    if(addToPlaylists.contains (mesArtistes.get(position))) {
+                        addToPlaylists.remove (mesArtistes.get(position));
+                    }
+                    else {
+                        addToPlaylists.add (mesArtistes.get (position));
+                    }
+                    Log.d("checkbox", addToPlaylists.toString ());
+                }
+            });
         }
     }
     private class ClickOnHolder implements View.OnClickListener {
@@ -110,11 +133,14 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
         private TextView mName;
         private ImageView bt_settings;
         private ImageView album;
+        public CheckBox cbSelect;
 
         public MyViewHolder(@NonNull View itemView) {
             // itemview = vue de chaque cellule
             super(itemView);
-
+            if(isLongClickMusic) {
+                cbSelect = itemView.findViewById (R.id.checkbox);
+            }
             if(isAlbum) {
                 album = itemView.findViewById (R.id.album);
                 album.setOnClickListener (new Click ());
@@ -158,9 +184,7 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
         }
         void display(String artiste) {
             // ne jamais le mettre dans le constructeur
-            if(isAlbum) {
-            }
-            else {
+            if(!isAlbum) {
                 mName.setText(artiste);
             }
         }
