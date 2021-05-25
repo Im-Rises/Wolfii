@@ -83,7 +83,6 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
         // affiche les viewholder en donnant la position
         holder.display(mesArtistes.get(position));
         if(isAlbum) {
-            holder.display (mesAlbums.get(position));
             holder.showImage (position);
         }
         Log.d("position", position + "");
@@ -138,6 +137,8 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
                 cbSelect = itemView.findViewById (R.id.checkbox);
             }
             if(isAlbum) {
+                mName = (TextView) itemView.findViewById (R.id.name);
+
                 album = itemView.findViewById (R.id.album);
                 album.setOnClickListener (new Click ());
                 album.setOnLongClickListener (new LongClick ());
@@ -180,9 +181,7 @@ public class MyStringAdapter extends RecyclerView.Adapter<MyStringAdapter.MyView
         }
         void display(String artiste) {
             // ne jamais le mettre dans le constructeur
-            if(!isAlbum) {
-                mName.setText(artiste);
-            }
+            mName.setText(artiste);
         }
         void showImage(int position){
             RecupererImage image = new RecupererImage (mesAlbumsImages.get (position), context);

@@ -36,7 +36,6 @@ public class AlbumFragment extends Fragment {
         ////////////////////////// ALBUMS /////////////////////////////
         // creation du recyclerview
         mRecyclerView = (RecyclerView) root.findViewById (R.id.myRecyclerView);
-        mRecyclerView.setBackgroundColor (Color.BLACK);
         shuffle = root.findViewById (R.id.shuffle);
         shuffle.setVisibility (View.INVISIBLE);
 
