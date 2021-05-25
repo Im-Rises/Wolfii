@@ -625,11 +625,11 @@ public class MusiqueService extends Service {
         DataLikedMusic dataLikedMusic = new DataLikedMusic ();
         dataLikedMusic.setPath (path);
 
-        Musique musique = new Musique ();
-
-        if(!database.mainDao ().getLikes ().contains (path))
-
+        Musique musique = maMusique.get(getPositionMusique ());
+        if(!database.mainDao ().getLikes ().contains (path)) {
+            database.mainDao ().insertMusic (musique);
             database.mainDao ().insertLike (dataLikedMusic);
+        }
         else database.mainDao ().deleteLike (dataLikedMusic);
         envoieBroadcast(EXTRA_MAJ_BOUTONS);
         notificationInitEtMaj();
