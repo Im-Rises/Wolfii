@@ -81,7 +81,7 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
         delete.setOnClickListener (new View.OnClickListener () {
             public void onClick (View v) {
 
-                // database.mainDao (). deletePlaylist(playlist);
+                database.mainDao (). deletePlaylist(playlist);
                 database.mainDao ().deleteFromPlaylistMusicWherePlaylist (playlist);
 
                 Toast.makeText(context, "playlist " +playlist +" supprimée", Toast.LENGTH_SHORT).show();

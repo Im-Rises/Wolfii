@@ -23,14 +23,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/new_playlist"
-            android:textAlignment="center"
-            android:layout_weight="1"
-            android:id="@+id/nom_playlist"
-            android:gravity="center_horizontal" />
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

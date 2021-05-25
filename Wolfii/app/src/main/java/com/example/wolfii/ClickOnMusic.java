@@ -123,6 +123,8 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
                     database.mainDao ().insertPlaylistMusic(dataPlaylistMusic);
 
                     Log.d("debug_data", dataPlaylist.getNom ());
+
+                    dialog.dismiss ();
                 }
 
             }
