@@ -54,6 +54,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         }
         else view.setBackgroundColor (Color.WHITE);
     }
+
     @SuppressLint("WrongConstant")
     public static void longClickMusic(Musique musique, Context context) {
         Dialog dialog = new Dialog(context);

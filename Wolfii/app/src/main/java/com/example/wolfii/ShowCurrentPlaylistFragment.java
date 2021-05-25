@@ -74,10 +74,6 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         playPause = root.findViewById(R.id.playPause);
         playPause.setOnClickListener(new EcouteurBtnDemaPause());
 
-/*        // bouton arrêt musique
-        arret = root.findViewById(R.id.arret);
-        arret.setOnClickListener(new EcouteurMusiqueArret());*/
-
         if (mService.getMusiquePlayerIsSet()) {
             // bouton like
             like = root.findViewById(R.id.like);
@@ -93,10 +89,6 @@ public class ShowCurrentPlaylistFragment extends Fragment {
                     clickOnLike.setContext(getActivity());
                     clickOnLike.setMusique(maMusique.get(positionMusique));
                     like.setOnClickListener(clickOnLike);
-
-
-
-
 
                     // bouton ajouter à une playlist
                     add = root.findViewById(R.id.addToPlaylist);
@@ -188,16 +180,6 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         }
     }
 
-/*    private class EcouteurMusiqueArret implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            if (mService.getMusiquePlayerIsSet())
-            {
-                mService.arretTotalMusique();
-            }
-        }
-    }*/
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////FONCTIONS MAJ INTERFACE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,8 +225,6 @@ public class ShowCurrentPlaylistFragment extends Fragment {
         playPause.setImageBitmap(drawableEnBitmap(R.drawable.ic_baseline_play_circle_outline_24));
         setImageRejoueRejouer();
     }
-
-
 
 
     public void setImageRejoueRejouer()
