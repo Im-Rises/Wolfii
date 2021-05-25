@@ -76,10 +76,19 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         hiddenTitle.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick (View v) {
-                HiddenTitleData hiddenTitleData = new HiddenTitleData ();
-                hiddenTitleData.setPath (musique.getPath ());
+                DataMusique dataMusique = new DataMusique ();
+                dataMusique.setNomMusique (musique.getName ());
+                dataMusique.setPath (musique.getPath ());
+                dataMusique.setAuthor (musique.getAuthor ());
+                dataMusique.setDuration (musique.getDuration ());
+                dataMusique.setDateTaken (musique.getDateTaken ());
+                dataMusique.setGenre (musique.getGenre ());
 
-                database.mainDao ().insertHiddenTitle (hiddenTitleData);
+                DataHiddenMusic dataHiddenMusic = new DataHiddenMusic ();
+                dataHiddenMusic.setPath (musique.getPath ());
+
+                database.mainDao ().insertMusic (dataMusique);
+                database.mainDao ().insertHiddenTitle (dataHiddenMusic);
             }
         });
 
@@ -94,26 +103,26 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         addToPlaylist.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v) {
                 for(String playlist : addToPlaylistsArray) {
-                    MainData data = new MainData ();
-                    data.setNomMusique (musique.getName ());
-                    data.setPath (musique.getPath ());
-                    data.setPlaylist (playlist);
-                    data.setAuthor (musique.getAuthor ());
-                    data.setDuration (musique.getDuration ());
-                    data.setDateTaken (musique.getDateTaken ());
-                    data.setGenre (musique.getGenre ());
+                    DataMusique dataMusique = new DataMusique ();
+                    dataMusique.setNomMusique (musique.getName ());
+                    dataMusique.setPath (musique.getPath ());
+                    dataMusique.setAuthor (musique.getAuthor ());
+                    dataMusique.setDuration (musique.getDuration ());
+                    dataMusique.setDateTaken (musique.getDateTaken ());
+                    dataMusique.setGenre (musique.getGenre ());
 
-                    PlaylistData pData = new PlaylistData ();
-                    pData.setNom (playlist);
+                    DataPlaylist dataPlaylist = new DataPlaylist ();
+                    dataPlaylist.setNom (playlist);
 
-                    try {
-                        database.mainDao ().insert (data);
-                        database.mainDao ().createPlaylist (pData);
-                    } catch (Exception e) {
-                        Log.d ("debug_db", e.getMessage ());
-                    }
-                    dialog.dismiss ();
+                    DataPlaylistMusic dataPlaylistMusic = new DataPlaylistMusic ();
+                    dataPlaylistMusic.setPath (musique.getPath ());
+                    dataPlaylistMusic.setPlaylist (playlist);
 
+                    database.mainDao ().insertMusic (dataMusique);
+                    database.mainDao ().insertPlaylist (dataPlaylist);
+                    database.mainDao ().insertPlaylistMusic(dataPlaylistMusic);
+
+                    Log.d("debug_data", dataPlaylist.getNom ());
                 }
 
             }

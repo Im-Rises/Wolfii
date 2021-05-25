@@ -632,15 +632,11 @@ public class MusiqueService extends Service {
     public void likerMusique()
     {
         String path = maMusique.get(getPositionMusique ()).getPath ();
-        if(!database.mainDao ().getLikes ().contains (path)) {
-            LikeData likeData = new LikeData ();
-            likeData.setPath (path);
-
-            database.mainDao ().insertLike (likeData);
-        }
-        else {
-            database.mainDao ().deleteLike (path);
-        }
+        DataLikedMusic dataLikedMusic = new DataLikedMusic ();
+        dataLikedMusic.setPath (path);
+        if(!database.mainDao ().getLikes ().contains (path))
+            database.mainDao ().insertLike (dataLikedMusic);
+        else database.mainDao ().deleteLike (dataLikedMusic);
         envoieBroadcast(EXTRA_MAJ_BOUTONS);
         notificationInitEtMaj();
     }

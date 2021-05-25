@@ -91,7 +91,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
                     clickOnLike.setIsWhite(true);
                     clickOnLike.setLike(like);
                     clickOnLike.setContext(getActivity());
-                    clickOnLike.setPath(maMusique.get(positionMusique).getPath());
+                    clickOnLike.setMusique(maMusique.get(positionMusique));
                     like.setOnClickListener(clickOnLike);
 
 

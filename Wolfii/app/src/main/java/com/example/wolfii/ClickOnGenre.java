@@ -128,20 +128,19 @@ public class ClickOnGenre implements MyStringAdapter.ArtisteItemClickListener {
         addToPlaylist.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v) {
                 for(Musique musique : musiques) {
-                    MainData data = new MainData ();
-                    data.setNomMusique (musique.getName ());
-                    data.setPath (musique.getPath ());
-                    data.setPlaylist (editText.getText ().toString ());
-                    data.setAuthor (musique.getAuthor ());
-                    data.setDuration (musique.getDuration ());
-                    data.setDateTaken (musique.getDateTaken ());
-                    data.setGenre (musique.getGenre ());
+                    DataMusique dataMusique = new DataMusique ();
+                    dataMusique.setNomMusique (musique.getName ());
+                    dataMusique.setPath (musique.getPath ());
+                    dataMusique.setAuthor (musique.getAuthor ());
+                    dataMusique.setDuration (musique.getDuration ());
+                    dataMusique.setDateTaken (musique.getDateTaken ());
+                    dataMusique.setGenre (musique.getGenre ());
 
-                    try {
-                        database.mainDao ().insert (data);
-                    } catch (Exception e) {
-                        Log.d ("debug_db", e.getMessage ());
-                    }
+                    DataPlaylist dataPlaylist = new DataPlaylist ();
+                    dataPlaylist.setNom (editText.getText ().toString ());
+
+                    database.mainDao ().insertMusic (dataMusique);
+                    database.mainDao ().insertPlaylist (dataPlaylist);
                 }
                 dialog.dismiss ();
             }

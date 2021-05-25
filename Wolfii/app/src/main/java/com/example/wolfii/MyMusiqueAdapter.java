@@ -86,7 +86,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
         holder.bt_settings.setOnClickListener(clickOnHolder);
 
         ClickOnLike clickOnLike = new ClickOnLike ();
-        clickOnLike.setPath(mesMusiques.get(position).getPath ());
+        clickOnLike.setMusique(mesMusiques.get(position));
         clickOnLike.setLike (holder.like);
         clickOnLike.setContext(context);
         holder.like.setOnClickListener (clickOnLike);

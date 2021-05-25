@@ -41,8 +41,8 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
         shuffleiv.setOnClickListener (shuffle);
 
 
-        List<MainData> musiquesMainData = database.mainDao ().getMusicFromPlaylist (playlist);
-        for(MainData data : musiquesMainData) {
+        List<DataMusique> musiquesMainData = database.mainDao ().getMusicFromPlaylist (playlist);
+        for(DataMusique data : musiquesMainData) {
             if(data.getPath () != null) {
                 musiques.add (new Musique (data.getNomMusique (),
                         data.getAuthor (),
@@ -80,8 +80,9 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
 
         delete.setOnClickListener (new View.OnClickListener () {
             public void onClick (View v) {
-                database.mainDao ().deletePlaylistFromMusic (playlist);
-                database.mainDao ().deletePlaylistFromPlaylist (playlist);
+
+                // database.mainDao (). deletePlaylist(playlist);
+                database.mainDao ().deleteFromPlaylistMusicWherePlaylist (playlist);
 
                 Toast.makeText(context, "playlist " +playlist +" supprimée", Toast.LENGTH_SHORT).show();
             }
@@ -104,8 +105,7 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
                     @Override
                     public void onClick (View v) {
                         String newName = name.getText ().toString ();
-                        database.mainDao ().renameFromMusic (playlist, newName);
-                        database.mainDao ().renameFromPlaylist (playlist, newName);
+                        database.mainDao ().renamePlaylist (playlist, newName);
                         Toast.makeText(context, "playlist " +playlist +" s'appellera maintenant " + newName, Toast.LENGTH_SHORT).show();
                     }
                 });

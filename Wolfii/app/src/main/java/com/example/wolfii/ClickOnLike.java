@@ -15,7 +15,7 @@ import static com.example.wolfii.MainActivity.mService;
 import static com.example.wolfii.R.drawable.like;
 
 public class ClickOnLike implements View.OnClickListener{
-    private String path;
+    private Musique musique;
 
     private Context context;
 
@@ -23,7 +23,7 @@ public class ClickOnLike implements View.OnClickListener{
 
     private Boolean isWhite = false;
 
-    public void setPath(String path) {this.path = path;}
+    public void setMusique(Musique musique){this.musique = musique;}
     public void setLike(ImageView like) {this.like = like;}
     public void setContext(Context context) {this.context = context;}
     public void setIsWhite(Boolean isWhite) {this.isWhite = isWhite;}
@@ -31,22 +31,32 @@ public class ClickOnLike implements View.OnClickListener{
     @Override
     public void onClick (View v) {
         Log.d("debug_like", database.mainDao ().getLikes ().toString ());
-        if(!database.mainDao ().getLikes ().contains (path)) {
-            LikeData likeData = new LikeData ();
-            likeData.setPath (path);
 
-            database.mainDao ().insertLike (likeData);
+        DataMusique dataMusique = new DataMusique ();
+        dataMusique.setNomMusique (musique.getName ());
+        dataMusique.setPath (musique.getPath ());
+        dataMusique.setAuthor (musique.getAuthor ());
+        dataMusique.setDuration (musique.getDuration ());
+        dataMusique.setDateTaken (musique.getDateTaken ());
+        dataMusique.setGenre (musique.getGenre ());
+
+        DataLikedMusic dataLikedMusic = new DataLikedMusic ();
+        dataLikedMusic.setPath (musique.getPath ());
+
+        if(!database.mainDao ().getLikes ().contains (musique.getPath ())) {
+            database.mainDao ().insertMusic (dataMusique);
+            database.mainDao ().insertLike (dataLikedMusic);
             if(isWhite) like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
             else like.setImageBitmap (drawableEnBitmap (R.drawable.like));
         }
         else {
-            database.mainDao ().deleteLike (path);
+            database.mainDao ().deleteLike (dataLikedMusic);
 
             if(isWhite) like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
             else like.setImageBitmap (drawableEnBitmap (R.drawable.unlike));
         }
 
-        if (mService.getMusiquePlayerIsSet() && mService.getMusiquePlayerPath()==path)
+        if (mService.getMusiquePlayerIsSet() && mService.getMusiquePlayerPath()==musique.getPath ())
             mService.notificationInitEtMaj();
 
     }

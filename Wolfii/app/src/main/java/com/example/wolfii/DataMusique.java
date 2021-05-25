@@ -16,9 +16,6 @@ public class DataMusique {
     @ColumnInfo(name = "nomMusique")
     private String nomMusique;
 
-    @ColumnInfo(name = "playlist")
-    private String playlist;
-
     @ColumnInfo(name = "author")
     private String author;
 
@@ -38,7 +35,6 @@ public class DataMusique {
     // GETTER
     public String getNomMusique () {return nomMusique;}
     public String getPath () {return path;}
-    public String getPlaylist() {return playlist;}
     public String getAuthor() {return author;}
     public String getDuration() {return duration;}
     public String getDateTaken() {return dateTaken;}
@@ -48,7 +44,6 @@ public class DataMusique {
     // SETTER
     public void setNomMusique (String nomMusique) {this.nomMusique = nomMusique;}
     public void setPath (String path) {this.path = path;}
-    public void setPlaylist(String playlist) {this.playlist=playlist;}
     public void setAuthor(String author) {this.author = author;}
     public void setDuration(String duration) {this.duration = duration;}
     public void setDateTaken(String dateTaken) {this.dateTaken = dateTaken;}

@@ -267,7 +267,7 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
 
 
     public void majInterface() {
-        clickOnLike.setPath (mService.getMusiquePlayerPath ());
+        clickOnLike.setMusique(mService.maMusique.get(mService.getPositionMusique ()));
         if(database.mainDao ().getLikes ().contains (mService.getMusiquePlayerPath ())) this.like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
         else this.like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
         showCurrentPlaylistFragment.setPositionMusique (mService.getPositionMusique ());

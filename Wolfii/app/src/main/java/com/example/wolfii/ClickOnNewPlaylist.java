@@ -35,11 +35,10 @@ public class ClickOnNewPlaylist implements View.OnClickListener {
         valider.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick (View v) {
-                PlaylistData data = new PlaylistData ();
-                data.setNom (nom.getText ().toString ());
+                DataPlaylist dataPlaylist = new DataPlaylist ();
+                dataPlaylist.setNom (nom.getText ().toString ());
 
-                database.mainDao ().createPlaylist (data);
-
+                database.mainDao ().insertPlaylist (dataPlaylist);
             }
         });
     }

@@ -68,4 +68,46 @@ public interface MainDao {
     @Insert(onConflict = REPLACE)
     void insertHiddenTitle(HiddenTitleData data);
      */
+
+    @Query ("SELECT * FROM LikedMusic")
+    List<String> getLikes();
+
+    @Query ("DELETE FROM Music WHERE path = :sPath;")
+    void deleteFromPath(String sPath);
+
+    @Query ("DELETE FROM PlaylistMusic WHERE playlist = :sPlaylist;")
+    void deleteFromPlaylistMusicWherePlaylist(String sPlaylist);
+
+    @Insert (onConflict = REPLACE)
+    void insertLike(DataLikedMusic dataLikedMusic);
+
+    @Insert(onConflict = REPLACE)
+    void insertHiddenTitle(DataHiddenMusic dataHiddenMusic);
+
+    @Insert(onConflict = REPLACE)
+    void insertMusic(DataMusique dataMusique);
+
+    @Insert(onConflict = REPLACE)
+    void insertPlaylist(DataPlaylist dataPlaylist);
+
+    @Insert(onConflict = REPLACE)
+    void insertPlaylistMusic(DataPlaylistMusic dataPlaylistMusic);
+
+    @Delete
+    void deleteLike(DataLikedMusic dataLikedMusic);
+
+    @Query ("DELETE FROM Playlist WHERE nom = :sPlaylist")
+    void deletePlaylist(String sPlaylist);
+
+    @Query("SELECT * FROM playlist")
+    List<String> getAllPlaylists();
+
+    @Query ("SELECT * FROM HiddenMusic")
+    List<String> getHiddenTitle();
+
+    @Query ("SELECT * FROM music m JOIN playlistmusic pm ON m.path = pm.path WHERE pm.playlist= :sPlaylist;")
+    List<DataMusique> getMusicFromPlaylist(String sPlaylist);
+
+    @Query ("UPDATE playlist SET nom = :newName WHERE nom = :oldName")
+    void renamePlaylist(String oldName, String newName);
 }
