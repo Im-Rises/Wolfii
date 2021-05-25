@@ -12,6 +12,7 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface MainDao {
+    /*
     @Insert(onConflict = REPLACE)
     void createPlaylist(PlaylistData playlistData);
     // insert query
@@ -66,4 +67,5 @@ public interface MainDao {
 
     @Insert(onConflict = REPLACE)
     void insertHiddenTitle(HiddenTitleData data);
+     */
 }

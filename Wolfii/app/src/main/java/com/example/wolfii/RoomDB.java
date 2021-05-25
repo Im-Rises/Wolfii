@@ -7,7 +7,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 // add database entities
-@Database(entities = {MainData.class, PlaylistData.class, LikeData.class, HiddenTitleData.class}, version = 1, exportSchema = false)
+@Database(entities = {
+        DataPlaylist.class,
+        DataMusique.class,
+        DataPlaylistMusic.class,
+        DataHiddenMusic.class,
+        DataLikedMusic.class}, version = 1, exportSchema = false)
 public abstract class RoomDB extends RoomDatabase {
     // create database instance
     private static RoomDB database;
