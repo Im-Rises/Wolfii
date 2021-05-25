@@ -127,14 +127,16 @@ public class MainActivity extends AppCompatActivity {
                 String currentGenre = songCursor.getString(songGenre);
                 String currentAlbum = songCursor.getString (songAlbum);
 
-                maMusique.add(new Musique(
-                        currentTitle,
-                        currentArtist,
-                        currentPath,
-                        currentDuration,
-                        currentDateTaken,
-                        currentGenre,
-                        currentAlbum));
+                Musique musique = new Musique ();
+                musique.setNomMusique (currentTitle);
+                musique.setAlbum (currentAlbum);
+                musique.setAuthor (currentArtist);
+                musique.setDateTaken (currentDateTaken);
+                musique.setDuration (currentDuration);
+                musique.setGenre (currentGenre);
+                musique.setPath (currentPath);
+
+                maMusique.add(musique);
                 // on repertorie tous les differents genres dispos
                 if(!mesGenres.contains (currentGenre)) mesGenres.add(currentGenre);
                 if(!mesArtistes.contains(currentArtist)) mesArtistes.add(currentArtist);

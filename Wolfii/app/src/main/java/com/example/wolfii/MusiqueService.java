@@ -632,9 +632,14 @@ public class MusiqueService extends Service {
     public void likerMusique()
     {
         String path = maMusique.get(getPositionMusique ()).getPath ();
+
         DataLikedMusic dataLikedMusic = new DataLikedMusic ();
         dataLikedMusic.setPath (path);
+
+        Musique musique = new Musique ();
+
         if(!database.mainDao ().getLikes ().contains (path))
+
             database.mainDao ().insertLike (dataLikedMusic);
         else database.mainDao ().deleteLike (dataLikedMusic);
         envoieBroadcast(EXTRA_MAJ_BOUTONS);

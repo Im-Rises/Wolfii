@@ -32,19 +32,11 @@ public class ClickOnLike implements View.OnClickListener{
     public void onClick (View v) {
         Log.d("debug_like", database.mainDao ().getLikes ().toString ());
 
-        DataMusique dataMusique = new DataMusique ();
-        dataMusique.setNomMusique (musique.getName ());
-        dataMusique.setPath (musique.getPath ());
-        dataMusique.setAuthor (musique.getAuthor ());
-        dataMusique.setDuration (musique.getDuration ());
-        dataMusique.setDateTaken (musique.getDateTaken ());
-        dataMusique.setGenre (musique.getGenre ());
-
         DataLikedMusic dataLikedMusic = new DataLikedMusic ();
         dataLikedMusic.setPath (musique.getPath ());
 
         if(!database.mainDao ().getLikes ().contains (musique.getPath ())) {
-            database.mainDao ().insertMusic (dataMusique);
+            database.mainDao ().insertMusic (musique);
             database.mainDao ().insertLike (dataLikedMusic);
             if(isWhite) like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
             else like.setImageBitmap (drawableEnBitmap (R.drawable.like));

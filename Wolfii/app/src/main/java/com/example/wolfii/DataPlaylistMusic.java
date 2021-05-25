@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "PlaylistMusic",
         primaryKeys = {"path", "playlist"},
         foreignKeys = {
-            @ForeignKey (entity = DataMusique.class, parentColumns = "path", childColumns = "path"),
+            @ForeignKey (entity = Musique.class, parentColumns = "path", childColumns = "path"),
             @ForeignKey (entity = DataPlaylist.class, parentColumns = "nom", childColumns = "playlist")})
 public class DataPlaylistMusic {
     @ColumnInfo(name = "path")

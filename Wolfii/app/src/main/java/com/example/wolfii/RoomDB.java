@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 // add database entities
 @Database(entities = {
         DataPlaylist.class,
-        DataMusique.class,
+        Musique.class,
         DataPlaylistMusic.class,
         DataHiddenMusic.class,
         DataLikedMusic.class}, version = 2, exportSchema = false)

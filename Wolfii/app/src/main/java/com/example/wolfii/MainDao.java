@@ -85,7 +85,7 @@ public interface MainDao {
     void insertHiddenTitle(DataHiddenMusic dataHiddenMusic);
 
     @Insert(onConflict = REPLACE)
-    void insertMusic(DataMusique dataMusique);
+    void insertMusic(Musique musique);
 
     @Insert(onConflict = REPLACE)
     void insertPlaylist(DataPlaylist dataPlaylist);
@@ -106,7 +106,7 @@ public interface MainDao {
     List<String> getHiddenTitle();
 
     @Query ("SELECT * FROM music m JOIN playlistmusic pm ON m.path = pm.path WHERE pm.playlist= :sPlaylist;")
-    List<DataMusique> getMusicFromPlaylist(String sPlaylist);
+    List<Musique> getMusicFromPlaylist(String sPlaylist);
 
     @Query ("UPDATE playlist SET nom = :newName WHERE nom = :oldName")
     void renamePlaylist(String oldName, String newName);

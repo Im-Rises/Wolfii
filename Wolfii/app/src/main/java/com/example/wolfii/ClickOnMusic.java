@@ -76,18 +76,10 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         hiddenTitle.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick (View v) {
-                DataMusique dataMusique = new DataMusique ();
-                dataMusique.setNomMusique (musique.getName ());
-                dataMusique.setPath (musique.getPath ());
-                dataMusique.setAuthor (musique.getAuthor ());
-                dataMusique.setDuration (musique.getDuration ());
-                dataMusique.setDateTaken (musique.getDateTaken ());
-                dataMusique.setGenre (musique.getGenre ());
-
                 DataHiddenMusic dataHiddenMusic = new DataHiddenMusic ();
                 dataHiddenMusic.setPath (musique.getPath ());
 
-                database.mainDao ().insertMusic (dataMusique);
+                database.mainDao ().insertMusic (musique);
                 database.mainDao ().insertHiddenTitle (dataHiddenMusic);
             }
         });
@@ -103,14 +95,6 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         addToPlaylist.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v) {
                 for(String playlist : addToPlaylistsArray) {
-                    DataMusique dataMusique = new DataMusique ();
-                    dataMusique.setNomMusique (musique.getName ());
-                    dataMusique.setPath (musique.getPath ());
-                    dataMusique.setAuthor (musique.getAuthor ());
-                    dataMusique.setDuration (musique.getDuration ());
-                    dataMusique.setDateTaken (musique.getDateTaken ());
-                    dataMusique.setGenre (musique.getGenre ());
-
                     DataPlaylist dataPlaylist = new DataPlaylist ();
                     dataPlaylist.setNom (playlist);
 
@@ -118,7 +102,7 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
                     dataPlaylistMusic.setPath (musique.getPath ());
                     dataPlaylistMusic.setPlaylist (playlist);
 
-                    database.mainDao ().insertMusic (dataMusique);
+                    database.mainDao ().insertMusic (musique);
                     database.mainDao ().insertPlaylist (dataPlaylist);
                     database.mainDao ().insertPlaylistMusic(dataPlaylistMusic);
 

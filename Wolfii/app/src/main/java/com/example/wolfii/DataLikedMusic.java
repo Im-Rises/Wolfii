@@ -7,7 +7,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "LikedMusic", foreignKeys = {@ForeignKey (entity = DataMusique.class, parentColumns = "path", childColumns = "path")})
+@Entity(tableName = "LikedMusic", foreignKeys = {@ForeignKey (entity = Musique.class, parentColumns = "path", childColumns = "path")})
 public class DataLikedMusic {
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "path")
