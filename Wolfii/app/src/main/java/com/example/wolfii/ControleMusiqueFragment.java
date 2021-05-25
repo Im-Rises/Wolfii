@@ -319,10 +319,4 @@ public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment 
         return bitmap;
     }
 
-
-
-
 }
-
-
-

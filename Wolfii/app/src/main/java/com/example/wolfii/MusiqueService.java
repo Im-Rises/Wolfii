@@ -27,19 +27,13 @@ import android.os.PowerManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 import android.widget.Toast;
-
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.example.wolfii.MainActivity.database;
-import static com.example.wolfii.MainActivity.mService;
 import static java.lang.Integer.parseInt;
 
 
@@ -88,7 +82,7 @@ public class MusiqueService extends Service {
 
     private Handler handlerTemps = new Handler();               //Handler pour appeler toutes les secondes le runnable
 
-    IntentFilter intentFilterDirecService = new IntentFilter(DIRECTION_SERVICE);//Intent Filter pour la mise ne écoute sous le filtre DIRECTION_SERVICE
+    private IntentFilter intentFilterDirecService = new IntentFilter(DIRECTION_SERVICE);//Intent Filter pour la mise ne écoute sous le filtre DIRECTION_SERVICE
 
     private MediaSessionCompat mediaSession;//déclaration d'une média session de contrôle musique
     private boolean mediaSessionNotifInitBool = false;//Valeur booléenne pour informer si l'utilisateur a déjà inititalisé la mediaSession et la notif
@@ -105,7 +99,7 @@ public class MusiqueService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        Toast.makeText(MusiqueService.this,"Démarrage du service",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MusiqueService.this,"Démarrage du service",Toast.LENGTH_SHORT).show();
 
         estActif=true;
         //Gestion du focus de la musique
@@ -156,7 +150,7 @@ public class MusiqueService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),"Arrêt service",Toast.LENGTH_SHORT).show();
         if (MainActivity.estActif)
         {
             startService(new Intent(MusiqueService.this,MusiqueService.class));
@@ -403,32 +397,29 @@ public class MusiqueService extends Service {
 
     public void arretTotalMusique()//Arret appelé dès qu'on arrête toute lecture en cours
     {
-        //if (getMusiquePlayerIsSet()) {
-            arretSimpleMusique();
-            maMusique.clear();
+        arretSimpleMusique();
+        maMusique.clear();
 
 
-            if(isRecyclerViewSet) {
-                MyMusiqueAdapter myMusique = new MyMusiqueAdapter (maMusique, getApplicationContext ());
-                ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (myMusique);
-            }
+        if (isRecyclerViewSet) {
+            MyMusiqueAdapter myMusique = new MyMusiqueAdapter(maMusique, getApplicationContext());
+            ShowCurrentPlaylistFragment.mRecyclerView.setAdapter(myMusique);
+        }
 
-            //Abandon du focus audio en fonction de la version d'android
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                musiqueManager.abandonAudioFocusRequest(musiqueFocusRequest);
-            } else {
-                musiqueManager.abandonAudioFocus(musiqueFocusChange);
-            }
+        //Abandon du focus audio en fonction de la version d'android
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            musiqueManager.abandonAudioFocusRequest(musiqueFocusRequest);
+        } else {
+            musiqueManager.abandonAudioFocus(musiqueFocusChange);
+        }
 
-            unregisterReceiver(broadcastReceiverNotifCmd);//Arret du BroadcastReceiver de réception des commandes de notification
-            unregisterReceiver(broadcastReceiverJack);//Arret du BroadcastReceiver de réception du débranchement d'une prise jack
+        unregisterReceiver(broadcastReceiverNotifCmd);//Arret du BroadcastReceiver de réception des commandes de notification
+        unregisterReceiver(broadcastReceiverJack);//Arret du BroadcastReceiver de réception du débranchement d'une prise jack
 
-            arretMediaSession();
-            stopForeground(true);
-            envoieBroadcast(EXTRA_MAJ_FIN);
-            mediaSessionNotifInitBool=false;
-
-        //}
+        arretMediaSession();
+        stopForeground(true);
+        envoieBroadcast(EXTRA_MAJ_FIN);
+        mediaSessionNotifInitBool = false;
     }
 
     /*--------------------------------------------PASSAGE A LA MUSIQUE SUIVANTE--------------------------------------------------------------*/
@@ -535,8 +526,6 @@ public class MusiqueService extends Service {
 
         //Enregistrement du BroafcastRecevier sous l'écoute du message ACTION_STRING_SERVICE (pour recevoir les commandes boutons)
         registerReceiver(broadcastReceiverNotifCmd, intentFilterDirecService);
-
-
 
 
         if (database.mainDao().getLikes().contains(maMusique.get(positionMusique).getPath()))
