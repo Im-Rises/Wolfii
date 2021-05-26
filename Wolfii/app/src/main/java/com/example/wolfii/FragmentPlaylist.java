@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +22,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.wolfii.FragmentListArtistPlaylistAlbum.clickOnRetour;
 import static com.example.wolfii.MainActivity.database;
 
-public class FragmentPlaylist extends Fragment {
+public class FragmentPlaylist extends FragmentsWithReturn {
     private RecyclerView mRecyclerView;
     private MyStringAdapter monAdapter;
     private Button newPlaylist;
-    private ImageView shuffle, next, previous, reload, playPause;
-
+    private ImageView shuffle;
 
     FragmentPlaylist(){}
 
@@ -45,6 +46,9 @@ public class FragmentPlaylist extends Fragment {
         shuffle = root.findViewById (R.id.shuffle);
         shuffle.setVisibility (View.INVISIBLE);
 
+        retour.setVisibility (View.INVISIBLE);
+        retour.setOnClickListener (clickOnRetour);
+
 
         newPlaylist = root.findViewById (R.id.new_playlist);
         ClickOnNewPlaylist clickOnNewPlaylist = new ClickOnNewPlaylist ();
@@ -60,6 +64,7 @@ public class FragmentPlaylist extends Fragment {
         ClickOnPlaylist clickOnPlaylist = new ClickOnPlaylist ();
         clickOnPlaylist.setRecyclerViewForMusic (mRecyclerView);
         clickOnPlaylist.setContext (getActivity ());
+        clickOnPlaylist.setRetour (retour);
         clickOnPlaylist.setShuffle (shuffle);
         monAdapter.setmArtisteItemClickListener (clickOnPlaylist);
         mRecyclerView.setAdapter (monAdapter);

@@ -36,6 +36,12 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/retour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retour"/>
+
     <LinearLayout
         android:id="@+id/listes"
         android:layout_width="match_parent"

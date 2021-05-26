@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 import static com.example.wolfii.MainActivity.mesArtistes;
 
-public class FragmentArtist extends Fragment {
+public class FragmentArtist extends FragmentsWithReturn {
     private RecyclerView mRecyclerView;
     private MyMusiqueAdapter monAdapter;
     private String artiste;

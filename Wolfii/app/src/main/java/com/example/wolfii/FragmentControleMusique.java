@@ -279,6 +279,8 @@ public class FragmentControleMusique<mTextStatus, mScrollView> extends Fragment 
     public void majInterfaceFin()
     {
         txtViewTitreMusique.setText("");
+        ArrayList<Musique> noMusique = new ArrayList<Musique> ();
+        ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (new MyMusiqueAdapter (noMusique, getActivity ()));
         txtViewAuteurMusique.setText("");
         txtViewMusiqueDuree.setText("00:00");
         txtViewMusiqueTemps.setText("00:00");

@@ -24,10 +24,13 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
     private RecyclerView mRecyclerView;
     private ImageView shuffleiv;
 
+    private Button retour;
+
     // SETTER
     public void setRecyclerViewForMusic(RecyclerView rv) { mRecyclerView = rv; }
     public void setContext(Context sContext) {context = sContext;}
     public void setShuffle(ImageView shuffle) {this.shuffleiv = shuffle;}
+    public void setRetour(Button retour){this.retour = retour;}
 
     @Override
     public void onArtisteItemClick (View view, String playlist, int position) {
@@ -40,6 +43,7 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
         shuffle.setPlaylist (musiques);
         shuffleiv.setOnClickListener (shuffle);
 
+        retour.setVisibility (View.VISIBLE);
 
         List<Musique> musiquesMainData = database.mainDao ().getMusicFromPlaylist (playlist);
         for(Musique data : musiquesMainData) {
