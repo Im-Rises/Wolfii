@@ -15,14 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static com.example.wolfii.FragmentListArtistPlaylistAlbum.clickOnRetour;
 import static com.example.wolfii.MainActivity.database;
 
 public class FragmentPlaylist extends FragmentsWithReturn {
@@ -45,9 +42,6 @@ public class FragmentPlaylist extends FragmentsWithReturn {
         // on desactive les boutons qui ne nous servent à rien ici
         shuffle = root.findViewById (R.id.shuffle);
         shuffle.setVisibility (View.INVISIBLE);
-
-        retour.setVisibility (View.INVISIBLE);
-        retour.setOnClickListener (clickOnRetour);
 
 
         newPlaylist = root.findViewById (R.id.new_playlist);

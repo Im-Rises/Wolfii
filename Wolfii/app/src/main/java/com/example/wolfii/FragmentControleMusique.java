@@ -75,7 +75,6 @@ public class FragmentControleMusique<mTextStatus, mScrollView> extends Fragment 
         this.txtViewAuteurMusique = root.findViewById(R.id.txtViewAuteurMusique);
 
         this.like = root.findViewById (R.id.like);
-        clickOnLike.setIsWhite (true);
         clickOnLike.setContext (getActivity ());
         clickOnLike.setLike (this.like);
         this.like.setOnClickListener (clickOnLike);

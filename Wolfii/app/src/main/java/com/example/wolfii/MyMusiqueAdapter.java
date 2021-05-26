@@ -117,7 +117,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
 
             // afficher le nom de la musique courante
             mName = (TextView) itemView.findViewById(R.id.name);
-            mName.setTextColor (Color.BLACK);
+            mName.setTextColor (Color.WHITE );
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -152,10 +152,10 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
             if(!mService.getCurrentPlaylist ().isEmpty ()) {
                 if (musique.getName ().equals (mService.getMusiqueTitre ()) && mService.getPositionMusique () == position) {
                     Log.d ("debug_position", mService.getMusiqueTitre () + " " + musique.getName ());
-                    itemView.setBackgroundColor (Color.CYAN);
+                    itemView.setBackgroundColor (Color.WHITE);
                 }
                 else {
-                    itemView.setBackgroundColor (Color.WHITE);
+                    itemView.setBackgroundColor (Color.TRANSPARENT);
                 }
             }
             if(likedMusic.contains (musique.getPath ())) {

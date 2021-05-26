@@ -84,7 +84,6 @@ public class ShowCurrentPlaylistFragment extends Fragment {
                     if (database.mainDao().getLikes().contains(maMusique.get(positionMusique).getPath()))
                         like.setImageBitmap(drawableEnBitmap(R.drawable.like_white));
                     ClickOnLike clickOnLike = new ClickOnLike();
-                    clickOnLike.setIsWhite(true);
                     clickOnLike.setLike(like);
                     clickOnLike.setContext(getActivity());
                     clickOnLike.setMusique(maMusique.get(positionMusique));

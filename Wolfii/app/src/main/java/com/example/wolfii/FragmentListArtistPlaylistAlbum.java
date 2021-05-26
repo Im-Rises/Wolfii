@@ -22,9 +22,8 @@ public class FragmentListArtistPlaylistAlbum extends Fragment {
     private FragmentTransaction fragmentTransaction;
     private FragmentManager fragmentManager;
 
-    private Button retour, artistes, playlists, albums;
+    private Button artistes, playlists, albums;
 
-    public static ClickOnRetour clickOnRetour;
 
     @SuppressLint("WrongConstant")
     public View onCreateView (@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +34,6 @@ public class FragmentListArtistPlaylistAlbum extends Fragment {
         artistes = root.findViewById (R.id.mes_artistes);
         playlists = root.findViewById (R.id.mes_playlists);
         albums = root.findViewById (R.id.mes_albums);
-        retour = root.findViewById (R.id.retour);
 
         fragmentManager = getActivity ().getSupportFragmentManager ();
 
@@ -49,16 +47,10 @@ public class FragmentListArtistPlaylistAlbum extends Fragment {
                         ? new FragmentNoPlaylists ()
                         : new FragmentPlaylist ());
 
-        for(FragmentsWithReturn f : fragments) f.setRetour(retour);
-
         // de base on place artistFragment
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.listes, fragments.get(0), null);
         fragmentTransaction.commit ();
-
-        clickOnRetour = new ClickOnRetour ();
-        clickOnRetour.setFragments (fragments);
-        clickOnRetour.setFragmentTransaction (fragmentManager.beginTransaction ());
 
         // on initialise le clicklistener pour artist et playlist
         OnClickButtonHere onClickButtonHereArtist= new OnClickButtonHere ();

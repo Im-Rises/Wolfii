@@ -21,36 +21,32 @@ public class ClickOnLike implements View.OnClickListener{
 
     private ImageView like;
 
-    private Boolean isWhite = false;
-
     public void setMusique(Musique musique){this.musique = musique;}
     public void setLike(ImageView like) {this.like = like;}
     public void setContext(Context context) {this.context = context;}
-    public void setIsWhite(Boolean isWhite) {this.isWhite = isWhite;}
 
     @Override
     public void onClick (View v) {
 
-        if (mService.getMusiquePlayerIsSet()) {
-            Log.d("debug_like", database.mainDao().getLikes().toString());
+        try {
+            DataLikedMusic dataLikedMusic = new DataLikedMusic ();
+            dataLikedMusic.setPath (musique.getPath ());
 
-            DataLikedMusic dataLikedMusic = new DataLikedMusic();
-            dataLikedMusic.setPath(musique.getPath());
-
-            if (!database.mainDao().getLikes().contains(musique.getPath())) {
-                database.mainDao().insertMusic(musique);
-                database.mainDao().insertLike(dataLikedMusic);
-                if (isWhite) like.setImageBitmap(drawableEnBitmap(R.drawable.like_white));
-                else like.setImageBitmap(drawableEnBitmap(R.drawable.like));
+            if (! database.mainDao ().getLikes ().contains (musique.getPath ())) {
+                database.mainDao ().insertMusic (musique);
+                database.mainDao ().insertLike (dataLikedMusic);
+                like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
             } else {
-                database.mainDao().deleteLike(dataLikedMusic);
+                database.mainDao ().deleteLike (dataLikedMusic);
 
-                if (isWhite) like.setImageBitmap(drawableEnBitmap(R.drawable.unlike_white));
-                else like.setImageBitmap(drawableEnBitmap(R.drawable.unlike));
+                like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
             }
 
-            if (mService.getMusiquePlayerIsSet() && mService.getMusiquePlayerPath() == musique.getPath())
-                mService.notificationInitEtMaj();
+            if (mService.getMusiquePlayerIsSet () && mService.getMusiquePlayerPath () == musique.getPath ())
+                mService.notificationInitEtMaj ();
+        }
+        catch (Exception e){
+            Log.d("debug_noLike", e.getStackTrace ().toString ());
         }
 
     }

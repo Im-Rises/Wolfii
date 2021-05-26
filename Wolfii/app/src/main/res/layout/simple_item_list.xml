@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/trans"
     android:layout_margin="4dp">
 
     <LinearLayout
@@ -12,11 +13,12 @@
         android:layout_height="wrap_content"
         android:background="@color/trans"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/name"
             android:layout_width="0dp"
+            android:textColor="@color/white"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/trans"
@@ -30,4 +32,4 @@
             android:layout_marginLeft="8dp"
             app:srcCompat="@drawable/ic_parametres" />
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</LinearLayout>
