@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -279,8 +280,13 @@ public class FragmentControleMusique<mTextStatus, mScrollView> extends Fragment 
     public void majInterfaceFin()
     {
         txtViewTitreMusique.setText("");
-        ArrayList<Musique> noMusique = new ArrayList<Musique> ();
-        ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (new MyMusiqueAdapter (noMusique, getActivity ()));
+        try {
+            ArrayList<Musique> noMusique = new ArrayList<Musique> ();
+            ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (new MyMusiqueAdapter (noMusique, getActivity ()));
+        }
+        catch (Exception e) {
+            Log.d("debug_rv", "probleme avec le rv");
+        }
         txtViewAuteurMusique.setText("");
         txtViewMusiqueDuree.setText("00:00");
         txtViewMusiqueTemps.setText("00:00");
