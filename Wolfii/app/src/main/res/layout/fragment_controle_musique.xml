@@ -51,7 +51,7 @@
             android:layout_marginRight="4dp"
             android:layout_marginBottom="4dp"
             android:gravity="center_vertical"
-            android:src="@drawable/logostyle"
+            android:src="@drawable/loupfinal"
             app:civ_border_color="@color/trans"
             app:civ_border_width="0dp" />
 
