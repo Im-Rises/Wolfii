@@ -84,7 +84,8 @@ public class FragmentControleMusique<mTextStatus, mScrollView> extends Fragment 
         this.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClickOnMusic.longClickMusic(mService.maMusique.get(mService.getPositionMusique ()), getActivity());
+                if (mService.getMusiquePlayerIsSet())
+                    ClickOnMusic.longClickMusic(mService.maMusique.get(mService.getPositionMusique ()), getActivity());
             }
         });
 
@@ -268,10 +269,14 @@ public class FragmentControleMusique<mTextStatus, mScrollView> extends Fragment 
 
 
     public void majInterface() {
-        clickOnLike.setMusique(mService.maMusique.get(mService.getPositionMusique ()));
-        if(database.mainDao ().getLikes ().contains (mService.getMusiquePlayerPath ())) this.like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
-        else this.like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
-        showCurrentPlaylistFragment.setPositionMusique (mService.getPositionMusique ());
+        clickOnLike.setMusique(mService.maMusique.get(mService.getPositionMusique()));
+
+        if (database.mainDao().getLikes().contains(mService.getMusiquePlayerPath()))
+            this.like.setImageBitmap(drawableEnBitmap(R.drawable.like_white));
+        else
+            this.like.setImageBitmap(drawableEnBitmap(R.drawable.unlike_white));
+
+        showCurrentPlaylistFragment.setPositionMusique(mService.getPositionMusique());
         seekBarMusique.setProgress(mService.getMusiquePlayerPosition());
         txtViewMusiqueTemps.setText(millisecondesEnMinutesSeconde(mService.getMusiquePlayerPosition()));
     }

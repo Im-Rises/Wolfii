@@ -30,26 +30,28 @@ public class ClickOnLike implements View.OnClickListener{
 
     @Override
     public void onClick (View v) {
-        Log.d("debug_like", database.mainDao ().getLikes ().toString ());
 
-        DataLikedMusic dataLikedMusic = new DataLikedMusic ();
-        dataLikedMusic.setPath (musique.getPath ());
+        if (mService.getMusiquePlayerIsSet()) {
+            Log.d("debug_like", database.mainDao().getLikes().toString());
 
-        if(!database.mainDao ().getLikes ().contains (musique.getPath ())) {
-            database.mainDao ().insertMusic (musique);
-            database.mainDao ().insertLike (dataLikedMusic);
-            if(isWhite) like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
-            else like.setImageBitmap (drawableEnBitmap (R.drawable.like));
+            DataLikedMusic dataLikedMusic = new DataLikedMusic();
+            dataLikedMusic.setPath(musique.getPath());
+
+            if (!database.mainDao().getLikes().contains(musique.getPath())) {
+                database.mainDao().insertMusic(musique);
+                database.mainDao().insertLike(dataLikedMusic);
+                if (isWhite) like.setImageBitmap(drawableEnBitmap(R.drawable.like_white));
+                else like.setImageBitmap(drawableEnBitmap(R.drawable.like));
+            } else {
+                database.mainDao().deleteLike(dataLikedMusic);
+
+                if (isWhite) like.setImageBitmap(drawableEnBitmap(R.drawable.unlike_white));
+                else like.setImageBitmap(drawableEnBitmap(R.drawable.unlike));
+            }
+
+            if (mService.getMusiquePlayerIsSet() && mService.getMusiquePlayerPath() == musique.getPath())
+                mService.notificationInitEtMaj();
         }
-        else {
-            database.mainDao ().deleteLike (dataLikedMusic);
-
-            if(isWhite) like.setImageBitmap (drawableEnBitmap (R.drawable.unlike_white));
-            else like.setImageBitmap (drawableEnBitmap (R.drawable.unlike));
-        }
-
-        if (mService.getMusiquePlayerIsSet() && mService.getMusiquePlayerPath()==musique.getPath ())
-            mService.notificationInitEtMaj();
 
     }
     public Bitmap drawableEnBitmap (int drawableRes) {
