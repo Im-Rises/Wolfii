@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import static com.example.wolfii.MainActivity.database;
+import static com.example.wolfii.MainActivity.mService;
 import static java.lang.Integer.parseInt;
 
 
@@ -608,6 +609,8 @@ public class MusiqueService extends Service {
                     break;
                 case "ARRET":
                     arretTotalMusique();
+                    ArrayList<Musique> noMusique = new ArrayList<Musique> ();
+                    ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (new MyMusiqueAdapter (noMusique, getApplication()));
                     if (!MainActivity.estActif)
                     {
                         stopSelf();
