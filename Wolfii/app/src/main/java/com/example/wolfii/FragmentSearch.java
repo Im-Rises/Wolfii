@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 
-public class SearchFragment extends Fragment {
+public class FragmentSearch extends Fragment {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
@@ -44,7 +44,7 @@ public class SearchFragment extends Fragment {
         public void onClick (View v) {
             String search = editText.getText().toString ();
             ArrayList<Musique> musiques = rechercher (search);
-            Fragment fragment = new ListSearchFragment (musiques, search);
+            Fragment fragment = new FragmentListSearch (musiques, search);
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.result_search, fragment, "search");
             fragmentTransaction.commit ();

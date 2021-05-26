@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import static com.example.wolfii.MainActivity.database;
 
-public class ListArtistPlaylistAlbumFragment extends Fragment {
+public class FragmentListArtistPlaylistAlbum extends Fragment {
 
     private FragmentTransaction fragmentTransaction;
     private FragmentManager fragmentManager;
@@ -33,7 +33,9 @@ public class ListArtistPlaylistAlbumFragment extends Fragment {
         // donner un fragment en consequence
         artistFragment = new FragmentArtist ();
         albumFragment = new FragmentAlbum ();
-        playlistFragment = database.mainDao ().getAllPlaylists ().isEmpty () ? new NoPlaylistsFragment () : new PlaylistFragment ();
+        playlistFragment = database.mainDao ().getAllPlaylists ().isEmpty ()
+                ? new FragmentNoPlaylists ()
+                : new FragmentPlaylist ();
 
         // de base on place artistFragment
         fragmentTransaction = fragmentManager.beginTransaction();

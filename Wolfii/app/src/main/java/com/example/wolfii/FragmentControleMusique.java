@@ -27,7 +27,7 @@ import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
 
 
-public class ControleMusiqueFragment<mTextStatus, mScrollView> extends Fragment {
+public class FragmentControleMusique<mTextStatus, mScrollView> extends Fragment {
 
     private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
 

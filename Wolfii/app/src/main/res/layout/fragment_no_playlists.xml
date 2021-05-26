@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/trans"
-    tools:context=".NoPlaylistsFragment">
+    tools:context=".FragmentNoPlaylists">
 
 
     <ImageView
@@ -62,7 +62,7 @@
     <Button
         android:layout_width="match_parent"
         android:id="@+id/new_playlist"
-        android:text="@string/new_playlist"
+        android:text="@string/create_playlist"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints" />
 

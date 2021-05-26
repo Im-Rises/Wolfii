@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_nouveaute"
-        android:name="com.example.wolfii.NouveautesFragment"
+        android:name="com.example.wolfii.FragmentNouveautes"
         android:label="@string/queue"
         tools:layout="@layout/fragment_nouveautes" >
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/navigation_artiste"
-        android:name="com.example.wolfii.ListArtistPlaylistAlbumFragment"
+        android:name="com.example.wolfii.FragmentListArtistPlaylistAlbum"
         android:label="@string/queue_artist"
         tools:layout="@layout/fragment_listallsongs" >
         <action
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.wolfii.ControleMusiqueFragment"
+        android:name="com.example.wolfii.FragmentControleMusique"
         android:label="@string/lecteur"
         tools:layout="@layout/fragment_controle_musique" >
         <action
@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.example.wolfii.SearchFragment"
+        android:name="com.example.wolfii.FragmentSearch"
         android:label="@string/search"
         tools:layout="@layout/fragment_search" >
         <action

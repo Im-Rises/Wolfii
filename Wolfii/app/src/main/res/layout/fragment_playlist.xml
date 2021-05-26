@@ -12,7 +12,7 @@
     <Button
         android:layout_width="match_parent"
         android:id="@+id/new_playlist"
-        android:text="@string/new_playlist"
+        android:text="@string/create_playlist"
         android:layout_height="wrap_content"/>
     <ImageView
         android:layout_width="wrap_content"

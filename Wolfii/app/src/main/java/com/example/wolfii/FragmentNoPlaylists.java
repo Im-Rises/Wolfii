@@ -8,9 +8,9 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
-public class NoPlaylistsFragment extends Fragment {
+public class FragmentNoPlaylists extends Fragment {
 
-    public NoPlaylistsFragment () {
+    public FragmentNoPlaylists () {
         // Required empty public constructor
     }
 

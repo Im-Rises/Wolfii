@@ -23,14 +23,14 @@ import java.util.List;
 
 import static com.example.wolfii.MainActivity.database;
 
-public class PlaylistFragment extends Fragment {
+public class FragmentPlaylist extends Fragment {
     private RecyclerView mRecyclerView;
     private MyStringAdapter monAdapter;
     private Button newPlaylist;
     private ImageView shuffle, next, previous, reload, playPause;
 
 
-    PlaylistFragment(){}
+    FragmentPlaylist(){}
 
     @SuppressLint({"WrongConstant", "SetTextI18n"})
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

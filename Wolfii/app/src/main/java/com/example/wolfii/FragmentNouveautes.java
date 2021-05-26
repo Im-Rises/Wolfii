@@ -16,14 +16,14 @@ import android.widget.ImageView;
 import static com.example.wolfii.MainActivity.mesGenres;
 
 
-public class NouveautesFragment extends Fragment {
+public class FragmentNouveautes extends Fragment {
 
     private RecyclerView mRecyclerView;
     private MyStringAdapter monAdapter;
     private ImageView shuffle;
 
 
-    public NouveautesFragment () {
+    public FragmentNouveautes () {
         // Required empty public constructor
     }
 

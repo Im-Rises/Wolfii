@@ -19,7 +19,7 @@ import java.util.List;
 
 import static com.example.wolfii.MainActivity.database;
 
-public class ListSearchFragment extends Fragment {
+public class FragmentListSearch extends Fragment {
     private RecyclerView mRecyclerView;
     private MyMusiqueAdapter monAdapter;
     private String artiste;
@@ -27,7 +27,7 @@ public class ListSearchFragment extends Fragment {
     private ImageView shuffleiv, next, previous, reload, playPause;
     private List<String> hiddenTitle = database.mainDao ().getHiddenTitle ();
 
-    ListSearchFragment(ArrayList<Musique> musiques, String artiste){
+    FragmentListSearch(ArrayList<Musique> musiques, String artiste){
         this.musiques = HideMusic (musiques);
         this.artiste = artiste;
     }

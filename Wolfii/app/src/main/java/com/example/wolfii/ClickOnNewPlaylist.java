@@ -39,6 +39,8 @@ public class ClickOnNewPlaylist implements View.OnClickListener {
                 dataPlaylist.setNom (nom.getText ().toString ());
 
                 database.mainDao ().insertPlaylist (dataPlaylist);
+
+                dialog.dismiss ();
             }
         });
     }
