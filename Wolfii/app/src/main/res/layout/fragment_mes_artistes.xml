@@ -3,7 +3,7 @@
     android:id="@+id/artistes_or_musiques"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/darklake"
+    android:background="@color/trans"
     android:orientation="vertical">
 
     <LinearLayout

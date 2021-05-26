@@ -18,7 +18,7 @@ import java.util.List;
 
 import static com.example.wolfii.MainActivity.mesAlbums;
 
-public class AlbumFragment extends Fragment {
+public class FragmentAlbum extends Fragment {
     private RecyclerView mRecyclerView;
     private MyMusiqueAdapter monAdapter;
     private String artiste;
@@ -26,7 +26,7 @@ public class AlbumFragment extends Fragment {
     private MyStringAdapter monArtisteAdapter;
     private ImageView shuffle;
 
-    AlbumFragment (){}
+    FragmentAlbum (){}
 
     @SuppressLint({"WrongConstant", "SetTextI18n"})
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

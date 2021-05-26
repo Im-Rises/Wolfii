@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import static com.example.wolfii.MainActivity.mesArtistes;
 
-public class ArtistFragment extends Fragment {
+public class FragmentArtist extends Fragment {
     private RecyclerView mRecyclerView;
     private MyMusiqueAdapter monAdapter;
     private String artiste;
@@ -26,7 +26,7 @@ public class ArtistFragment extends Fragment {
     private MyStringAdapter monArtisteAdapter;
     private ImageView shuffle;
 
-    ArtistFragment(){}
+    FragmentArtist(){}
 
     @SuppressLint({"WrongConstant", "SetTextI18n"})
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

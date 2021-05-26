@@ -31,8 +31,8 @@ public class ListArtistPlaylistAlbumFragment extends Fragment {
 
         // on initialise nos fragments, on verifie que la base de donnees n'est pas vide pour lui
         // donner un fragment en consequence
-        artistFragment = new ArtistFragment ();
-        albumFragment = new AlbumFragment ();
+        artistFragment = new FragmentArtist ();
+        albumFragment = new FragmentAlbum ();
         playlistFragment = database.mainDao ().getAllPlaylists ().isEmpty () ? new NoPlaylistsFragment () : new PlaylistFragment ();
 
         // de base on place artistFragment
