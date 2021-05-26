@@ -12,7 +12,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myRecyclerView"
         android:paddingBottom="60dp"
-        android:background="@drawable/darklake"
+        android:background="@color/trans"
         tools:listitem="@layout/musique_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
