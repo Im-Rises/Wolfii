@@ -6,7 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/trans"
-    android:layout_margin="4dp">
+    android:layout_margin="4dp"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,4 +38,12 @@
             android:layout_marginLeft="8dp"
             app:srcCompat="@drawable/ic_parametres" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white" />
+
+
+
 </LinearLayout>
