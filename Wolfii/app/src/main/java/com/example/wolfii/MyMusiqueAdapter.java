@@ -152,7 +152,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
             if(!mService.getCurrentPlaylist ().isEmpty ()) {
                 if (musique.getName ().equals (mService.getMusiqueTitre ()) && mService.getPositionMusique () == position) {
                     Log.d ("debug_position", mService.getMusiqueTitre () + " " + musique.getName ());
-                    itemView.setBackgroundColor (Color.WHITE);
+                    itemView.setBackgroundColor (Color.rgb(59, 135, 171));
                     mName.setTextColor (Color.BLACK);
                 }
                 else {

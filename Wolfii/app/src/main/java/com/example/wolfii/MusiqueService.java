@@ -777,7 +777,7 @@ public class MusiqueService extends Service {
         else
         {
             //Si aucune image n'est trouvé dans le fichier mp3 alors on met le logo logoStyle.png
-            return drawableEnBitmap(R.drawable.loupfinal);
+            return drawableEnBitmap(R.drawable.logostyle);
         }
     }
 

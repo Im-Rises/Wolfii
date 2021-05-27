@@ -290,7 +290,7 @@ public class FragmentControleMusique<mTextStatus, mScrollView> extends Fragment 
         seekBarMusique.setProgress(0);
         arretRotationImage();
         imgViewMusique.setRotation(0);
-        imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.loupfinal));
+        imgViewMusique.setImageBitmap(drawableEnBitmap(R.drawable.logostyle));
         rotationImageValeur=0;
     }
 
