@@ -18,6 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:text="@string/queue_artist" />
 
         <Button
@@ -25,6 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:text="@string/mesPlaylists" />
 
         <Button
@@ -32,6 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             android:text="@string/albums" />
 
     </LinearLayout>

@@ -99,6 +99,7 @@
             android:layout_weight="1"
             android:layout_marginLeft="14dp"
             android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             app:srcCompat="@drawable/unlike_white" />
 
         <SeekBar
