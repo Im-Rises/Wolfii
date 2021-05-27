@@ -27,6 +27,7 @@ import android.os.PowerManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -609,8 +610,14 @@ public class MusiqueService extends Service {
                     break;
                 case "ARRET":
                     arretTotalMusique();
-                    ArrayList<Musique> noMusique = new ArrayList<Musique> ();
-                    ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (new MyMusiqueAdapter (noMusique, getApplication()));
+                    try {
+                        ArrayList<Musique> noMusique = new ArrayList<Musique> ();
+                        ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (new MyMusiqueAdapter (noMusique, getApplication()));
+                    }
+                    catch (Exception e)
+                    {
+                        Log.d("BUG CRASH","Crash du programme dû à l'arrêt de l'affichage de la playlsit en cours");
+                    }
                     if (!MainActivity.estActif)
                     {
                         stopSelf();
