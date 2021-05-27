@@ -14,16 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 
-import static com.example.wolfii.ClickOnMusic.*;
 import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
 
@@ -32,7 +28,7 @@ public class ShowCurrentPlaylistFragment extends Fragment {
     public static RecyclerView mRecyclerView;
     private ArrayList<Musique> maMusique;
     private MyMusiqueAdapter monAdapter;
-    private ImageView shuffleiv, reload, playPause, next, previous, like, add, arret;
+    private ImageView shuffleiv, reload, playPause, next, previous, like, add;
     private int positionMusique;
 
 

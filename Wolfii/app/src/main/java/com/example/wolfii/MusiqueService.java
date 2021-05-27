@@ -82,14 +82,14 @@ public class MusiqueService extends Service {
     private static final String DIRECTION_SERVICE = "TO_SERVICE";
     private static final String TYPE_NOTIFICATION = "TYPE_NOTIFICATION";
 
-    private Handler handlerTemps = new Handler();               //Handler pour appeler toutes les secondes le runnable
+    private Handler handlerTemps = new Handler();//Handler pour appeler toutes les secondes le runnable
 
     private IntentFilter intentFilterDirecService = new IntentFilter(DIRECTION_SERVICE);//Intent Filter pour la mise ne écoute sous le filtre DIRECTION_SERVICE
 
     private MediaSessionCompat mediaSession;//déclaration d'une média session de contrôle musique
     private boolean mediaSessionNotifInitBool = false;//Valeur booléenne pour informer si l'utilisateur a déjà inititalisé la mediaSession et la notif
 
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView;//Recycler view
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////FONCTIONS DU CYCLE DE VIE DE LA CLASSE SERVICE///////////////////////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ public class MusiqueService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //return super.onStartCommand(intent, flags, startId);
-        return START_STICKY;//Si l'application est arrêté toatalement alors on redémarre le service
+        return START_STICKY;//Si l'application est arrêté toatalement alors on redémarre le service de zéro
     }
 
     /*---------------------------------------------------------FONCTION ONDESTROY--------------------------------------------------------------*/
@@ -157,11 +157,6 @@ public class MusiqueService extends Service {
         {
             startService(new Intent(MusiqueService.this,MusiqueService.class));
         }
-        //stopForeground(true);
-        //Si l'application a été arrêté automatiquement par le système android car la musique
-        //était en pause (aucune activité n'était faite par l'application) alors on arrête toute
-        //les notifications au cas où une soit restée.
-        //stopForeground(true);
         estActif=false;
     }
 
