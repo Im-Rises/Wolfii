@@ -139,21 +139,13 @@ public class ClickOnAlbum implements MyStringAdapter.ArtisteItemClickListener {
 
         addToCurrentPlaylist.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v) {
-                if(!maMusique.isEmpty ()) {
-                    for(Musique musique : musiques) maMusique.add (musique);
-                }
-                else {
-                    Musique musique = maMusique.get(0);
-                    Toast.makeText(Wolfii.getAppContext (), "Lecture de : " + musique.getName(), Toast.LENGTH_SHORT).show();
+                for(Musique musique : musiques) maMusique.add (musique);
 
-                    ArrayList<Musique> musiqueArray = new ArrayList<> ();
-                    musiqueArray.add(musique);
-                    mService.setMusiquePlaylist(musiqueArray, 0);
-                    mService.arretSimpleMusique();
-                    mService.musiqueDemaPause();
-                }
+                mService.setMusiquePlaylist(maMusique, 0);
+                mService.arretSimpleMusique();
+                mService.musiqueDemaPause();
+
                 dialog.dismiss ();
-
             }
         });
 
