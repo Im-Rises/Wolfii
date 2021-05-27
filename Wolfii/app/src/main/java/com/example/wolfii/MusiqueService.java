@@ -484,7 +484,7 @@ public class MusiqueService extends Service {
 
 
 
-    /*-----------------------------------------------------GESTION ARRIVEE EN FIN DE MUSIQUE--------------------------------------------------------------*/
+    /*-----------------------------------------------------GESTION ERREUR DE LECTURE DE MUSIQUE--------------------------------------------------------------*/
 
     private class EcouteurMusiqueErreur implements MediaPlayer.OnErrorListener {
         @Override
@@ -604,23 +604,28 @@ public class MusiqueService extends Service {
                     musiqueSuivante();
                     break;
                 case "ARRET":
-                    arretTotalMusique();
-                    try {
-                        ArrayList<Musique> noMusique = new ArrayList<Musique> ();
-                        ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (new MyMusiqueAdapter (noMusique, getApplication()));
-                    }
-                    catch (Exception e)
-                    {
-                        Log.d("BUG CRASH","Crash du programme dû à l'arrêt de l'affichage de la playlsit en cours");
-                    }
-                    if (!MainActivity.estActif)
-                    {
-                        stopSelf();
-                    }
+                    arretApplicationNotif();
                     break;
             }
         }
     };
+
+    public void arretApplicationNotif()
+    {
+        arretTotalMusique();
+        try {
+            ArrayList<Musique> noMusique = new ArrayList<Musique> ();
+            ShowCurrentPlaylistFragment.mRecyclerView.setAdapter (new MyMusiqueAdapter (noMusique, getApplication()));
+        }
+        catch (Exception e)
+        {
+            Log.d("BUG CRASH","Crash du programme dû à l'arrêt de l'affichage de la playlsit en cours");
+        }
+        if (!MainActivity.estActif)
+        {
+            stopSelf();
+        }
+    }
 
 
     public void likerMusique()
