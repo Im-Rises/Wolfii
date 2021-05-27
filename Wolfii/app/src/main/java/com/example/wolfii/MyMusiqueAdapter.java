@@ -159,7 +159,7 @@ public class MyMusiqueAdapter extends RecyclerView.Adapter<MyMusiqueAdapter.MyVi
                 }
             }
             if(likedMusic.contains (musique.getPath ())) {
-                like.setImageBitmap (drawableEnBitmap (R.drawable.like));
+                like.setImageBitmap (drawableEnBitmap (R.drawable.like_white));
             }
             album.setImageBitmap (recupImageMusiquePageControle (musique.getPath ()));
 

@@ -531,11 +531,11 @@ public class MusiqueService extends Service {
 
         if (database.mainDao().getLikes().contains(maMusique.get(positionMusique).getPath()))
         {
-            notifBuilder.addAction(R.drawable.like, "Liked", musiquePenIntLiker);  //Ajout le bouton "musique rejouer" à la notification"
+            notifBuilder.addAction(R.drawable.like_white, "Liked", musiquePenIntLiker);  //Ajout le bouton "musique rejouer" à la notification"
         }
         else
         {
-            notifBuilder.addAction(R.drawable.unlike, "NotLiked", musiquePenIntLiker);  //Ajout le bouton "musique rejouer" à la notification"
+            notifBuilder.addAction(R.drawable.unlike_white, "NotLiked", musiquePenIntLiker);  //Ajout le bouton "musique rejouer" à la notification"
         }
 
         notifBuilder.addAction(R.drawable.image_precedent, "Précédent", musiquePenIntPrecedent); //Ajout le bouton "musique précédente à la notification"

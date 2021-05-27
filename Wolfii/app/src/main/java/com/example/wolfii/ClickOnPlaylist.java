@@ -43,8 +43,6 @@ public class ClickOnPlaylist implements MyStringAdapter.ArtisteItemClickListener
         shuffle.setPlaylist (musiques);
         shuffleiv.setOnClickListener (shuffle);
 
-        retour.setVisibility (View.VISIBLE);
-
         List<Musique> musiquesMainData = database.mainDao ().getMusicFromPlaylist (playlist);
         for(Musique data : musiquesMainData) {
             if(data.getPath () != null) {

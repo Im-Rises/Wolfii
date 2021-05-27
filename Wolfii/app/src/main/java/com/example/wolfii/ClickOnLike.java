@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import static com.example.wolfii.MainActivity.database;
 import static com.example.wolfii.MainActivity.mService;
-import static com.example.wolfii.R.drawable.like;
 
 public class ClickOnLike implements View.OnClickListener{
     private Musique musique;
