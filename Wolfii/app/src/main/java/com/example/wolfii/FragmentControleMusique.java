@@ -29,7 +29,7 @@ import static com.example.wolfii.MainActivity.mService;
 
 public class FragmentControleMusique<mTextStatus, mScrollView> extends Fragment {
 
-    private SeekBar seekBarMusique;                             //SeekBar de lecture de la musique
+    private SeekBar seekBarMusique;//SeekBar de lecture de la musique
 
     private TextView txtViewMusiqueTemps, txtViewMusiqueDuree, txtViewTitreMusique, txtViewAuteurMusique;   //TextView du temps de lecture de la musique
 
@@ -49,7 +49,7 @@ public class FragmentControleMusique<mTextStatus, mScrollView> extends Fragment 
     private boolean imageRotationDejaInit = false;
     private boolean imageRotationEnPause = true;
 
-    private static ClickOnLike clickOnLike = new ClickOnLike ();
+    private static ClickOnLike clickOnLike = new ClickOnLike();
 
 
 
@@ -322,5 +322,4 @@ public class FragmentControleMusique<mTextStatus, mScrollView> extends Fragment 
 
         return bitmap;
     }
-
 }
