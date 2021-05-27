@@ -49,10 +49,6 @@ public class ClickOnMusic implements MyMusiqueAdapter.MusiqueItemClickListener {
         mService.arretSimpleMusique();
         mService.setMusiquePlaylist(mesMusiques, position);
         mService.musiqueDemaPause();
-        if(position == mService.getPositionMusique ()) {
-            view.setBackgroundColor (Color.CYAN);
-        }
-        else view.setBackgroundColor (Color.WHITE);
     }
 
     @SuppressLint("WrongConstant")
