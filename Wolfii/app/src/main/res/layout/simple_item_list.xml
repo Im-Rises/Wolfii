@@ -39,10 +39,7 @@
             app:srcCompat="@drawable/ic_parametres" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/white" />
+
 
 
 
