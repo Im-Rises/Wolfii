@@ -7,14 +7,14 @@
 ## Description
 
 Android music player made with Android Studio.  
-Wolfii is music player for Android that alow you to:
-- listen music
+Wolfii is a music player for Android that allows you to:
+- listen music and the basics controls
+- list all the musics by album
 - create playlists
 - search music by author/album/name in your files
 - manage the application with the notification
 
 ## Images
-
 <table>
   <tbody><tr>
     <td>Pulsar</td>
