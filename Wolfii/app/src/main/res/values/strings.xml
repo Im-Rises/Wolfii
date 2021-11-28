@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Wolfii</string>
+    <string name="queue_artist">Artistes</string>
+    <string name="queue">Dossiers</string>
+    <string name="lecteur">Wolfii</string>
+    <string name="search">Rechercher</string>
+    <string name="shazam">Shazam</string>
+    <string name="delete">Supprimer</string>
+    <string name="edit">Éditer la musique</string>
+    <string name="new_playlist">Nom de la playlist</string>
+    <string name="create_playlist">Nouvelle Playlist</string>
+    <string name="mesPlaylists">playlists</string>
+    <string name="mesBibliotheques">Bibliothèque</string>
+    <string name="insert_playlist_name">Nom de la playlist</string>
+    <string name="creer">créer</string>
+    <string name="add_to_playlist">Ajouter à une playlist</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_playlist">il semble ne pas y avoir de playlists pour le moment</string>
+    <string name="no_playlist_conseil">pour créer des playlists, veuillez cliquer longtemps sur une musique ou alors cliquer sur les options de celles-ci, insérer le nom de la playlist désiré et valider</string>
+    <string name="supprimerPlaylist">supprimer la playlist</string>
+    <string name="renamePlaylist">Renommer la playlist</string>
+    <string name="showCurrentPlaylist">File de Lecture</string>
+    <string name="retournerAuLecteur">Revenir au Lecteur</string>
+    <string name="addToCurrentPlaylist">Ajouter à la file de lecture</string>
+    <string name="emptyPlaylist">Vider file de lecture</string>
+    <string name="mesGenres">Mes Genres</string>
+    <string name="createPlaylist">Créer la playlist</string>
+    <string name="albums">albums</string>
+    <string name="playlistExistante">playlists existantes :</string>
+    <string name="cacherCeTitre">cacher ce titre</string>
+    <string name="retour">retour</string>
+</resources>

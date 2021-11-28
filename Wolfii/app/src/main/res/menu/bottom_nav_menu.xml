@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_musique"
+        android:title="@string/lecteur" />
+
+    <item
+        android:id="@+id/navigation_artiste"
+        android:icon="@drawable/ic_queue"
+        android:title="Bibliothèque"/>
+
+    <item
+        android:id="@+id/navigation_nouveaute"
+        android:icon="@drawable/ic_baseline_folder_24"
+        android:title="@string/queue" />
+
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search" />
+
+</menu>

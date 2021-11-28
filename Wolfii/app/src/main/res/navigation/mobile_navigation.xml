@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_artiste">
+
+    <fragment
+        android:id="@+id/navigation_nouveaute"
+        android:name="com.example.wolfii.FragmentNouveautes"
+        android:label="@string/queue"
+        tools:layout="@layout/fragment_nouveautes" >
+        <action
+            android:id="@+id/action_navigation_nouveaute_to_navigation_search"
+            app:destination="@id/navigation_search" />
+        <action
+            android:id="@+id/action_navigation_nouveaute_to_navigation_artiste"
+            app:destination="@id/navigation_artiste" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_artiste"
+        android:name="com.example.wolfii.FragmentListArtistPlaylistAlbum"
+        android:label="@string/queue_artist"
+        tools:layout="@layout/fragment_listallsongs" >
+        <action
+            android:id="@+id/action_navigation_artiste_to_navigation_nouveaute"
+            app:destination="@id/navigation_nouveaute" />
+        <action
+            android:id="@+id/action_navigation_artiste_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.wolfii.FragmentControleMusique"
+        android:label="@string/lecteur"
+        tools:layout="@layout/fragment_controle_musique" >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_artiste"
+            app:destination="@id/navigation_artiste" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.example.wolfii.FragmentSearch"
+        android:label="@string/search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_navigation_nouveaute"
+            app:destination="@id/navigation_nouveaute" />
+    </fragment>
+
+
+</navigation>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:textAlignment="center"
+    android:background="@color/trans"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <LinearLayout
+        android:layout_width="344dp"
+        android:layout_height="50dp"
+        android:background="@drawable/arrondi"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:textAlignment="center">
+        <!--
+        <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:background="@color/trans"
+            android:id="@+id/addToPlaylist"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            app:srcCompat="@drawable/plus" />
+      -->
+
+
+        <ImageView
+            android:id="@+id/reload"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/trans"
+            android:layout_marginRight="30dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_baseline_repeat_24" />
+
+        <ImageView
+            android:id="@+id/previous"
+            android:layout_width="44dp"
+            android:layout_height="37dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/trans"
+            android:clickable="true"
+            android:layout_marginRight="10dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_baseline_skip_previous_24" />
+
+        <ImageView
+            android:id="@+id/playPause"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@color/trans"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_baseline_play_arrow_24" />
+
+
+        <ImageView
+            android:id="@+id/next"
+            android:layout_width="46dp"
+            android:layout_height="37dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/trans"
+            android:layout_marginLeft="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_baseline_skip_next_24" />
+
+        <ImageView
+            android:id="@+id/shuffle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="25dp"
+            android:background="@color/trans"
+
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:srcCompat="@drawable/ic_baseline_shuffle_24" />
+
+        <!--
+        <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:background="@color/trans"
+            android:layout_width="wrap_content"
+            android:id="@+id/like"
+            android:layout_height="match_parent"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            app:srcCompat="@drawable/unlike_white"/>
+        -->
+
+        <!--        <ImageView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:background="@color/trans"
+            android:id="@+id/arret"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/image_nettoyer" />-->
+
+
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myRecyclerView"
+        android:layout_marginTop="10dp"
+        android:background="@color/trans"
+        tools:listitem="@layout/musique_item"
+        android:paddingBottom="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
