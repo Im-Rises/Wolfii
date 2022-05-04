@@ -1,32 +1,65 @@
 # Wolfii
 
-Programme Android développé sous Android Studio pour la lecture de musique.
+<p align="center">
+<img src="README_files/logoWolfii.png" >
+</p>
 
-## Explication du programme, page de code par page de code
+## Description
 
-### MainActivity
+<!-- <p align='center'> -->
+  <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white">
+  <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
+<!-- </p> -->
 
-ici on initialise le bottom navigation, le mService et la database.
+Android music player made with Android Studio.  
+Wolfii is a music player for Android.  
+The app is developed in Java.
 
-objets statics :
-mService => notre service qui fonctionne en arrière plan
-database => notre bdd pour recup les playlists
-des tableaux => remplient la methode "getMusic" avec un curseur
+## Features
 
-### NouveauteFragment
+The app is made with the basic featues of an music player :  
 
-on verifie que mesGenres contain download, hidden music, liked music
-on init un recyclerview
+- listen music and the basics controls
+- list all the musics by album
+- create playlists
+- search music by author/album/name in your files
+- manage the application with the notification
 
-### ClickOnGenre
+## Installation
 
-quand on click sur Genre => les actions
+To install the apk, you can proceed by starting the ANdroid Studio project or you can simply download the .apk folder in the release section of the git repository.
 
-### mobile_navigation 
+## Screenshots
 
-on affiche toutes les pages du bottom nav et on definit la page principale.
-on affecte un id, avec un layout et son code java pour chaque fragment.
+<table>
+  <tbody><tr>
+    <td><p align="center">Control page</p></td>
+    <td><p align="center">Musics folders page</p></td>
+    <td><p align="center">Notification</p></td>
+  </tr>
+  <tr>
+    <td><img src="README_files/screen1.png" ></td>
+    <td><img src="README_files/screen2.png" ></td>    
+    <td><img src="README_files/notif.png" ></td>
+  </tr>
+  </tbody>
+</table>
 
-### MusiqueService
+## Contributors
 
-lire en arriere plan des musiques, gerer la playlist
+Clément Reiffers :  
+- @clementreiffers  
+- <https://github.com/clementreiffers>
+
+Quentin Morel :  
+- @Im-Rises
+- <https://github.com/Im-Rises>
+
+Owen Locqueneux :  
+- @owen62  
+- <https://github.com/owen62>
+
+# Documentations
+
+Android Developers documentation :  
+<https://developer.android.com>
