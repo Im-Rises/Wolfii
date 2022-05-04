@@ -27,7 +27,7 @@ The app is made with the basic featues of an music player :
 
 ## Installation
 
-To install the apk, you can proceed by starting the ANdroid Studio project or you can simply download the .apk folder in the release section of the git repository.
+To install the apk, you can proceed by starting the Android Studio project or you can simply download the .apk folder in the release section of the git repository.
 
 ## Screenshots
 
