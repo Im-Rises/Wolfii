@@ -7,8 +7,8 @@
 ## Description
 
 <!-- <p align='center'> -->
-  <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white">
-  <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
+<img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
+<img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white">
 <!-- </p> -->
 
 Android music player made with Android Studio.  
@@ -33,14 +33,14 @@ To install the apk, you can proceed by starting the ANdroid Studio project or yo
 
 <table>
   <tbody><tr>
-    <td><p align="center">Control page</p></td>
+    <td><p align="center">Music control page</p></td>
     <td><p align="center">Musics folders page</p></td>
     <td><p align="center">Notification</p></td>
   </tr>
   <tr>
-    <td><img src="README_files/screen1.png" ></td>
-    <td><img src="README_files/screen2.png" ></td>    
-    <td><img src="README_files/notif.png" ></td>
+    <td><img src="https://user-images.githubusercontent.com/59691442/166655368-58cbbcfb-8f48-4405-abb5-6f9076581202.png" alt="Music control page"></td>
+    <td><img src="https://user-images.githubusercontent.com/59691442/166655379-3d74c0be-10de-47fb-ab2b-11110dce4981.png" alt="Musics folders page"></td>    
+    <td><img src="https://user-images.githubusercontent.com/59691442/166655356-bcbc8d7c-1d86-4578-a704-71d7cc7e6c4f.png" alt="Notification"></td>
   </tr>
   </tbody>
 </table>
