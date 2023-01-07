@@ -6,14 +6,12 @@
 
 ## Description
 
-<p>
+<div align="center">
   <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
   <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white">
-</p>
+</div>
 
-Android music player made with Android Studio.  
-Wolfii is a music player for Android.  
-The app is developed in Java.
+Android music player made with Android Studio in Java.  
 
 ## Features
 
@@ -45,21 +43,23 @@ To install the apk, you can proceed by starting the Android Studio project or yo
   </tbody>
 </table>
 
-## Contributors
+# Documentations
 
-Clément Reiffers :  
-- @clementreiffers  
-- <https://github.com/clementreiffers>
+Android Developers documentation :  
+<https://developer.android.com>
+
+## Contributors
 
 Quentin Morel :  
 - @Im-Rises
 - <https://github.com/Im-Rises>
 
+Clément Reiffers :  
+- @clementreiffers  
+- <https://github.com/clementreiffers>
+
 Owen Locqueneux :  
 - @owen62  
 - <https://github.com/owen62>
 
-# Documentations
-
-Android Developers documentation :  
-<https://developer.android.com>
+[![GitHub contributors](https://contrib.rocks/image?repo=Im-Rises/Wolfii)](https://github.com/friends-link/Wolfii/graphs/contributors)
